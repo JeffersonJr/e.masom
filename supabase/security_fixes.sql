@@ -16,16 +16,17 @@ CREATE POLICY "Allow authenticated users to insert potency" ON public.potencias
 FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 
 -- 3. Políticas para a tabela 'perfis'
+-- Nota: Usando 'id' como referência ao usuário autenticado (conforme estrutura atual do DB)
 -- Usuários podem ver apenas seu próprio perfil
 DROP POLICY IF EXISTS "Users can see their own profile" ON public.perfis;
 CREATE POLICY "Users can see their own profile" ON public.perfis
-FOR SELECT USING (auth.uid() = user_id);
+FOR SELECT USING (auth.uid() = id);
 
--- Usuários podem atualizar apenas seu próprio perfil (ex: vincular a uma potência no cadastro)
+-- Usuários podem atualizar apenas seu próprio perfil
 DROP POLICY IF EXISTS "Users can update their own profile" ON public.perfis;
 CREATE POLICY "Users can update their own profile" ON public.perfis
-FOR UPDATE USING (auth.uid() = user_id)
-WITH CHECK (auth.uid() = user_id);
+FOR UPDATE USING (auth.uid() = id)
+WITH CHECK (auth.uid() = id);
 
 -- 4. Nota sobre Proteção de Senhas Vazadas
 -- Esta configuração deve ser ativada manualmente no Dashboard do Supabase:

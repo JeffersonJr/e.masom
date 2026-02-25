@@ -16,7 +16,6 @@ import AdminDocuments from '../pages/AdminDocuments';
 import AdminLojas from '../pages/AdminLojas';
 import AdminObreiros from '../pages/AdminObreiros';
 import Login from '../pages/Login';
-import ForgotPassword from '../pages/ForgotPassword';
 import Governanca from '../pages/Governanca';
 import Capitacao from '../pages/Capitacao';
 import CmsLojas from '../pages/CmsLojas';
@@ -52,7 +51,6 @@ export default function AppRouter() {
 
                         {/* Authentication (Isolated from Site UI) */}
                         <Route path="/login" element={<Login />} />
-                        <Route path="/forgot-password" element={<ForgotPassword />} />
 
                         {/* Admin Master (Potência) */}
                         <Route path="/admin" element={

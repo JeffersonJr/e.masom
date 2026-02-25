@@ -225,11 +225,13 @@ export default function Home() {
                 </div>
             </section>
 
-            <LeadModal
-                isOpen={modalConfig.open}
-                onClose={closeModal}
-                type={modalConfig.type}
-            />
+            {modalConfig.open && (
+                <LeadModal
+                    isOpen={modalConfig.open}
+                    onClose={closeModal}
+                    type={modalConfig.type}
+                />
+            )}
         </div>
     );
 }

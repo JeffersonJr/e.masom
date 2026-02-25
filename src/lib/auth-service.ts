@@ -63,7 +63,7 @@ export const authService = {
                 cargo: 'Grão-Mestre', // First user of instance
                 status: 'Ativo'
             })
-            .eq('user_id', authData.user.id);
+            .eq('id', authData.user.id);
 
         if (profileError) throw profileError;
 

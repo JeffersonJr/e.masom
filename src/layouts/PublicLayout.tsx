@@ -39,11 +39,13 @@ export default function PublicLayout() {
                 </div>
             </header>
 
-            <LeadModal
-                isOpen={modalConfig.open}
-                onClose={closeModal}
-                type={modalConfig.type}
-            />
+            {modalConfig.open && (
+                <LeadModal
+                    isOpen={modalConfig.open}
+                    onClose={closeModal}
+                    type={modalConfig.type}
+                />
+            )}
 
             <main className="flex-grow pt-20">
                 <Outlet />

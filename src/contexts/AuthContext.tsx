@@ -36,8 +36,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
 
         // Listen for auth changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: string, session: Session | null) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event: string, session: Session | null) => {
             setSession(session);
+
+            if (event === 'PASSWORD_RECOVERY') {
+                window.location.href = '/login?view=reset';
+            }
+
             if (session) fetchProfile(session.user.id);
             else {
                 setProfile(null);
@@ -53,7 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const { data, error } = await supabase
                 .from('perfis')
                 .select('*')
-                .eq('user_id', userId)
+                .eq('id', userId)
                 .single();
 
             if (error) throw error;

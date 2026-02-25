@@ -28,6 +28,17 @@ CREATE POLICY "Users can update their own profile" ON public.perfis
 FOR UPDATE USING (auth.uid() = id)
 WITH CHECK (auth.uid() = id);
 
--- 4. Nota sobre Proteção de Senhas Vazadas
+-- 4. Ajuste do Gatilho de Novo Usuário (Schema Alignment)
+-- Garante que o trigger use a coluna 'id' em vez de 'user_id'
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.perfis (id, grau, grau_nr, status)
+  VALUES (new.id, 'Aprendiz', 1, 'Ativo');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 5. Nota sobre Proteção de Senhas Vazadas
 -- Esta configuração deve ser ativada manualmente no Dashboard do Supabase:
 -- Auth -> Base Configuration -> Password Protection -> Enable "Have I Been Pwned"

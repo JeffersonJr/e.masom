@@ -20,6 +20,7 @@ export default function LeadModal({ isOpen, onClose, type }: LeadModalProps) {
         potency: ''
     });
 
+
     if (!isOpen) return null;
 
     const isCorporateEmail = (email: string) => {
@@ -133,7 +134,7 @@ export default function LeadModal({ isOpen, onClose, type }: LeadModalProps) {
 
                             {type === 'trial' && (
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-primary uppercase tracking-[0.2em] pl-1">Senha do Sistema</label>
+                                    <label className="text-[10px] font-black text-primary uppercase tracking-[0.2em] pl-1">Defina sua Senha de Acesso</label>
                                     <div className="relative group">
                                         <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 group-focus-within:text-accent transition" size={18} />
                                         <input
@@ -142,9 +143,10 @@ export default function LeadModal({ isOpen, onClose, type }: LeadModalProps) {
                                             value={formData.password}
                                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                             className="w-full bg-background border border-border rounded-md px-12 py-4 text-primary outline-none focus:border-accent transition font-medium"
-                                            placeholder="••••••••"
+                                            placeholder="Crie uma senha forte"
                                         />
                                     </div>
+                                    <p className="text-[9px] text-muted-foreground/60 uppercase tracking-widest pl-1 font-bold italic">Esta será sua credencial de acesso soberano ao e.mason.</p>
                                 </div>
                             )}
 

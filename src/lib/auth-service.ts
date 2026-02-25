@@ -12,24 +12,7 @@ export const authService = {
     async signupTrial(data: TrialSignupData) {
         const domain = data.email.split('@')[1].toLowerCase();
 
-        // 1. Sign up the user
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-            email: data.email,
-            password: data.password,
-            options: {
-                data: {
-                    full_name: data.name,
-                }
-            }
-        });
-
-        if (authError) throw authError;
-        if (!authData.user) throw new Error('Falha ao criar usuário.');
-
-        // 2. Check if Potency exists for this domain
-        // Note: The potency table doesn't have a domain field yet. We should add it or use sigla.
-        // For the purpose of this task, we will create a new potency per signup or map by domain.
-
+        // 1. Check if Potency exists for this domain
         let { data: existingPotency } = await supabase
             .from('potencias')
             .select('id')
@@ -55,17 +38,21 @@ export const authService = {
             potencyId = existingPotency.id;
         }
 
-        // 3. Update Profile (trigger creates it, we link it)
-        const { error: profileError } = await supabase
-            .from('perfis')
-            .update({
-                potencia_id: potencyId,
-                cargo: 'Grão-Mestre', // First user of instance
-                status: 'Ativo'
-            })
-            .eq('id', authData.user.id);
+        // 2. Sign up the user with metadata (trigger will handle profile)
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+            email: data.email,
+            password: data.password,
+            options: {
+                data: {
+                    full_name: data.name,
+                    potencia_id: potencyId,
+                    cargo: 'Grão-Mestre'
+                }
+            }
+        });
 
-        if (profileError) throw profileError;
+        if (authError) throw authError;
+        if (!authData.user) throw new Error('Falha ao criar usuário.');
 
         return authData;
     }

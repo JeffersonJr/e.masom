@@ -27,6 +27,7 @@ import Termos from '../pages/Termos';
 import NotFound from '../pages/NotFound';
 import { AuthProvider } from '../contexts/AuthContext';
 import ProtectedRoute from '../components/ProtectedRoute';
+import DashRedirect from '../components/DashRedirect';
 import ScrollToTop from '../components/ScrollToTop';
 
 export default function AppRouter() {
@@ -51,6 +52,7 @@ export default function AppRouter() {
 
                         {/* Authentication (Isolated from Site UI) */}
                         <Route path="/login" element={<Login />} />
+                        <Route path="/dashboard" element={<DashRedirect />} />
 
                         {/* Admin Master (Potência) */}
                         <Route path="/admin" element={

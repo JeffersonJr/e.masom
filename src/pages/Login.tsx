@@ -63,7 +63,7 @@ export default function Login() {
                 setError(translateAuthError(error.message));
                 setLoading(false);
             } else {
-                navigate('/');
+                navigate('/dashboard');
             }
         } catch (err: any) {
             console.error('Erro inesperado no Login:', err);

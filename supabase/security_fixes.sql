@@ -4,6 +4,9 @@
 ALTER TABLE IF EXISTS public.potencias ENABLE ROW LEVEL SECURITY;
 ALTER TABLE IF EXISTS public.perfis ENABLE ROW LEVEL SECURITY;
 
+-- 2. Garantir colunas necessárias
+ALTER TABLE IF EXISTS public.potencias ADD COLUMN IF NOT EXISTS configuracoes_json jsonb DEFAULT '{}';
+
 -- 2. Políticas para a tabela 'potencias'
 -- Permite leitura pública (necessário para o formulário de cadastro verificar domínios)
 DROP POLICY IF EXISTS "Allow public read for potency basic info" ON public.potencias;
@@ -33,8 +36,15 @@ WITH CHECK (auth.uid() = id);
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 BEGIN
-  INSERT INTO public.perfis (id, grau, grau_nr, status)
-  VALUES (new.id, 'Aprendiz', 1, 'Ativo');
+  INSERT INTO public.perfis (id, grau, grau_nr, status, potencia_id, cargo)
+  VALUES (
+    new.id, 
+    'Aprendiz', 
+    1, 
+    'Ativo', 
+    (new.raw_user_meta_data->>'potencia_id')::uuid,
+    COALESCE(new.raw_user_meta_data->>'cargo', 'Obreiro')
+  );
   RETURN new;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

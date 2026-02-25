@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>e.mason - Notificação Institucional</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0c0d0e;
+            font-family: 'Times New Roman', Times, serif;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #1f2123;
+        }
+
+        .logo {
+            width: 120px;
+            filter: brightness(0) invert(1);
+        }
+
+        .content {
+            padding: 40px 0;
+            line-height: 1.6;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+            font-style: italic;
+            color: #ffffff;
+        }
+
+        .text {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-bottom: 32px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 16px 32px;
+            background-color: #bfa15e;
+            color: #0c0d0e !important;
+            text-decoration: none;
+            font-weight: 900;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .footer {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid #1f2123;
+            color: #475569;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .otp-code {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 0.3em;
+            color: #bfa15e;
+            text-align: center;
+            margin: 24px 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .warning-box {
+            background-color: #1a1c1e;
+            border: 1px solid #bfa15e40;
+            padding: 24px;
+            border-radius: 4px;
+            margin: 32px 0;
+        }
+
+        .warning-title {
+            color: #bfa15e;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://e-masom.vercel.app/e.mason.svg" alt="e.mason" class="logo">
+        </div>
+
+        <div class="content">
+
+            <!-- CASE: PASSWORD CHANGED (Senha Alterada) -->
+            <!-- 
+            <h1 class="title">Atualização de Segurança.</h1>
+            <p class="text">Este é um aviso institucional para informar que a credencial de acesso vinculada a esta jurisdição foi alterada com sucesso.</p>
+            <div class="warning-box">
+                <div class="warning-title">Ação Requerida</div>
+                <p class="text" style="margin-bottom: 0; font-size: 14px;">Se você realizou esta alteração, nenhuma ação é necessária. Caso contrário, acesse imediatamente o portal de recuperação para proteger sua soberania.</p>
+            </div>
+            -->
+
+            <!-- CASE: EMAIL ADDRESS CHANGED (E-mail Alterado) -->
+            <!-- 
+            <h1 class="title">Mudança de Identidade Digital.</h1>
+            <p class="text">Informamos que o endereço de e-mail administrativo da sua conta foi atualizado com êxito.</p>
+            <div class="warning-box">
+                <div class="warning-title">Aviso de Integridade</div>
+                <p class="text" style="margin-bottom: 0; font-size: 14px;">Para sua proteção, todas as notificações futuras serão enviadas para o novo endereço configurado.</p>
+            </div>
+            -->
+
+            <!-- CASE: PHONE NUMBER CHANGED (Telefone Alterado) -->
+            <!-- 
+            <h1 class="title">Vínculo Telefônico Atualizado.</h1>
+            <p class="text">O número de telefone vinculado para autenticação de dois fatores ou comunicações seguras foi modificado.</p>
+            <p class="text">Esta medida visa garantir que apenas o detentor legítimo da credencial receba os protocolos de validação.</p>
+            -->
+
+            <!-- CASE: IDENTITY LINKED (Vínculo de Identidade) -->
+            <!-- 
+            <h1 class="title">Nova Identidade Integrada.</h1>
+            <p class="text">Uma nova identidade externa (Google/Apple/etc) foi vinculada à sua credencial mestre do e.mason.</p>
+            <p class="text">Agora você pode utilizar este novo método para autenticação rápida e soberana no portal.</p>
+            -->
+
+            <!-- CASE: IDENTITY UNLINKED (Identidade Removida) -->
+            <!-- 
+            <h1 class="title">Remoção de Vínculo Externo.</h1>
+            <p class="text">Um provedor de identidade externa foi desvinculado da sua conta institucional.</p>
+            <p class="text">A partir de agora, o acesso só será permitido pelos métodos remanescentes configurados em sua jurisdição.</p>
+            -->
+
+            <!-- CASE: MFA ADDED (Segundo Fator Adicionado) -->
+            <!-- 
+            <h1 class="title">Camada de Proteção Ativada.</h1>
+            <p class="text">Sua segurança foi elevada. Um novo método de Autenticação Multifator (MFA) foi adicionado com sucesso.</p>
+            <p class="text">Este protocolo adicional garante que sua governança permaneça inviolável, mesmo em cenários adversos.</p>
+            -->
+
+            <!-- CASE: MFA REMOVED (Segundo Fator Removido) -->
+            <!-- 
+            <h1 class="title">Redução de Barreira de Acesso.</h1>
+            <div class="warning-box" style="border-color: #ef444440;">
+                <div class="warning-title" style="color: #ef4444;">Alerta de Segurança</div>
+                <p class="text" style="margin-bottom: 0; font-size: 14px;">Um método de Autenticação Multifator (MFA) foi removido. Recomendamos manter ao menos uma camada extra ativa para preservar o sigilo das informações.</p>
+            </div>
+            -->
+
+        </div>
+
+        <div class="footer">
+            Soberania Digital • © 2026 e.mason • Proteção e Tradição
+        </div>
+    </div>
+</body>
+
+</html>

@@ -10,6 +10,9 @@ interface Profile {
     grau: string;
     cargo: string;
     status: string;
+    lojas?: {
+        slug: string;
+    } | null;
 }
 
 interface AuthContextType {
@@ -53,20 +56,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return () => subscription.unsubscribe();
     }, []);
 
-    const fetchProfile = async (userId: string) => {
+    const fetchProfile = async (userId: string, retries = 5) => {
+        setLoading(true);
         try {
-            const { data, error } = await supabase
+            const { data } = await supabase
                 .from('perfis')
-                .select('*')
+                .select('*, lojas(slug)')
                 .eq('id', userId)
                 .single();
 
-            if (error) throw error;
-            setProfile(data);
+            if (data) {
+                setProfile(data);
+                setLoading(false);
+            } else if (retries > 0) {
+                // Wait 1s and retry (in case trigger is slow)
+                setTimeout(() => fetchProfile(userId, retries - 1), 1000);
+            } else {
+                setLoading(false);
+            }
         } catch (error) {
-            console.error('Error fetching profile:', error);
-        } finally {
-            setLoading(false);
+            if (retries > 0) {
+                setTimeout(() => fetchProfile(userId, retries - 1), 1000);
+            } else {
+                setLoading(false);
+            }
         }
     };
 

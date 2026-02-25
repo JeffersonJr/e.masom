@@ -13,13 +13,15 @@ DROP POLICY IF EXISTS "Allow public read for potency basic info" ON public.poten
 CREATE POLICY "Allow public read for potency basic info" ON public.potencias
 FOR SELECT USING (true);
 
--- Permite que usuários autenticados criem novas potências (primeiro cadastro)
+-- Permite que usuários (incluindo anônimos no trial) criem novas potências
 DROP POLICY IF EXISTS "Allow authenticated users to insert potency" ON public.potencias;
-CREATE POLICY "Allow authenticated users to insert potency" ON public.potencias
-FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+DROP POLICY IF EXISTS "Allow anon to insert potency for trial" ON public.potencias;
+CREATE POLICY "Allow anon to insert potency for trial" ON public.potencias
+FOR INSERT WITH CHECK (true);
 
 -- 3. Políticas para a tabela 'perfis'
 -- Nota: Usando 'id' como referência ao usuário autenticado (conforme estrutura atual do DB)
+-- Usuários podem ver apenas seu próprio perfil
 -- Usuários podem ver apenas seu próprio perfil
 DROP POLICY IF EXISTS "Users can see their own profile" ON public.perfis;
 CREATE POLICY "Users can see their own profile" ON public.perfis

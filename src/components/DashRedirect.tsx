@@ -18,25 +18,33 @@ export default function DashRedirect() {
 
         if (profile) {
             // Priority 1: Master Admin (Potência)
-            if (profile.potencia_id && !profile.loja_id) {
+            // If they have a potency_id, they are likely a potency-level admin
+            if (profile.potencia_id && (!profile.loja_id || profile.cargo === 'Grão-Mestre' || profile.cargo === 'Secretário Geral')) {
                 navigate('/admin');
                 return;
             }
 
             // Priority 2: Lodge Admin/Member
             if (profile.loja_id) {
-                // For now, we use a placeholder slug if we don't have it in profile
-                // Ideally, profile should contain the slug or we fetch it.
-                // Assuming "loja-padrao" as fallback for now to avoid break
-                navigate('/dashboard/view');
+                if (profile.lojas?.slug) {
+                    navigate(`/${profile.lojas.slug}/dashboard`);
+                } else {
+                    if (profile.potencia_id) navigate('/admin');
+                    else navigate('/');
+                }
                 return;
             }
 
             // Fallback: If no specific role is found but has profile
             navigate('/');
-        } else {
-            // If logged in but no profile yet (shouldn't happen with trigger)
-            navigate('/');
+        } else if (!loading && session) {
+            // Stay in loading state for 5 seconds while AuthContext retries profile fetch
+            const timer = setTimeout(() => {
+                if (!profile) {
+                    navigate('/');
+                }
+            }, 5000);
+            return () => clearTimeout(timer);
         }
     }, [profile, loading, session, navigate]);
 

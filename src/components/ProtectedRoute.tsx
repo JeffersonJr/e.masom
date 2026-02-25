@@ -26,7 +26,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requirePotenc
     }
 
     if (requirePotencia && !profile?.potencia_id) {
-        return <Navigate to="/" replace />;
+        // If they don't have a profile yet, but loading is over, they aren't an admin.
+        return <Navigate to="/dashboard" replace />;
     }
 
     // If it's a lodge route, we could add lodge_id check here too if needed

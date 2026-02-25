@@ -7,94 +7,97 @@ export default function LodgeCMS() {
     const [description, setDescription] = useState('Uma oficina dedicada ao estudo e aperfeiçoamento moral.');
 
     return (
-        <div className="p-8 max-w-6xl mx-auto">
-            <header className="flex justify-between items-center mb-10">
+        <div className="p-10 space-y-12 bg-background min-h-screen">
+            <header className="flex justify-between items-end border-b border-border pb-10">
                 <div>
-                    <h1 className="text-3xl font-bold text-mason-blue">Gerenciador de Site (CMS)</h1>
-                    <p className="text-slate-500">Configure a presença digital da sua loja em tempo real.</p>
+                    <h1 className="text-5xl font-black text-primary tracking-tighter leading-none mb-4 italic font-serif">Editor da Oficina</h1>
+                    <p className="text-muted-foreground font-medium flex items-center gap-2">
+                        <span className="w-2 h-2 bg-accent rounded-full" />
+                        Configure sua presença digital em tempo real
+                    </p>
                 </div>
-                <div className="flex gap-3">
-                    <button className="flex items-center gap-2 px-6 py-2.5 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition">
-                        <ExternalLink size={18} /> Ver Site
+                <div className="flex gap-4">
+                    <button className="flex items-center gap-2 px-6 py-4 bg-background border border-border text-muted-foreground font-black uppercase text-[10px] tracking-[0.2em] rounded-md hover:text-primary hover:border-primary transition shadow-sm">
+                        <ExternalLink size={16} /> Ver Site
                     </button>
-                    <button className="flex items-center gap-2 px-6 py-2.5 bg-mason-green text-mason-blue font-bold rounded-xl hover:bg-mason-green-light transition shadow-lg">
+                    <button className="flex items-center gap-2 px-8 py-4 bg-accent text-primary font-black uppercase text-[10px] tracking-[0.2em] rounded-md hover:bg-accent/90 transition shadow-xl shadow-accent/10 active:scale-95">
                         <Save size={18} /> Publicar Alterações
                     </button>
                 </div>
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                <div className="lg:col-span-1 space-y-6">
-                    <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div className="lg:col-span-1 space-y-8">
+                    <div className="bg-background p-8 rounded-xl border border-border shadow-sm space-y-8">
                         <div>
-                            <label className="flex items-center gap-2 text-xs font-black text-mason-blue uppercase tracking-widest mb-4">
-                                <Type size={14} className="text-mason-green" /> Conteúdo Principal
+                            <label className="flex items-center gap-2 text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-6">
+                                <Type size={14} className="text-accent" /> Conteúdo Principal
                             </label>
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-[10px] text-slate-400 font-bold uppercase mb-1">Nome da Loja</label>
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="block text-[9px] text-muted-foreground font-black uppercase tracking-widest ml-1">Nome da Oficina</label>
                                     <input
                                         value={siteName}
                                         onChange={(e) => setSiteName(e.target.value)}
-                                        className="w-full bg-slate-50 border-none rounded-xl px-4 py-2 text-sm outline-none focus:ring-1 focus:ring-mason-green"
+                                        className="w-full bg-muted/20 border border-border rounded-md px-4 py-3 text-sm font-medium outline-none focus:border-accent transition-all"
                                     />
                                 </div>
-                                <div>
-                                    <label className="block text-[10px] text-slate-400 font-bold uppercase mb-1">Descrição Curta</label>
+                                <div className="space-y-2">
+                                    <label className="block text-[9px] text-muted-foreground font-black uppercase tracking-widest ml-1">Descrição</label>
                                     <textarea
-                                        rows={3}
+                                        rows={4}
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
-                                        className="w-full bg-slate-50 border-none rounded-xl px-4 py-2 text-sm outline-none focus:ring-1 focus:ring-mason-green"
+                                        className="w-full bg-muted/20 border border-border rounded-md px-4 py-3 text-sm font-medium outline-none focus:border-accent transition-all resize-none"
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="pt-6 border-t border-slate-50">
-                            <label className="flex items-center gap-2 text-xs font-black text-mason-blue uppercase tracking-widest mb-4">
-                                <Palette size={14} className="text-mason-green" /> Estética
+                        <div className="pt-8 border-t border-border">
+                            <label className="flex items-center gap-2 text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-6">
+                                <Palette size={14} className="text-accent" /> Estética Fundamental
                             </label>
-                            <div className="grid grid-cols-4 gap-2">
-                                <div className="aspect-square bg-mason-blue rounded-lg border-2 border-slate-100 cursor-pointer hover:border-mason-green ring-2 ring-offset-2 ring-transparent transition" />
-                                <div className="aspect-square bg-emerald-900 rounded-lg border-2 border-slate-100 cursor-pointer hover:border-mason-green transition" />
-                                <div className="aspect-square bg-slate-900 rounded-lg border-2 border-slate-100 cursor-pointer hover:border-mason-green transition" />
-                                <div className="aspect-square bg-white rounded-lg border-2 border-slate-100 cursor-pointer hover:border-mason-green transition" />
+                            <div className="grid grid-cols-4 gap-3">
+                                <div className="aspect-square bg-primary rounded-md border-2 border-primary cursor-pointer hover:scale-105 transition active:scale-95 shadow-lg" />
+                                <div className="aspect-square bg-accent rounded-md border border-border cursor-pointer hover:scale-105 transition active:scale-95" />
+                                <div className="aspect-square bg-zinc-400 rounded-md border border-border cursor-pointer hover:scale-105 transition active:scale-95" />
+                                <div className="aspect-square bg-white rounded-md border border-border cursor-pointer hover:scale-105 transition active:scale-95" />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="lg:col-span-2">
-                    <div className="bg-slate-900 rounded-3xl p-4 shadow-2xl">
-                        <div className="flex gap-1.5 mb-4 px-2">
-                            <div className="w-2.5 h-2.5 bg-rose-500 rounded-full" />
-                            <div className="w-2.5 h-2.5 bg-amber-500 rounded-full" />
-                            <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full" />
+                    <div className="bg-primary rounded-xl p-4 shadow-2xl relative">
+                        <div className="flex gap-2 mb-4 px-2">
+                            <div className="w-2.5 h-2.5 bg-accent/20 rounded-full" />
+                            <div className="w-2.5 h-2.5 bg-accent/20 rounded-full" />
+                            <div className="w-2.5 h-2.5 bg-accent/20 rounded-full" />
                         </div>
-                        <div className="bg-white rounded-2xl aspect-[16/10] overflow-hidden border border-slate-800 relative group">
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 flex items-center justify-center transition opacity-0 group-hover:opacity-100">
-                                <span className="bg-white px-4 py-2 rounded-full font-bold text-xs shadow-xl flex items-center gap-2">
-                                    <Layout size={14} /> Pré-visualização Interativa
+                        <div className="bg-background rounded-lg aspect-[16/10] overflow-hidden border border-white/5 shadow-inner relative group">
+                            <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-500 z-30 backdrop-blur-[2px]">
+                                <span className="bg-background text-primary px-6 py-3 rounded-md font-black text-[10px] uppercase tracking-[0.2em] shadow-2xl flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                                    <Layout size={14} className="text-accent" /> Pré-visualização
                                 </span>
                             </div>
 
                             {/* Mock Site Preview */}
-                            <div className="p-10 text-center">
-                                <div className="w-12 h-12 bg-mason-blue rounded-xl mx-auto mb-6 flex items-center justify-center text-mason-green font-bold">
-                                    L
+                            <div className="p-16 text-center h-full flex flex-col justify-center bg-background">
+                                <div className="w-16 h-16 bg-primary rounded-md mx-auto mb-8 flex items-center justify-center text-accent font-black text-2xl shadow-xl italic font-serif">
+                                    {siteName.charAt(0)}
                                 </div>
-                                <h2 className="text-3xl font-bold text-mason-blue mb-4">{siteName}</h2>
-                                <p className="text-slate-500 text-sm max-w-sm mx-auto leading-relaxed italic border-l-2 border-mason-green pl-4">
-                                    "{description}"
+                                <h2 className="text-4xl font-black text-primary mb-6 tracking-tighter italic font-serif">{siteName}</h2>
+                                <p className="text-muted-foreground text-sm max-w-sm mx-auto leading-relaxed font-medium italic border-l-4 border-accent pl-6 text-left">
+                                    {description}
                                 </p>
-                                <div className="mt-10 h-32 bg-slate-50 rounded-2xl border border-dashed border-slate-200 flex items-center justify-center">
-                                    <Globe className="text-slate-300" />
+                                <div className="mt-12 h-24 bg-muted/20 border border-border rounded-xl border-dashed flex items-center justify-center">
+                                    <Globe className="text-muted-foreground/30" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p className="text-center text-[10px] text-slate-400 mt-6 uppercase tracking-[0.2em]">Otimizado para Mobile e Desktop</p>
+                    <p className="text-center text-[10px] text-muted-foreground mt-8 uppercase tracking-[0.3em] font-black">Otimizado para mobile e desktop v603010</p>
                 </div>
             </div>
         </div>

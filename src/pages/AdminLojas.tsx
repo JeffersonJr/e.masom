@@ -9,66 +9,71 @@ export default function AdminLojas() {
     ];
 
     return (
-        <div className="p-10 space-y-8">
-            <header className="flex justify-between items-end">
+        <div className="p-10 space-y-12 bg-background min-h-screen">
+            <header className="flex justify-between items-end border-b border-border pb-10">
                 <div>
-                    <h1 className="text-3xl font-bold text-mason-blue">Lojas Federadas</h1>
-                    <p className="text-slate-500 mt-1">Gestão e acompanhamento das oficinas da jurisdição.</p>
+                    <h1 className="text-5xl font-black text-primary tracking-tighter leading-none mb-4">Lojas Federadas</h1>
+                    <p className="text-muted-foreground font-medium flex items-center gap-2">
+                        <span className="w-2 h-2 bg-accent rounded-full" />
+                        Gestão e acompanhamento das oficinas da jurisdição
+                    </p>
                 </div>
-                <button className="bg-mason-blue text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-mason-blue-light transition shadow-xl">
-                    <Plus size={20} /> Nova Loja
+                <button className="bg-primary text-primary-foreground px-8 py-4 rounded-md font-black flex items-center gap-2 hover:bg-primary/95 transition shadow-xl shadow-primary/10 uppercase text-[10px] tracking-[0.2em] active:scale-95">
+                    <Plus size={20} className="text-accent" /> Nova Loja
                 </button>
             </header>
 
             {/* Filters */}
-            <div className="flex gap-4">
-                <div className="relative flex-grow max-w-md">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                    <input type="text" placeholder="Buscar por nome ou número..." className="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-mason-green/20 transition" />
+            <div className="flex gap-6">
+                <div className="relative flex-grow max-w-2xl group">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-accent transition" size={18} />
+                    <input type="text" placeholder="Buscar por nome ou número..." className="w-full pl-12 pr-6 py-4 bg-background border border-border rounded-md outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition font-medium" />
                 </div>
-                <button className="px-5 py-3 bg-white border border-slate-200 rounded-2xl text-slate-500 font-bold flex items-center gap-2 hover:bg-slate-50 transition">
-                    <Filter size={18} /> Filtros
+                <button className="px-6 py-4 bg-background border border-border rounded-md text-muted-foreground font-black uppercase text-[10px] tracking-[0.2em] flex items-center gap-2 hover:text-primary hover:border-primary transition shadow-sm">
+                    <Filter size={16} /> Filtros
                 </button>
             </div>
 
-            <div className="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden">
+            <div className="bg-background border border-border rounded-xl shadow-sm overflow-hidden">
                 <table className="w-full text-left">
-                    <thead className="bg-slate-50/50 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">
+                    <thead className="bg-muted/10 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] border-b border-border">
                         <tr>
-                            <th className="px-8 py-5">Loja</th>
-                            <th className="px-8 py-5">Número</th>
-                            <th className="px-8 py-5">Oriente</th>
-                            <th className="px-8 py-5 text-center">Membros</th>
-                            <th className="px-8 py-5">Status</th>
-                            <th className="px-8 py-5"></th>
+                            <th className="px-8 py-6">Loja</th>
+                            <th className="px-8 py-6">Número</th>
+                            <th className="px-8 py-6">Oriente</th>
+                            <th className="px-8 py-6 text-center">Membros</th>
+                            <th className="px-8 py-6">Status</th>
+                            <th className="px-8 py-6"></th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-border text-primary">
                         {lojas.map(loja => (
-                            <tr key={loja.id} className="hover:bg-slate-50/30 transition group">
-                                <td className="px-8 py-5">
+                            <tr key={loja.id} className="hover:bg-muted/5 transition group">
+                                <td className="px-8 py-6">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-mason-green group-hover:text-mason-blue transition duration-500">
+                                        <div className="w-12 h-12 bg-muted border border-border rounded-xl flex items-center justify-center text-muted-foreground group-hover:bg-accent group-hover:text-primary transition-colors duration-500">
                                             <Store size={20} />
                                         </div>
-                                        <span className="font-bold text-mason-blue">{loja.nome}</span>
+                                        <span className="font-black text-lg tracking-tight text-primary">{loja.nome}</span>
                                     </div>
                                 </td>
-                                <td className="px-8 py-5 font-mono text-xs">{loja.numero}</td>
-                                <td className="px-8 py-5 text-slate-500">{loja.oriente}</td>
-                                <td className="px-8 py-5 text-center font-bold text-mason-blue">{loja.membros}</td>
-                                <td className="px-8 py-5">
-                                    <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${loja.status === 'Regular' ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'
+                                <td className="px-8 py-6 font-mono text-xs font-bold text-muted-foreground tracking-widest">{loja.numero}</td>
+                                <td className="px-8 py-6 text-muted-foreground font-medium">{loja.oriente}</td>
+                                <td className="px-8 py-6 text-center font-black text-primary">{loja.membros}</td>
+                                <td className="px-8 py-6">
+                                    <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] ${loja.status === 'Regular'
+                                        ? 'bg-primary text-primary-foreground border border-white/5'
+                                        : 'bg-accent/10 text-accent border border-accent/20 underline decoration-accent/30 decoration-offset-4'
                                         }`}>
                                         {loja.status}
                                     </span>
                                 </td>
-                                <td className="px-8 py-5 text-right">
-                                    <div className="flex items-center justify-end gap-2">
-                                        <button className="p-2 text-slate-300 hover:text-mason-blue transition">
+                                <td className="px-8 py-6 text-right">
+                                    <div className="flex items-center justify-end gap-3">
+                                        <button className="p-3 text-muted-foreground hover:text-primary transition hover:bg-muted/50 rounded-md">
                                             <ExternalLink size={18} />
                                         </button>
-                                        <button className="p-2 text-slate-300 hover:text-mason-blue transition">
+                                        <button className="p-3 text-muted-foreground hover:text-primary transition hover:bg-muted/50 rounded-md">
                                             <MoreVertical size={18} />
                                         </button>
                                     </div>

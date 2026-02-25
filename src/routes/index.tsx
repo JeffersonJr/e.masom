@@ -21,9 +21,11 @@ import Governanca from '../pages/Governanca';
 import Capitacao from '../pages/Capitacao';
 import CmsLojas from '../pages/CmsLojas';
 import Seguranca from '../pages/Seguranca';
+import Privacidade from '../pages/Privacidade';
 import Documentacao from '../pages/Documentacao';
 import Suporte from '../pages/Suporte';
 import Termos from '../pages/Termos';
+import NotFound from '../pages/NotFound';
 import { AuthProvider } from '../contexts/AuthContext';
 import ProtectedRoute from '../components/ProtectedRoute';
 import ScrollToTop from '../components/ScrollToTop';
@@ -42,6 +44,7 @@ export default function AppRouter() {
                             <Route path="/capitacao" element={<Capitacao />} />
                             <Route path="/cms-lojas" element={<CmsLojas />} />
                             <Route path="/seguranca" element={<Seguranca />} />
+                            <Route path="/privacidade" element={<Privacidade />} />
                             <Route path="/documentacao" element={<Documentacao />} />
                             <Route path="/suporte" element={<Suporte />} />
                             <Route path="/termos" element={<Termos />} />
@@ -79,6 +82,9 @@ export default function AppRouter() {
 
                         {/* Lodge Public Landing Page */}
                         <Route path="/:lodgeSlug" element={<LodgePublic />} />
+
+                        {/* 404 Not Found */}
+                        <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
             </AuthProvider>

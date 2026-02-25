@@ -20,36 +20,39 @@ export default function ApprovalWorkflow() {
     };
 
     return (
-        <div className="p-8 max-w-6xl mx-auto">
-            <header className="flex justify-between items-end mb-10">
+        <div className="p-10 space-y-12 bg-background min-h-screen">
+            <header className="flex justify-between items-end border-b border-border pb-10">
                 <div>
-                    <h1 className="text-3xl font-bold text-mason-blue font-serif">Processos e Placets</h1>
-                    <p className="text-slate-500">Workflow de aprovação entre Oficina e Potência.</p>
+                    <h1 className="text-5xl font-black text-primary tracking-tighter leading-none mb-4 italic font-serif">Processos & Placets</h1>
+                    <p className="text-muted-foreground font-medium flex items-center gap-2">
+                        <span className="w-2 h-2 bg-accent rounded-full" />
+                        Fluxo de aprovação soberana entre Oficina e Potência
+                    </p>
                 </div>
-                <div className="flex bg-slate-100 p-1 rounded-xl">
+                <div className="flex bg-muted/20 p-1.5 rounded-md border border-border">
                     <button
                         onClick={() => setActiveTab('upload')}
-                        className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${activeTab === 'upload' ? 'bg-white shadow-sm text-mason-blue' : 'text-slate-400'}`}
+                        className={`px-6 py-2.5 rounded-md text-[10px] font-black tracking-[0.2em] transition-all uppercase ${activeTab === 'upload' ? 'bg-primary text-primary-foreground shadow-xl' : 'text-muted-foreground hover:text-primary font-bold'}`}
                     >
-                        SOLICITAR
+                        Solicitar
                     </button>
                     <button
                         onClick={() => setActiveTab('history')}
-                        className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${activeTab === 'history' ? 'bg-white shadow-sm text-mason-blue' : 'text-slate-400'}`}
+                        className={`px-6 py-2.5 rounded-md text-[10px] font-black tracking-[0.2em] transition-all uppercase ${activeTab === 'history' ? 'bg-primary text-primary-foreground shadow-xl' : 'text-muted-foreground hover:text-primary font-bold'}`}
                     >
-                        MEUS PROCESSOS
+                        Meus Processos
                     </button>
                 </div>
             </header>
 
             {activeTab === 'upload' ? (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                    <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-xl border-t-4 border-t-mason-green">
-                        <h2 className="text-xl font-bold text-mason-blue mb-6">Novo Requerimento</h2>
-                        <form className="space-y-6">
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Tipo de Processo</label>
-                                <select className="w-full bg-slate-50 border-none rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-mason-green">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div className="bg-background p-10 rounded-xl border border-border shadow-sm border-t-4 border-t-accent">
+                        <h2 className="text-3xl font-black text-primary mb-8 italic font-serif tracking-tight">Novo Requerimento</h2>
+                        <form className="space-y-8">
+                            <div className="space-y-3">
+                                <label className="block text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] ml-1">Tipo de Processo</label>
+                                <select className="w-full bg-muted/20 border border-border rounded-md px-4 py-4 outline-none focus:border-accent font-medium text-primary text-sm transition-all appearance-none cursor-pointer">
                                     <option>Placet de Transferência</option>
                                     <option>Indicação de Candidato</option>
                                     <option>Aumento de Salário</option>
@@ -57,63 +60,79 @@ export default function ApprovalWorkflow() {
                                 </select>
                             </div>
 
-                            <div className="border-2 border-dashed border-slate-200 rounded-3xl p-10 text-center hover:border-mason-green transition group cursor-pointer">
-                                <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-mason-green/10 group-hover:text-mason-green transition">
-                                    <FileUp size={32} />
+                            <div className="border-2 border-dashed border-border rounded-xl p-12 text-center hover:border-accent/40 bg-muted/5 transition group cursor-pointer relative overflow-hidden">
+                                <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="relative z-10">
+                                    <div className="w-20 h-20 bg-muted rounded-md flex items-center justify-center mx-auto mb-6 group-hover:bg-accent group-hover:text-primary transition-all duration-500 shadow-sm">
+                                        <FileUp size={32} />
+                                    </div>
+                                    <p className="text-base font-black text-primary tracking-tight">Arraste seu arquivo PDF aqui</p>
+                                    <p className="text-[10px] text-muted-foreground mt-2 uppercase tracking-widest font-black">ou clique para selecionar o documento</p>
                                 </div>
-                                <p className="text-sm font-bold text-mason-blue">Arraste seu arquivo PDF aqui</p>
-                                <p className="text-xs text-slate-400 mt-1 uppercase tracking-tighter">ou clique para selecionar</p>
                             </div>
 
-                            <button className="w-full py-4 bg-mason-blue text-white font-bold rounded-2xl hover:bg-mason-blue-light transition shadow-lg">
+                            <button className="w-full py-5 bg-primary text-primary-foreground font-black rounded-md hover:bg-primary/95 transition shadow-xl shadow-primary/10 uppercase text-[11px] tracking-[0.3em] active:scale-[0.98]">
                                 Enviar para a Potência
                             </button>
                         </form>
                     </div>
 
-                    <div className="space-y-6">
-                        <div className="bg-mason-blue p-8 rounded-3xl text-white">
-                            <h3 className="font-bold text-lg mb-4 text-mason-green italic underline underline-offset-8">Instruções Importantes</h3>
-                            <ul className="space-y-4 text-sm text-white/70">
-                                <li className="flex gap-3"><span className="text-mason-green font-bold">01.</span> Todos os documentos devem estar assinados pelo Venerável Mestre e Secretário.</li>
-                                <li className="flex gap-3"><span className="text-mason-green font-bold">02.</span> O prazo médio de despacho pela Potência é de 72 horas úteis.</li>
-                            </ul>
+                    <div className="space-y-8">
+                        <div className="bg-primary p-10 rounded-xl text-primary-foreground relative overflow-hidden shadow-2xl">
+                            <div className="absolute top-0 right-0 w-48 h-48 bg-accent/10 rounded-full blur-3xl -mr-24 -mt-24" />
+                            <h3 className="font-black text-[10px] mb-8 text-accent uppercase tracking-[0.4em] flex items-center gap-3">
+                                <Clock size={16} /> Protocolos Atuais
+                            </h3>
+                            <div className="space-y-8 relative z-10">
+                                <div className="border-l-2 border-accent/30 pl-8 space-y-2">
+                                    <p className="font-black text-lg italic font-serif">Validação Formal</p>
+                                    <p className="text-primary-foreground/40 text-xs font-medium leading-relaxed">
+                                        Todos os documentos devem estar assinados pelo Venerável Mestre e Secretário conforme o RGF.
+                                    </p>
+                                </div>
+                                <div className="border-l-2 border-accent/10 pl-8 space-y-2">
+                                    <p className="font-black text-lg italic font-serif">Tempo de Resposta</p>
+                                    <p className="text-primary-foreground/40 text-xs font-medium leading-relaxed">
+                                        O prazo médio de despacho pela Grande Secretaria é de 72 horas úteis.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             ) : (
-                <div className="bg-white rounded-3xl border border-slate-100 shadow-xl overflow-hidden">
-                    <div className="p-6 border-b border-slate-50 flex items-center gap-4">
-                        <div className="relative flex-grow">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
-                            <input type="text" placeholder="Filtrar processos..." className="w-full bg-slate-50 rounded-full py-2 pl-12 pr-4 text-sm outline-none border border-transparent focus:border-slate-200" />
+                <div className="bg-background rounded-xl border border-border shadow-sm overflow-hidden">
+                    <div className="p-8 border-b border-border flex items-center gap-6 bg-muted/5">
+                        <div className="relative flex-grow max-w-2xl">
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-accent transition" size={18} />
+                            <input type="text" placeholder="Filtrar processos por protocolo ou tipo..." className="w-full bg-background border border-border rounded-md py-4 pl-14 pr-6 text-sm outline-none focus:border-accent transition font-medium" />
                         </div>
                     </div>
                     <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead className="bg-slate-50/50 text-slate-400 text-[10px] font-black uppercase tracking-widest">
+                        <table className="w-full text-left">
+                            <thead className="bg-muted/10 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] border-b border-border">
                                 <tr>
-                                    <th className="px-8 py-4 text-left">Protocolo</th>
-                                    <th className="px-8 py-4 text-left">Documento</th>
-                                    <th className="px-8 py-4 text-left">Data Envio</th>
-                                    <th className="px-8 py-4 text-left">Status</th>
-                                    <th className="px-8 py-4"></th>
+                                    <th className="px-8 py-6">Protocolo</th>
+                                    <th className="px-8 py-6">Documento</th>
+                                    <th className="px-8 py-6">Data Envio</th>
+                                    <th className="px-8 py-6">Status</th>
+                                    <th className="px-8 py-6"></th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-50">
+                            <tbody className="divide-y divide-border text-primary font-medium">
                                 {processes.map(p => (
-                                    <tr key={p.id} className="hover:bg-slate-50/50 transition">
-                                        <td className="px-8 py-5 text-sm font-bold text-mason-blue">#2026-00{p.id}</td>
-                                        <td className="px-8 py-5 text-sm text-slate-600 font-medium">{p.tipo}</td>
-                                        <td className="px-8 py-5 text-sm text-slate-400">{p.data}</td>
-                                        <td className="px-8 py-5">
-                                            <div className="flex items-center gap-2 text-xs font-bold italic">
+                                    <tr key={p.id} className="hover:bg-muted/5 transition-colors group">
+                                        <td className="px-8 py-6 font-black tracking-tight underline decoration-accent/10 decoration-offset-4 italic font-serif">#2026-00{p.id}</td>
+                                        <td className="px-8 py-6 text-sm">{p.tipo}</td>
+                                        <td className="px-8 py-6 text-xs text-muted-foreground">{p.data}</td>
+                                        <td className="px-8 py-6">
+                                            <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest italic font-serif">
                                                 {getStatusIcon(p.status)}
                                                 {p.status}
                                             </div>
                                         </td>
-                                        <td className="px-8 py-5 text-right">
-                                            <button className="text-xs font-bold text-mason-green hover:underline">Detalhes</button>
+                                        <td className="px-8 py-6 text-right">
+                                            <button className="text-[10px] font-black text-accent uppercase tracking-[0.2em] hover:underline decoration-offset-4">Detalhes</button>
                                         </td>
                                     </tr>
                                 ))}

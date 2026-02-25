@@ -12,77 +12,87 @@ export default function LodgeFinance() {
     const { stats } = useCapitacao(mockObreiros, 55.00); // R$ 55,00 per active member
 
     return (
-        <div className="p-8 max-w-5xl mx-auto">
-            <header className="mb-10">
-                <h1 className="text-3xl font-bold text-mason-blue">Tesouraria e Capitação</h1>
-                <p className="text-slate-500">Gestão financeira e obrigações federativas da oficina.</p>
+        <div className="p-10 space-y-12 bg-background min-h-screen">
+            <header className="flex justify-between items-end border-b border-border pb-10">
+                <div>
+                    <h1 className="text-5xl font-black text-primary tracking-tighter leading-none mb-4 italic font-serif uppercase">Tesouraria & Capitação</h1>
+                    <p className="text-muted-foreground font-medium flex items-center gap-2">
+                        <span className="w-2 h-2 bg-accent rounded-full" />
+                        Gestão financeira e obrigações federativas
+                    </p>
+                </div>
             </header>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm">
-                    <div className="flex items-center gap-3 text-mason-blue font-bold text-sm mb-4">
-                        <Landmark size={18} className="text-mason-green" /> TAXA FEDERATIVA
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="p-8 bg-background rounded-xl border border-border shadow-sm hover:border-accent/40 transition-all group">
+                    <div className="flex items-center gap-3 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-6">
+                        <Landmark size={18} className="text-accent" /> TAXA FEDERATIVA
                     </div>
-                    <p className="text-4xl font-bold text-mason-blue">
-                        R$ {stats.totalFatura.toFixed(2)}
+                    <p className="text-5xl font-black text-primary tracking-tighter">
+                        <span className="text-xl text-muted-foreground align-top mt-2">R$</span> {stats.totalFatura.toFixed(0)}
+                        <span className="text-xl font-bold">,{(stats.totalFatura % 1).toFixed(2).split('.')[1]}</span>
                     </p>
-                    <p className="text-xs text-slate-400 mt-2 uppercase tracking-wider">
-                        Fat. Atual: {stats.ativos} Obreiros × R$ {stats.taxaPorObreiro.toFixed(2)}
+                    <p className="text-[9px] font-black text-muted-foreground mt-4 uppercase tracking-[0.1em]">
+                        Atual: {stats.ativos} Ativos × R$ {stats.taxaPorObreiro.toFixed(2)}
                     </p>
                 </div>
 
-                <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm">
-                    <div className="flex items-center gap-3 text-mason-blue font-bold text-sm mb-4">
-                        <TrendingUp size={18} className="text-emerald-500" /> SALDO EM CONTA
+                <div className="p-8 bg-background rounded-xl border border-border shadow-sm hover:border-primary/40 transition-all group relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12" />
+                    <div className="flex items-center gap-3 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-6">
+                        <TrendingUp size={18} className="text-primary" /> SALDO EM CONTA
                     </div>
-                    <p className="text-4xl font-bold text-emerald-600">
-                        R$ 12.450,00
+                    <p className="text-5xl font-black text-primary tracking-tighter">
+                        <span className="text-xl text-muted-foreground align-top mt-2">R$</span> 12.450
+                        <span className="text-xl font-bold">,00</span>
                     </p>
-                    <p className="text-xs text-slate-400 mt-2 uppercase tracking-wider">Disponível para custeio</p>
+                    <p className="text-[9px] font-black text-muted-foreground mt-4 uppercase tracking-[0.1em]">Disponível para custeio operacional</p>
                 </div>
 
-                <div className="p-6 bg-amber-50 rounded-2xl border border-amber-100 shadow-sm">
-                    <div className="flex items-center gap-3 text-amber-700 font-bold text-sm mb-4">
+                <div className="p-8 bg-accent/5 rounded-xl border border-accent/20 shadow-sm hover:border-accent transition-all group">
+                    <div className="flex items-center gap-3 text-[10px] font-black text-accent uppercase tracking-[0.2em] mb-6">
                         <AlertCircle size={18} /> PENDÊNCIAS
                     </div>
-                    <p className="text-4xl font-bold text-amber-800">02</p>
-                    <p className="text-xs text-amber-600/70 mt-2 uppercase tracking-wider">Meses em atraso</p>
+                    <p className="text-5xl font-black text-accent tracking-tighter underline decoration-accent/30 decoration-offset-8">02</p>
+                    <p className="text-[9px] font-black text-accent/70 mt-4 uppercase tracking-[0.1em]">Meses em atraso com a potência</p>
                 </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-md overflow-hidden">
-                <div className="p-6 border-b border-slate-50 flex justify-between items-center">
-                    <h2 className="font-bold text-mason-blue">Histórico de Cobrança (Capitação)</h2>
-                    <button className="text-xs font-bold text-mason-green hover:underline">Ver Detalhamento</button>
+            <div className="bg-background border border-border rounded-xl shadow-sm overflow-hidden">
+                <div className="p-8 border-b border-border flex justify-between items-center bg-muted/5">
+                    <h2 className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Histórico de Cobrança (Capitação)</h2>
+                    <button className="text-[10px] font-black text-accent uppercase tracking-[0.2em] hover:underline decoration-offset-4">Ver Detalhamento</button>
                 </div>
-                <table className="w-full text-left">
-                    <thead className="bg-slate-50 text-slate-500 text-xs font-bold uppercase tracking-widest">
-                        <tr>
-                            <th className="px-6 py-4">Referência</th>
-                            <th className="px-6 py-4">Obreiros Ativos</th>
-                            <th className="px-6 py-4">Valor Total</th>
-                            <th className="px-6 py-4">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-50 text-sm italic text-slate-600">
-                        <tr>
-                            <td className="px-6 py-4 font-medium not-italic text-mason-blue">Fevereiro 2026</td>
-                            <td className="px-6 py-4">32</td>
-                            <td className="px-6 py-4 text-mason-blue">R$ 1.760,00</td>
-                            <td className="px-6 py-4">
-                                <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold uppercase">Pago</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="px-6 py-4 font-medium not-italic text-mason-blue">Janeiro 2026</td>
-                            <td className="px-6 py-4">31</td>
-                            <td className="px-6 py-4 text-mason-blue">R$ 1.705,00</td>
-                            <td className="px-6 py-4">
-                                <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold uppercase">Pago</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead className="bg-muted/10 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] border-b border-border">
+                            <tr>
+                                <th className="px-8 py-6">Referência</th>
+                                <th className="px-8 py-6">Obreiros Ativos</th>
+                                <th className="px-8 py-6">Valor Total</th>
+                                <th className="px-8 py-6 text-right">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border text-primary font-medium">
+                            <tr className="hover:bg-muted/5 transition-colors">
+                                <td className="px-8 py-6 font-black tracking-tight underline italic font-serif">Fevereiro 2026</td>
+                                <td className="px-8 py-6">32</td>
+                                <td className="px-8 py-6 font-bold">R$ 1.760,00</td>
+                                <td className="px-8 py-6 text-right">
+                                    <span className="px-4 py-1.5 bg-primary text-primary-foreground border border-white/5 rounded-full text-[9px] font-black uppercase tracking-[0.2em]">Liquidado</span>
+                                </td>
+                            </tr>
+                            <tr className="hover:bg-muted/5 transition-colors">
+                                <td className="px-8 py-6 font-black tracking-tight underline italic font-serif">Janeiro 2026</td>
+                                <td className="px-8 py-6">31</td>
+                                <td className="px-8 py-6 font-bold">R$ 1.705,00</td>
+                                <td className="px-8 py-6 text-right">
+                                    <span className="px-4 py-1.5 bg-primary text-primary-foreground border border-white/5 rounded-full text-[9px] font-black uppercase tracking-[0.2em]">Liquidado</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

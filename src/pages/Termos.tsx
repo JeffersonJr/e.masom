@@ -1,44 +1,43 @@
 
+import InternalHero from '../components/InternalHero';
+
 export default function Termos() {
     return (
-        <div className="bg-white min-h-screen pt-20">
-            <div className="max-w-3xl mx-auto px-6 py-20">
-                <h1 className="text-4xl font-bold text-mason-blue mb-12">Termos de Uso e Privacidade</h1>
+        <div className="bg-background min-h-screen">
+            <InternalHero
+                badge="Conformidade"
+                title={<>Termos de <br /><span className="text-accent underline decoration-accent/30 decoration-offset-8">Uso.</span></>}
+                subtitle="Regras e diretrizes para o uso ético e seguro da plataforma e.mason."
+            />
 
-                <div className="prose prose-slate max-w-none text-slate-600 space-y-8">
-                    <section>
-                        <h2 className="text-2xl font-bold text-mason-blue mb-4">1. Introdução</h2>
-                        <p>
-                            Bem-vindo ao e.mason. Ao acessar nossa plataforma, você concorda em cumprir estes termos e todas as leis aplicáveis à prática de governança digital e proteção de dados.
-                        </p>
-                    </section>
+            <section className="py-24 px-6 max-w-4xl mx-auto">
+                <div className="prose prose-slate max-w-none text-primary/80 font-medium">
+                    <h2 className="text-3xl font-black text-primary mb-8 tracking-tight font-serif italic">1. Aceitação dos Termos</h2>
+                    <p className="mb-8 leading-relaxed">
+                        Ao acessar a plataforma e.mason, você concorda em cumprir estes termos de serviço, todas as leis e regulamentos aplicáveis ​​e concorda que é responsável pelo cumprimento de todas as leis locais e regulamentos internos de sua Jurisdição.
+                    </p>
 
-                    <section>
-                        <h2 className="text-2xl font-bold text-mason-blue mb-4">2. Propriedade dos Dados</h2>
-                        <p>
-                            A e.mason é uma provedora de infraestrutura técnica. Todos os dados inseridos na plataforma pertencem exclusivamente à Potência ou à Loja contratante. Não acessamos conteúdos sem autorização expressa do administrador master judicial para fins de suporte.
-                        </p>
-                    </section>
+                    <h2 className="text-3xl font-black text-primary mb-8 tracking-tight font-serif italic">2. Licença de Uso</h2>
+                    <p className="mb-8 leading-relaxed">
+                        A licença concedida é para uso interno e institucional, conforme o plano contratado pela sua Potência ou Loja. É vetada a redistribuição, engenharia reversa ou uso para fins não condizentes com a finalidade de governança maçônica.
+                    </p>
 
-                    <section>
-                        <h2 className="text-2xl font-bold text-mason-blue mb-4">3. Sigilo da Ordem</h2>
-                        <p>
-                            Reconhecemos a natureza sensível e o compromisso de sigilo dos nossos usuários. Nossa plataforma é desenhada para reforçar esses pilares, garantindo que o acesso a rituais, atas e processos seja restrito apenas a obreiros devidamente identificados por CIM e grau.
-                        </p>
-                    </section>
+                    <h2 className="text-3xl font-black text-primary mb-8 tracking-tight font-serif italic">3. Responsabilidades</h2>
+                    <p className="mb-8 leading-relaxed">
+                        Cada usuário é responsável pela guarda de suas credenciais de acesso. O e.mason não se responsabiliza por atos decorrentes de negligência na segurança das senhas individuais. A integridade das informações lançadas é de responsabilidade exclusiva da Loja ou Potência detentora da conta.
+                    </p>
 
-                    <section>
-                        <h2 className="text-2xl font-bold text-mason-blue mb-4">4. LGPD</h2>
-                        <p>
-                            Estamos em total conformidade com a Lei Geral de Proteção de Dados (LGPD). Todos os dados pessoais são coletados com base legal específica e tratados sob as mais rigorosas camadas de segurança cibernética.
-                        </p>
-                    </section>
-
-                    <div className="pt-12 border-t border-slate-100 text-sm text-slate-400">
-                        Última atualização: 24 de Fevereiro de 2026.
-                    </div>
+                    <h2 className="text-3xl font-black text-primary mb-8 tracking-tight font-serif italic">4. Modificações</h2>
+                    <p className="mb-8 leading-relaxed">
+                        O e.mason pode revisar estes termos de serviço a qualquer momento, visando sempre a melhoria da segurança e conformidade da plataforma. O uso continuado do sistema implica na aceitação dos termos revisados.
+                    </p>
                 </div>
-            </div>
+
+                <div className="mt-16 pt-12 border-t border-border flex justify-between items-center text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40">
+                    <span>Jurisdição Digital Soberana</span>
+                    <span>Atualizado: Fevereiro 2026</span>
+                </div>
+            </section>
         </div>
     );
 }

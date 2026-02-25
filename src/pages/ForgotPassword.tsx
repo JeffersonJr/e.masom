@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Link } from 'react-router-dom';
 import { Mail, ArrowLeft, Loader2, CheckCircle2 } from 'lucide-react';
+import { translateAuthError } from '../lib/auth-translate';
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ export default function ForgotPassword() {
         });
 
         if (error) {
-            setError(error.message);
+            setError(translateAuthError(error.message));
             setLoading(false);
         } else {
             setSent(true);
@@ -29,38 +30,38 @@ export default function ForgotPassword() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
-            <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl p-10 md:p-14">
-                <Link to="/login" className="flex items-center gap-2 text-slate-400 text-sm mb-12 hover:text-mason-blue transition font-bold uppercase tracking-widest">
-                    <ArrowLeft size={16} /> Voltar para o Login
+        <div className="min-h-screen flex items-center justify-center bg-background p-6">
+            <div className="w-full max-w-lg bg-background rounded-xl border border-border shadow-2xl p-10 md:p-16 border-t-4 border-t-accent">
+                <Link to="/login" className="flex items-center gap-3 text-muted-foreground text-[10px] mb-16 hover:text-primary transition font-black uppercase tracking-[0.3em]">
+                    <ArrowLeft size={16} /> Voltar ao Portal
                 </Link>
 
                 {!sent ? (
                     <>
-                        <header className="mb-10">
-                            <h1 className="text-3xl font-bold text-mason-blue mb-2 tracking-tight">Recuperar Senha</h1>
-                            <p className="text-slate-500">Enviaremos um link de recuperação para o seu e-mail.</p>
+                        <header className="mb-12">
+                            <h1 className="text-4xl font-black text-primary mb-4 tracking-tighter italic font-serif italic">Recuperar Soberania</h1>
+                            <p className="text-muted-foreground font-medium italic">Enviaremos um link de restauração para sua conta.</p>
                         </header>
 
                         {error && (
-                            <div className="mb-6 p-4 bg-rose-50 border border-rose-100 text-rose-600 text-sm rounded-2xl flex gap-3 items-center">
-                                <div className="w-2 h-2 bg-rose-500 rounded-full" />
+                            <div className="mb-8 p-6 bg-accent/5 border border-accent/20 text-accent text-xs font-black uppercase tracking-widest rounded-md flex gap-4 items-center">
+                                <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
                                 {error}
                             </div>
                         )}
 
-                        <form onSubmit={handleReset} className="space-y-6">
-                            <div className="space-y-1">
-                                <label className="text-[10px] font-black text-mason-blue uppercase tracking-widest pl-1">E-mail Cadastrado</label>
+                        <form onSubmit={handleReset} className="space-y-8">
+                            <div className="space-y-3">
+                                <label className="text-[10px] font-black text-primary uppercase tracking-[0.2em] ml-1">E-mail Cadastrado</label>
                                 <div className="relative group">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-mason-green transition" size={18} />
+                                    <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-accent transition" size={18} />
                                     <input
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
-                                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 outline-none focus:ring-2 focus:ring-mason-green/20 focus:border-mason-green transition"
-                                        placeholder="seu@email.com"
+                                        className="w-full bg-muted/20 border border-border rounded-md py-4 pl-14 pr-6 outline-none focus:border-accent transition font-medium text-sm"
+                                        placeholder="seu@identidade.com"
                                     />
                                 </div>
                             </div>
@@ -68,26 +69,26 @@ export default function ForgotPassword() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full bg-mason-blue text-white font-bold py-5 rounded-2xl hover:bg-mason-blue-light transition shadow-xl disabled:opacity-50 flex items-center justify-center gap-3"
+                                className="w-full bg-primary text-primary-foreground font-black py-5 rounded-md hover:bg-primary/95 transition shadow-xl shadow-primary/10 disabled:opacity-50 flex items-center justify-center gap-3 uppercase text-[11px] tracking-[0.3em]"
                             >
-                                {loading ? <Loader2 className="animate-spin" size={20} /> : 'Enviar Link de Recuperação'}
+                                {loading ? <Loader2 className="animate-spin" size={20} /> : 'Enviar Protocolo'}
                             </button>
                         </form>
                     </>
                 ) : (
-                    <div className="text-center py-6">
-                        <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8">
-                            <CheckCircle2 size={40} />
+                    <div className="text-center py-10">
+                        <div className="w-24 h-24 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto mb-10 shadow-inner border border-accent/20">
+                            <CheckCircle2 size={48} />
                         </div>
-                        <h2 className="text-3xl font-bold text-mason-blue mb-4">Verifique seu E-mail</h2>
-                        <p className="text-slate-500 mb-10 leading-relaxed">
-                            Enviamos as instruções de recuperação para <strong>{email}</strong>. Por favor, verifique sua caixa de entrada e spam.
+                        <h2 className="text-4xl font-black text-primary mb-6 italic font-serif">Verifique seu E-mail</h2>
+                        <p className="text-muted-foreground mb-12 leading-relaxed font-medium italic">
+                            Protocolo enviado para <strong>{email}</strong>.
                         </p>
                         <Link
                             to="/login"
-                            className="block w-full bg-slate-100 text-slate-600 font-bold rounded-2xl py-4 hover:bg-slate-200 transition"
+                            className="block w-full bg-muted text-primary font-black rounded-md py-5 hover:bg-muted/80 transition uppercase text-[10px] tracking-[0.3em]"
                         >
-                            Voltar para o Login
+                            Retornar ao Login
                         </Link>
                     </div>
                 )}

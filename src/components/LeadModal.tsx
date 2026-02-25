@@ -1,6 +1,7 @@
-
-import React, { useState } from 'react';
-import { X, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { X, CheckCircle2, Loader2, Sparkles, User, Mail, Shield, Lock } from 'lucide-react';
+import { authService } from '../lib/auth-service';
+import { translateAuthError } from '../lib/auth-translate';
 
 interface LeadModalProps {
     isOpen: boolean;
@@ -11,89 +12,186 @@ interface LeadModalProps {
 export default function LeadModal({ isOpen, onClose, type }: LeadModalProps) {
     const [step, setStep] = useState<'form' | 'success'>('form');
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        potency: ''
+    });
 
     if (!isOpen) return null;
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const isCorporateEmail = (email: string) => {
+        const emailTrimmed = email.trim().toLowerCase();
+        const commonProviders = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'icloud.com'];
+        const domain = emailTrimmed.split('@')[1];
+
+        console.log('Validating domain:', domain, 'Full email:', emailTrimmed);
+
+        if (!domain) return false;
+        return !commonProviders.includes(domain);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
+
+        if (type === 'trial' && !isCorporateEmail(formData.email)) {
+            setError(`O domínio "${formData.email.split('@')[1] || 'informado'}" não é reconhecido como e-mail corporativo / institucional.`);
+            return;
+        }
+
         setLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-            setLoading(false);
+
+        try {
+            if (type === 'trial') {
+                await authService.signupTrial({
+                    name: formData.name,
+                    email: formData.email,
+                    password: formData.password as any,
+                    potencyName: formData.potency
+                });
+            } else {
+                // For demo, just simulate
+                await new Promise(resolve => setTimeout(resolve, 1500));
+            }
             setStep('success');
-        }, 1500);
+        } catch (err: any) {
+            setError(translateAuthError(err.message || 'Ocorreu um erro ao processar sua solicitação.'));
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-            <div className="absolute inset-0 bg-mason-blue/40 backdrop-blur-md transition-opacity" onClick={onClose} />
+            <div className="absolute inset-0 bg-primary/40 backdrop-blur-md transition-opacity" onClick={onClose} />
 
-            <div className="relative w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
-                <button onClick={onClose} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-mason-blue transition">
+            <div className="relative w-full max-w-xl bg-background rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 border border-border mt-10 md:mt-20">
+                <button onClick={onClose} className="absolute top-6 right-6 p-2 text-muted-foreground hover:text-primary transition z-20">
                     <X size={24} />
                 </button>
 
                 {step === 'form' ? (
-                    <div className="p-10 md:p-14">
-                        <div className="mb-8">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-mason-green/10 text-mason-green rounded-full text-[10px] font-black uppercase tracking-widest mb-4">
-                                <Sparkles size={12} /> {type === 'demo' ? 'Solicite uma Demonstração' : 'Acesso Antecipado'}
+                    <div className="p-10 md:p-14 max-h-[90vh] overflow-y-auto">
+                        <div className="mb-10">
+                            <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-accent/10 border border-accent/20 rounded-full text-[10px] font-black text-accent mb-6 tracking-[0.3em] uppercase">
+                                <Sparkles size={12} /> {type === 'demo' ? 'Demonstração Premium' : 'Teste de 15 Dias'}
                             </div>
-                            <h2 className="text-3xl font-bold text-mason-blue">
+                            <h2 className="text-4xl font-black text-primary tracking-tighter italic font-serif leading-none">
                                 {type === 'demo'
-                                    ? 'Veja o e.mason em ação.'
-                                    : 'Comece seu teste gratuito de 15 dias.'}
+                                    ? 'Descubra a Governança.'
+                                    : 'Acesso Soberano.'}
                             </h2>
-                            <p className="text-slate-500 mt-4">
+                            <p className="text-muted-foreground mt-4 font-medium italic">
                                 {type === 'demo'
-                                    ? 'Nossos consultores entrarão em contato para agendar uma tour personalizada.'
-                                    : 'Descubra como podemos transformar a governança da sua jurisdição hoje.'}
+                                    ? 'Nossos consultores realizarão uma tour personalizada pela infraestrutura e.mason.'
+                                    : 'Instancie sua Potência agora e experimente a transformação digital.'}
                             </p>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Nome Completo</label>
-                                <input required type="text" className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-mason-blue outline-none focus:ring-4 focus:ring-mason-green/10 focus:border-mason-green transition" placeholder="Ex: José Duarte" />
+                        {error && (
+                            <div className="mb-8 p-5 bg-destructive/5 border border-destructive/20 text-destructive text-[11px] font-black uppercase tracking-widest rounded-md flex gap-4 items-center animate-shake">
+                                <div className="w-1.5 h-1.5 bg-destructive rounded-full" />
+                                {error}
                             </div>
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">E-mail Corporativo</label>
-                                <input required type="email" className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-mason-blue outline-none focus:ring-4 focus:ring-mason-green/10 focus:border-mason-green transition" placeholder="jose.duarte@potencia.org.br" />
+                        )}
+
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-primary uppercase tracking-[0.2em] pl-1">Nome Completo</label>
+                                <div className="relative group">
+                                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 group-focus-within:text-accent transition" size={18} />
+                                    <input
+                                        required
+                                        type="text"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        className="w-full bg-background border border-border rounded-md px-12 py-4 text-primary outline-none focus:border-accent transition font-medium"
+                                        placeholder="Irmão / Administrador"
+                                    />
+                                </div>
                             </div>
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Potência / Loja</label>
-                                <input required type="text" className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-mason-blue outline-none focus:ring-4 focus:ring-mason-green/10 focus:border-mason-green transition" placeholder="Ex: Grande Loja Equinócio" />
+
+                            <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-primary uppercase tracking-[0.2em] pl-1">E-mail Corporativo</label>
+                                    <div className="relative group">
+                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 group-focus-within:text-accent transition" size={18} />
+                                        <input
+                                            required
+                                            type="email"
+                                            value={formData.email}
+                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                            className="w-full bg-background border border-border rounded-md px-12 py-4 text-primary outline-none focus:border-accent transition font-medium"
+                                            placeholder="nome@federacao.org.br"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {type === 'trial' && (
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-primary uppercase tracking-[0.2em] pl-1">Senha do Sistema</label>
+                                    <div className="relative group">
+                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 group-focus-within:text-accent transition" size={18} />
+                                        <input
+                                            required
+                                            type="password"
+                                            value={formData.password}
+                                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                            className="w-full bg-background border border-border rounded-md px-12 py-4 text-primary outline-none focus:border-accent transition font-medium"
+                                            placeholder="••••••••"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-primary uppercase tracking-[0.2em] pl-1">Potência / Loja</label>
+                                <div className="relative group">
+                                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 group-focus-within:text-accent transition" size={18} />
+                                    <input
+                                        required
+                                        type="text"
+                                        value={formData.potency}
+                                        onChange={(e) => setFormData({ ...formData, potency: e.target.value })}
+                                        className="w-full bg-background border border-border rounded-md px-12 py-4 text-primary outline-none focus:border-accent transition font-medium"
+                                        placeholder="Ex: GOB / Glesp / Oficina Independente"
+                                    />
+                                </div>
                             </div>
 
                             <button
                                 disabled={loading}
                                 type="submit"
-                                className="w-full bg-mason-blue text-white font-bold rounded-2xl py-5 mt-6 hover:bg-mason-blue-light transition-all shadow-xl shadow-mason-blue/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                                className="w-full bg-primary text-primary-foreground font-black rounded-md py-5 mt-4 hover:bg-primary/95 transition-all shadow-xl shadow-primary/10 flex items-center justify-center gap-3 disabled:opacity-50 uppercase text-[11px] tracking-[0.3em]"
                             >
                                 {loading ? (
                                     <Loader2 className="animate-spin" size={20} />
                                 ) : (
-                                    type === 'demo' ? 'Enviar Solicitação' : 'Ativar 15 Dias Grátis'
+                                    type === 'demo' ? 'Agendar com Especialista' : 'Iniciar Teste Sóbrio'
                                 )}
                             </button>
                         </form>
                     </div>
                 ) : (
-                    <div className="p-10 md:p-14 text-center">
-                        <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8">
-                            <CheckCircle2 size={40} />
+                    <div className="p-16 text-center">
+                        <div className="w-24 h-24 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto mb-10 border border-accent/20">
+                            <CheckCircle2 size={48} />
                         </div>
-                        <h2 className="text-3xl font-bold text-mason-blue mb-4">Solicitação Enviada!</h2>
-                        <p className="text-slate-500 mb-10 leading-relaxed">
+                        <h2 className="text-4xl font-black text-primary mb-6 tracking-tighter italic font-serif italic">Protocolo Iniciado!</h2>
+                        <p className="text-muted-foreground mb-12 leading-relaxed font-medium italic">
                             {type === 'demo'
-                                ? 'Um de nossos especialistas entrará em contato em breve no seu e-mail para agendar a demonstração.'
-                                : 'Suas credenciais de acesso temporário foram enviadas para o seu e-mail. Aproveite sua jornada digital!'}
+                                ? 'Um de nossos consultores entrará em contato em breve para realizar a tour institucional.'
+                                : `Instância para ${formData.potency} em fase de provisionamento. Verifique ${formData.email} para confirmar seu acesso.`}
                         </p>
                         <button
                             onClick={onClose}
-                            className="w-full bg-slate-100 text-slate-600 font-bold rounded-2xl py-4 hover:bg-slate-200 transition"
+                            className="w-full bg-muted text-primary font-black rounded-md py-5 hover:bg-muted/80 transition uppercase text-[10px] tracking-[0.3em]"
                         >
-                            Fechar
+                            Retornar
                         </button>
                     </div>
                 )}

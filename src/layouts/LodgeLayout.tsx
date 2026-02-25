@@ -6,50 +6,43 @@ export default function LodgeLayout() {
     const { lodgeSlug } = useParams();
 
     return (
-        <div className="flex min-h-screen bg-slate-50">
+        <div className="flex min-h-screen bg-background text-primary">
             {/* Sidebar */}
-            <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
-                <div className="p-6">
+            <aside className="w-64 bg-primary text-primary-foreground flex flex-col shadow-xl">
+                <div className="p-8">
                     <Link to={`/${lodgeSlug}/dashboard`} className="block">
-                        <img src="/e.mason.svg" alt="e.mason" className="h-6 w-auto" />
+                        <img src="/e.mason.svg" alt="e.mason" className="h-6 w-auto grayscale brightness-200" />
                     </Link>
-                    <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-1">Dashboard da Oficina</p>
+                    <p className="text-[10px] text-primary-foreground/40 uppercase tracking-[0.2em] font-black mt-2">Painel de Oficina</p>
                 </div>
 
-                <nav className="flex-grow px-4 space-y-1 py-4">
-                    <Link to={`/${lodgeSlug}/dashboard`} className="flex items-center gap-3 px-4 py-2 bg-slate-100 rounded-md text-sm font-medium text-mason-blue">
-                        <Home size={18} /> Início
-                    </Link>
-                    <Link to={`/${lodgeSlug}/dashboard/membros`} className="flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-50 hover:text-mason-blue rounded-md text-sm font-medium transition">
-                        <Users size={18} /> Quadro de Obreiros
-                    </Link>
-                    <Link to={`/${lodgeSlug}/dashboard/financeiro`} className="flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-50 hover:text-mason-blue rounded-md text-sm font-medium transition">
-                        <Landmark size={18} /> Tesouraria
-                    </Link>
-                    <Link to={`/${lodgeSlug}/dashboard/processos`} className="flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-50 hover:text-mason-blue rounded-md text-sm font-medium transition">
-                        <FileText size={18} /> Processos
-                    </Link>
-                    <Link to={`/${lodgeSlug}/dashboard/cms`} className="flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-50 hover:text-mason-blue rounded-md text-sm font-medium transition">
-                        <Globe size={18} /> Web & CMS
-                    </Link>
+                <nav className="flex-grow px-4 space-y-2 py-4">
+                    <SidebarLink to={`/${lodgeSlug}/dashboard`} icon={Home} label="Início" />
+                    <SidebarLink to={`/${lodgeSlug}/dashboard/membros`} icon={Users} label="Quadro de Obreiros" />
+                    <SidebarLink to={`/${lodgeSlug}/dashboard/financeiro`} icon={Landmark} label="Tesouraria" />
+                    <SidebarLink to={`/${lodgeSlug}/dashboard/processos`} icon={FileText} label="Processos" />
+                    <SidebarLink to={`/${lodgeSlug}/dashboard/cms`} icon={Globe} label="Web & CMS" />
                 </nav>
 
-                <div className="p-4 mt-auto border-t border-slate-100">
-                    <Link to={`/${lodgeSlug}/dashboard/config`} className="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-mason-blue text-sm font-medium">
+                <div className="p-6 mt-auto border-t border-white/5">
+                    <Link to={`/${lodgeSlug}/dashboard/config`} className="flex items-center gap-3 px-4 py-2 text-primary-foreground/40 hover:text-white text-sm font-medium transition">
                         <Settings size={18} /> Configurações
                     </Link>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-grow flex flex-col">
-                <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8">
-                    <div className="text-sm font-medium text-slate-500">Loja / {lodgeSlug}</div>
-                    <div className="flex items-center gap-4">
-                        <Link to={`/${lodgeSlug}`} className="text-xs text-mason-green hover:underline">Ver Site Público</Link>
-                        <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold">M</div>
+            <main className="flex-grow flex flex-col relative">
+                <header className="h-20 bg-background/80 backdrop-blur-md border-b border-border flex items-center justify-between px-10 sticky top-0 z-10">
+                    <div className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">
+                        Loja <span className="text-border mx-2">/</span> <span className="text-primary italic font-serif">{lodgeSlug}</span>
+                    </div>
+                    <div className="flex items-center gap-6">
+                        <Link to={`/${lodgeSlug}`} className="text-[10px] font-black text-accent uppercase tracking-[0.2em] hover:text-primary transition">Ver Site Público</Link>
+                        <div className="w-10 h-10 rounded-full bg-muted border border-border flex items-center justify-center text-primary font-black shadow-sm">M</div>
                     </div>
                 </header>
+
                 <div className="flex-grow overflow-auto">
                     <Outlet />
                 </div>
@@ -57,3 +50,21 @@ export default function LodgeLayout() {
         </div>
     );
 }
+
+interface SidebarLinkProps {
+    to: string;
+    icon: React.ElementType;
+    label: string;
+}
+
+function SidebarLink({ to, icon: Icon, label }: SidebarLinkProps) {
+    return (
+        <Link
+            to={to}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-primary-foreground/40 hover:bg-white/5 hover:text-white transition-all duration-300"
+        >
+            <Icon size={20} /> {label}
+        </Link>
+    );
+}
+

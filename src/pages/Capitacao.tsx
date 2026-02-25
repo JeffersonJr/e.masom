@@ -1,79 +1,74 @@
-
+import InternalHero from '../components/InternalHero';
 
 export default function Capitacao() {
     return (
-        <div className="bg-white">
-            <section className="pt-20 pb-32 px-6">
-                <div className="max-w-7xl mx-auto text-center">
-                    <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-mason-blue leading-tight mb-8">
-                        Módulo de <span className="text-mason-green">Capitação</span>
-                    </h1>
-                    <p className="max-w-3xl mx-auto text-xl text-slate-500 mb-12 leading-relaxed">
-                        Automatize a arrecadação de metais, mensalidades e taxas. Gestão financeira simplificada para a Tesouraria da Potência e das Lojas.
-                    </p>
-                </div>
-            </section>
+        <div className="bg-background">
+            <InternalHero
+                badge="Eficiência Master"
+                title={<>Módulo de <span className="text-accent underline decoration-accent/30 decoration-offset-8">Capitação.</span></>}
+                subtitle="Transforme a saúde financeira da sua Jurisdição. Automatize arrecadações, reduza a inadimplência e ofereça transparência absoluta para cada Obreiro e cada Oficina sob sua guarda."
+            />
 
-            <section className="py-24">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                        <div className="space-y-8">
-                            <div className="flex gap-6 items-start">
-                                <div className="flex-shrink-0 w-14 h-14 bg-mason-blue/5 rounded-[1.2rem] flex items-center justify-center text-mason-blue italic font-black text-xl border border-mason-blue/10">
-                                    01
-                                </div>
-                                <div>
-                                    <h3 className="text-2xl font-bold text-mason-blue mb-3">Arrecadação Inteligente</h3>
-                                    <p className="text-slate-500 leading-relaxed text-lg">
-                                        Geração em massa de boletos para toda a Potência com apenas um clique. O sistema identifica automaticamente obreiros irregulares e ajusta as cobranças.
-                                    </p>
-                                    <p className="text-slate-400 text-sm mt-3 italic">• Suporte a PIX, Boleto Registrado e Cartão.</p>
-                                </div>
-                            </div>
-                            <div className="flex gap-6 items-start">
-                                <div className="flex-shrink-0 w-14 h-14 bg-mason-green/5 rounded-[1.2rem] flex items-center justify-center text-mason-green italic font-black text-xl border border-mason-green/10">
-                                    02
-                                </div>
-                                <div>
-                                    <h3 className="text-2xl font-bold text-mason-blue mb-3">Dashboard Financeiro</h3>
-                                    <p className="text-slate-500 leading-relaxed text-lg">
-                                        Gráficos detalhados de saúde financeira por loja ou jurisdição. Previsibilidade de caixa e gestão de inadimplência ativa.
-                                    </p>
-                                    <p className="text-slate-400 text-sm mt-3 italic">• Fechamento mensal automatizado para as Secretarias.</p>
-                                </div>
-                            </div>
-                            <div className="flex gap-6 items-start">
-                                <div className="flex-shrink-0 w-14 h-14 bg-mason-blue/5 rounded-[1.2rem] flex items-center justify-center text-mason-blue italic font-black text-xl border border-mason-blue/10">
-                                    03
-                                </div>
-                                <div>
-                                    <h3 className="text-2xl font-bold text-mason-blue mb-3">Transparência Total</h3>
-                                    <p className="text-slate-500 leading-relaxed text-lg">
-                                        Cada obreiro pode consultar seu histórico de contribuições pelo portal, reduzindo o trabalho administrativo do Tesoureiro da Loja.
-                                    </p>
-                                    <p className="text-slate-400 text-sm mt-3 italic">• Extrato detalhado e comprovantes digitais instantâneos.</p>
-                                </div>
-                            </div>
+            <section className="py-40 px-6">
+                <div className="max-w-7xl mx-auto">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
+                        <div className="space-y-16">
+                            <CapitacaoStep
+                                number="01"
+                                title="Arrecadação Inteligente"
+                                description="Geração em massa de boletos para toda a Potência com apenas um clique. Identificação automática de regularidade."
+                                detail="Suporte a PIX, Boleto Registrado e Cartão."
+                            />
+                            <CapitacaoStep
+                                number="02"
+                                title="Insights Financeiros"
+                                description="Gráficos detalhados de saúde financeira por oficina ou jurisdição. Previsibilidade de caixa absoluta."
+                                detail="Fechamento mensal automatizado para as Secretarias."
+                                accent
+                            />
+                            <CapitacaoStep
+                                number="03"
+                                title="Transparência Soberana"
+                                description="Cada obreiro consulta seu histórico pelo portal, reduzindo a carga administrativa do Tesoureiro."
+                                detail="Extrato detalhado e comprovantes digitais instantâneos."
+                            />
                         </div>
-                        <div className="bg-mason-blue rounded-[4rem] p-16 text-white relative overflow-hidden shadow-2xl">
-                            <div className="absolute top-0 right-0 w-80 h-80 bg-mason-green/20 rounded-full blur-[100px] -mr-40 -mt-40" />
-                            <h2 className="text-xs font-black uppercase tracking-[0.4em] text-mason-green mb-8">Performance Garantida</h2>
-                            <p className="text-2xl md:text-3xl font-bold leading-tight mb-12 italic tracking-tight">
-                                "O e.mason transformou nossa tesouraria. A baixa automática e a integração bancária pouparam centenas de horas de trabalho manual mensal."
+                        <div className="bg-primary rounded-2xl p-16 md:p-24 text-primary-foreground relative overflow-hidden shadow-2xl border border-white/5">
+                            <div className="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-[100px] -mr-40 -mt-40" />
+                            <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-accent mb-12">Performance de Elite</h2>
+                            <p className="text-3xl md:text-5xl font-black leading-tight mb-16 italic font-serif tracking-tighter">
+                                "O e.mason transformou nossa tesouraria. A baixa automática poupa centenas de horas mensais."
                             </p>
-                            <div className="flex items-center gap-6 border-t border-white/10 pt-10">
-                                <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-mason-green font-bold text-xl">
+                            <div className="flex items-center gap-8 border-t border-white/10 pt-12">
+                                <div className="w-20 h-20 bg-white/5 rounded-xl flex items-center justify-center text-accent font-black text-2xl shadow-inner italic font-serif">
                                     TM
                                 </div>
-                                <div>
-                                    <p className="text-lg font-bold">Hugo S.</p>
-                                    <p className="text-sm text-slate-400 uppercase tracking-widest font-black">Tesoureiro Master</p>
+                                <div className="space-y-1">
+                                    <p className="text-2xl font-black tracking-tight underline decoration-accent/30 italic font-serif uppercase">Hugo S.</p>
+                                    <p className="text-[10px] text-primary-foreground/40 uppercase tracking-[0.3em] font-black">Tesourario Master</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+        </div>
+    );
+}
+
+function CapitacaoStep({ number, title, description, detail, accent }: { number: string, title: string, description: string, detail: string, accent?: boolean }) {
+    return (
+        <div className="flex gap-10 items-start group">
+            <div className={`flex-shrink-0 w-20 h-20 rounded-xl flex items-center justify-center italic font-serif font-black text-3xl border transition-all duration-500 ${accent ? 'bg-accent text-primary border-accent shadow-xl' : 'bg-muted border-border text-primary group-hover:bg-primary group-hover:text-primary-foreground'}`}>
+                {number}
+            </div>
+            <div className="space-y-4">
+                <h3 className="text-3xl font-black text-primary tracking-tighter italic font-serif">{title}</h3>
+                <p className="text-muted-foreground leading-relaxed text-lg font-medium">
+                    {description}
+                </p>
+                <p className="text-accent text-[10px] font-black uppercase tracking-[0.2em] pt-2">{detail}</p>
+            </div>
         </div>
     );
 }

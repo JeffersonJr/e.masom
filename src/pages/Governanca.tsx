@@ -1,78 +1,66 @@
-
+import InternalHero from '../components/InternalHero';
 import { ShieldCheck, LayoutDashboard, Database } from 'lucide-react';
 
 export default function Governanca() {
     return (
-        <div className="bg-white">
-            <section className="pt-20 pb-32 px-6">
-                <div className="max-w-7xl mx-auto">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-mason-blue/10 border border-mason-blue/20 rounded-full text-xs font-bold text-mason-blue mb-8 tracking-widest uppercase">
-                        Plataforma
-                    </div>
-                    <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-mason-blue leading-tight mb-8 max-w-4xl">
-                        Governança Digital para a <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-mason-blue to-mason-green">
-                            Tradição Maçônica.
-                        </span>
-                    </h1>
-                    <p className="max-w-2xl text-xl text-slate-500 mb-12 leading-relaxed">
-                        Uma solução completa para Grandes Secretarias e Grão-Mestrados gerenciarem suas jurisdições com eficiência, transparência e segurança.
-                    </p>
-                </div>
-            </section>
+        <div className="bg-background">
+            <InternalHero
+                badge="Soberania Digital"
+                title={<>Governança para a <br /><span className="text-accent underline decoration-accent/30 decoration-offset-8">Tradição Maçônica.</span></>}
+                subtitle="Dê o próximo passo na evolução administrativa da sua Jurisdição. O e.mason oferece o controle absoluto, a discrição necessária e a eficiência que a modernidade exige, sem nunca ferir a tradição secular."
+            />
 
-            <section className="py-24 bg-slate-50">
+            <section className="py-40">
                 <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-20">
-                        <h2 className="text-3xl font-bold text-mason-blue mb-4">Governança 360°</h2>
-                        <p className="text-slate-500 max-w-2xl mx-auto">Um sistema pensado para as complexidades da administração maçônica moderna.</p>
+                    <div className="text-center mb-32 border-b border-border pb-16">
+                        <h2 className="text-5xl font-black text-primary mb-6 tracking-tighter italic font-serif">Governança 360°</h2>
+                        <p className="text-muted-foreground max-w-2xl mx-auto text-xl font-medium">Arquitetura de dados pensada para as complexidades administrativas da jurisdição.</p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                        <div className="bg-white p-10 rounded-3xl border border-slate-100 shadow-sm space-y-6">
-                            <div className="w-12 h-12 bg-mason-blue rounded-xl flex items-center justify-center text-white">
-                                <LayoutDashboard size={24} />
-                            </div>
-                            <h3 className="text-xl font-bold text-mason-blue leading-tight italic">Macrovisão Jurisdicional</h3>
-                            <p className="text-slate-500 leading-relaxed italic">
-                                Visualize o status de todas as lojas, membros e processos em um único painel inteligente. Acompanhe o crescimento anual e a regularidade de toda a Potência.
-                            </p>
-                            <ul className="space-y-3 text-sm text-slate-400 border-t border-slate-50 pt-6">
-                                <li className="flex items-center gap-2 italic">✓ Gráficos de Evolução</li>
-                                <li className="flex items-center gap-2 italic">✓ Alertas de Irregularidade</li>
-                                <li className="flex items-center gap-2 italic">✓ Heatmap de Lojas</li>
-                            </ul>
-                        </div>
-                        <div className="bg-white p-10 rounded-3xl border border-slate-100 shadow-sm space-y-6">
-                            <div className="w-12 h-12 bg-mason-green rounded-xl flex items-center justify-center text-white">
-                                <Database size={24} />
-                            </div>
-                            <h3 className="text-xl font-bold text-mason-blue leading-tight italic">Base de Dados Unificada</h3>
-                            <p className="text-slate-500 leading-relaxed italic">
-                                Elimine a fragmentação de dados com um repositório centralizado e seguro para toda a Potência. Informação rápida para decisões estratégicas do Grão-Mestrado.
-                            </p>
-                            <ul className="space-y-3 text-sm text-slate-400 border-t border-slate-50 pt-6">
-                                <li className="flex items-center gap-2 italic">✓ Histórico de Gestões</li>
-                                <li className="flex items-center gap-2 italic">✓ Registro de Atas Históricas</li>
-                                <li className="flex items-center gap-2 italic">✓ Backup Automatizado</li>
-                            </ul>
-                        </div>
-                        <div className="bg-white p-10 rounded-3xl border border-slate-100 shadow-sm space-y-6">
-                            <div className="w-12 h-12 bg-mason-blue rounded-xl flex items-center justify-center text-white">
-                                <ShieldCheck size={24} />
-                            </div>
-                            <h3 className="text-xl font-bold text-mason-blue leading-tight italic">Conformidade e Sigilo</h3>
-                            <p className="text-slate-500 leading-relaxed italic">
-                                Controles de acesso rigorosos que respeitam a hierarquia e os graus maçônicos. Documentos sensíveis só podem ser visualizados por quem possui autoridade.
-                            </p>
-                            <ul className="space-y-3 text-sm text-slate-400 border-t border-slate-50 pt-6">
-                                <li className="flex items-center gap-2 italic">✓ Acesso Baseado em Graus</li>
-                                <li className="flex items-center gap-2 italic">✓ Logs de Acessos Sensíveis</li>
-                                <li className="flex items-center gap-2 italic">✓ Assinatura Digital</li>
-                            </ul>
-                        </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+                        <GovernancaCard
+                            icon={LayoutDashboard}
+                            title="Macrovisão Jurisdicional"
+                            description="Visualize o status de todas as oficinas, obreiros e processos em um único painel inteligente. Acompanhe a regularidade sistêmica."
+                            items={["Evolução Orgânica", "Alertas de Irregularidade", "Relatórios Dinâmicos"]}
+                        />
+                        <GovernancaCard
+                            icon={Database}
+                            title="Base de Dados Unificada"
+                            description="Elimine a fragmentação com um repositório centralizado e seguro. Informação imediata para decisões estratégicas."
+                            items={["Histórico de Gestões", "Atas Históricas", "Backup Automático"]}
+                            accent
+                        />
+                        <GovernancaCard
+                            icon={ShieldCheck}
+                            title="Conformidade e Sigilo"
+                            description="Controles de acesso rigorosos que respeitam a hierarquia e os graus. Documentos sensíveis sob autoridade restrita."
+                            items={["Acesso por Graus", "Logs de Auditoria", "Assinatura Digital"]}
+                        />
                     </div>
                 </div>
             </section>
+        </div>
+    );
+}
+
+function GovernancaCard({ icon: Icon, title, description, items, accent }: { icon: any, title: string, description: string, items: string[], accent?: boolean }) {
+    return (
+        <div className={`p-12 rounded-xl border transition-all duration-500 hover:shadow-2xl ${accent ? 'bg-primary border-primary text-primary-foreground shadow-xl scale-105 relative z-10' : 'bg-background border-border text-primary hover:border-accent/40'}`}>
+            <div className={`w-16 h-16 rounded-md flex items-center justify-center mb-10 shadow-lg ${accent ? 'bg-accent text-primary' : 'bg-muted text-muted-foreground'}`}>
+                <Icon size={32} />
+            </div>
+            <h3 className="text-3xl font-black mb-8 leading-tight italic font-serif tracking-tight">{title}</h3>
+            <p className={`${accent ? 'text-primary-foreground/60' : 'text-muted-foreground'} leading-relaxed font-medium mb-10`}>
+                {description}
+            </p>
+            <ul className={`space-y-4 text-[10px] font-black uppercase tracking-[0.2em] pt-10 border-t ${accent ? 'border-white/10 text-accent/80' : 'border-border text-muted-foreground/60'}`}>
+                {items.map((item, i) => (
+                    <li key={i} className="flex items-center gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                        {item}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }

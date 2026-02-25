@@ -1,0 +1,32 @@
+-- Resolução de Alertas de Segurança Supabase - e.mason
+
+-- 1. Ativar Row Level Security (RLS)
+ALTER TABLE IF EXISTS public.potencias ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS public.perfis ENABLE ROW LEVEL SECURITY;
+
+-- 2. Políticas para a tabela 'potencias'
+-- Permite leitura pública (necessário para o formulário de cadastro verificar domínios)
+DROP POLICY IF EXISTS "Allow public read for potency basic info" ON public.potencias;
+CREATE POLICY "Allow public read for potency basic info" ON public.potencias
+FOR SELECT USING (true);
+
+-- Permite que usuários autenticados criem novas potências (primeiro cadastro)
+DROP POLICY IF EXISTS "Allow authenticated users to insert potency" ON public.potencias;
+CREATE POLICY "Allow authenticated users to insert potency" ON public.potencias
+FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+
+-- 3. Políticas para a tabela 'perfis'
+-- Usuários podem ver apenas seu próprio perfil
+DROP POLICY IF EXISTS "Users can see their own profile" ON public.perfis;
+CREATE POLICY "Users can see their own profile" ON public.perfis
+FOR SELECT USING (auth.uid() = user_id);
+
+-- Usuários podem atualizar apenas seu próprio perfil (ex: vincular a uma potência no cadastro)
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.perfis;
+CREATE POLICY "Users can update their own profile" ON public.perfis
+FOR UPDATE USING (auth.uid() = user_id)
+WITH CHECK (auth.uid() = user_id);
+
+-- 4. Nota sobre Proteção de Senhas Vazadas
+-- Esta configuração deve ser ativada manualmente no Dashboard do Supabase:
+-- Auth -> Base Configuration -> Password Protection -> Enable "Have I Been Pwned"

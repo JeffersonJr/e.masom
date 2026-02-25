@@ -80,7 +80,7 @@ export default function PublicLayout() {
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto mt-24 pt-10 border-t border-border/50 text-muted-foreground/60 text-[10px] flex flex-col md:flex-row justify-between gap-4 uppercase tracking-widest font-medium">
-                    <span>© 2026 e.mason. Todos os direitos reservados. Powered by <a href="https://evolvestecnologia.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition">evolves tecnologia</a></span>
+                    <span>© 2026 e.mason. Todos os direitos reservados. Powered by <a href="https://evolves.site" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition">evolves tecnologia</a></span>
                     <div className="flex gap-8">
                         <Link to="/privacidade" className="hover:text-primary transition">Privacidade</Link>
                         <Link to="/seguranca" className="hover:text-primary transition">Segurança</Link>

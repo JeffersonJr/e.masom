@@ -51,9 +51,9 @@ export default function Home() {
                     </div>
 
                     <h1 className="text-6xl md:text-8xl font-black tracking-tight text-primary leading-[0.95] mb-10 max-w-4xl">
-                        Garanta a <br />
+                        Soberania Digital. <br />
                         <span className="text-muted-foreground italic font-serif">
-                            Perenidade da Ordem.
+                            Legado Institucional.
                         </span>
                     </h1>
 
@@ -210,9 +210,9 @@ export default function Home() {
                         <div className="flex flex-col sm:flex-row gap-6 justify-center">
                             <button
                                 onClick={() => openModal('trial')}
-                                className="px-12 py-5 bg-accent text-primary font-black rounded-md hover:scale-105 transition-transform uppercase text-xs tracking-widest shadow-xl shadow-accent/20 active:scale-95"
+                                className="px-12 py-5 bg-accent text-primary font-black rounded-md hover:scale-110 hover:-rotate-1 transition-all uppercase text-xs tracking-widest shadow-xl shadow-accent/20 active:scale-95"
                             >
-                                Iniciar Teste Grátis
+                                Reivindicar Soberania
                             </button>
                             <button
                                 onClick={() => openModal('demo')}

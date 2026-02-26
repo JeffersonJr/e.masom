@@ -8,6 +8,20 @@ export interface Loja {
     numero: string;
     rito: string | null;
     slug: string;
+    logo_url: string | null;
+    status: 'ativo' | 'rascunho';
+    localizacao_json: {
+        cidade?: string;
+        estado?: string;
+        cep?: string;
+        endereco?: string;
+        complemento?: string;
+    } | null;
+    membros_json: {
+        veneravel_id?: string;
+        cargos?: { perfil_id: string; cargo: string }[];
+        irmaos?: string[];
+    } | null;
     created_at: string;
 }
 
@@ -57,6 +71,18 @@ export const databaseService = {
         return newLoja as Loja;
     },
 
+    async updateLoja(id: string, data: Partial<Loja>) {
+        const { data: updated, error } = await supabase
+            .from('lojas')
+            .update(data)
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) throw error;
+        return updated as Loja;
+    },
+
     // OBREIROS
     async getObreiros(potenciaId: string) {
         const { data, error } = await supabase
@@ -67,6 +93,18 @@ export const databaseService = {
 
         if (error) throw error;
         return data as (Obreiro & { lojas: { nome: string; numero: string } | null })[];
+    },
+
+    async getObreirosByPotencia(potenciaId: string) {
+        const { data, error } = await supabase
+            .from('perfis')
+            .select('id, nome, cargo, grau, status')
+            .eq('potencia_id', potenciaId)
+            .eq('status', 'Ativo')
+            .order('nome');
+
+        if (error) throw error;
+        return data as Pick<Obreiro, 'id' | 'nome' | 'cargo' | 'grau' | 'status'>[];
     },
 
     // DOCUMENTOS

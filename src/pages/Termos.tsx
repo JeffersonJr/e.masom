@@ -14,7 +14,7 @@ export default function Termos() {
                 <div className="prose prose-slate max-w-none text-primary/80 font-medium">
                     <h2 className="text-3xl font-black text-primary mb-8 tracking-tight font-serif italic">1. Aceitação dos Termos</h2>
                     <p className="mb-8 leading-relaxed">
-                        Ao acessar a plataforma e.mason, você concorda em cumprir estes termos de serviço, todas as leis e regulamentos aplicáveis ​​e concorda que é responsável pelo cumprimento de todas as leis locais e regulamentos internos de sua Jurisdição.
+                        Ao acessar a plataforma e.mason, você concorda em cumprir estes termos de serviço, todas as leis e regulamentos aplicáveis e concorda que é responsável pelo cumprimento de todas as leis locais e regulamentos internos de sua Jurisdição.
                     </p>
 
                     <h2 className="text-3xl font-black text-primary mb-8 tracking-tight font-serif italic">2. Licença de Uso</h2>

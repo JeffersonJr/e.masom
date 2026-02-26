@@ -117,14 +117,16 @@ export default function Login() {
             } else {
                 setResetSuccess(true);
                 setLoading(false);
+                // Keep success message for 3 seconds then redirect
                 setTimeout(() => {
-                    setView('login');
+                    navigate('/login?view=login');
                     setResetSuccess(false);
                     setPassword('');
                     setConfirmPassword('');
                 }, 3000);
             }
         } catch (err: any) {
+            console.error('Erro no Reset:', err);
             setError('Ocorreu um erro inesperado.');
             setLoading(false);
         }

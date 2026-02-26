@@ -17,7 +17,7 @@ export const authService = {
             .from('potencias')
             .select('id')
             .eq('sigla', domain.split('.')[0].toUpperCase())
-            .single();
+            .maybeSingle();
 
         let potencyId;
 
@@ -27,7 +27,8 @@ export const authService = {
                 .insert({
                     nome: data.potencyName,
                     sigla: domain.split('.')[0].toUpperCase(),
-                    configuracoes_json: { domain: domain }
+                    configuracoes_json: { domain: domain },
+                    trial_ends_at: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString()
                 })
                 .select()
                 .single();

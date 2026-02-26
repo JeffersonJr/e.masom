@@ -9,17 +9,21 @@ export default function DashRedirect() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log('DashRedirect State:', { profile, loading, session });
+
         if (loading) return;
 
         if (!session) {
+            console.log('No session, redirecting to /login');
             navigate('/login');
             return;
         }
 
         if (profile) {
+            console.log('Profile found:', profile);
             // Priority 1: Master Admin (Potência)
-            // If they have a potency_id, they are likely a potency-level admin
-            if (profile.potencia_id && (!profile.loja_id || profile.cargo === 'Grão-Mestre' || profile.cargo === 'Secretário Geral')) {
+            if (profile.potencia_id && (!profile.loja_id || profile.cargo === 'Grão-Mestre' || profile.cargo === 'Secretário Geral' || profile.cargo === 'Administrador Master')) {
+                console.log('Redirecting to /admin');
                 navigate('/admin');
                 return;
             }
@@ -27,8 +31,10 @@ export default function DashRedirect() {
             // Priority 2: Lodge Admin/Member
             if (profile.loja_id) {
                 if (profile.lojas?.slug) {
+                    console.log('Redirecting to lodge dashboard:', profile.lojas.slug);
                     navigate(`/${profile.lojas.slug}/dashboard`);
                 } else {
+                    console.log('Lodge ID exists but no slug, fallback to /admin or /');
                     if (profile.potencia_id) navigate('/admin');
                     else navigate('/');
                 }
@@ -36,11 +42,14 @@ export default function DashRedirect() {
             }
 
             // Fallback: If no specific role is found but has profile
+            console.log('Fallback to /, no specific route found for profile');
             navigate('/');
         } else if (!loading && session) {
+            console.log('Session exists but no profile, waiting 5s...');
             // Stay in loading state for 5 seconds while AuthContext retries profile fetch
             const timer = setTimeout(() => {
                 if (!profile) {
+                    console.log('Profile fetch timeout, redirecting to /');
                     navigate('/');
                 }
             }, 5000);

@@ -110,4 +110,37 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-delayed: float 6s ease-in-out 3s infinite;
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+}
+
+@layer utilities {
+  .perspective-2000 {
+    perspective: 2000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .rotate-x-60 {
+    transform: rotateX(60deg);
+  }
+  .-rotate-z-12 {
+    transform: rotateZ(-12deg);
+  }
+  .rotate-x-45 {
+    transform: rotateX(45deg);
+  }
+  .-rotate-z-6 {
+    transform: rotateZ(-6deg);
+  }
 }

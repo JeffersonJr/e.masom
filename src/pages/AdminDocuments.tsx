@@ -1,3 +1,5 @@
+
+import { useState, useEffect, useMemo } from 'react';
 import {
     Search,
     Filter,
@@ -8,18 +10,60 @@ import {
     Download,
     Eye,
     MoreVertical,
-    ChevronRight
+    ChevronRight,
+    Loader2
 } from 'lucide-react';
+import { databaseService, type Documento } from '../lib/database-service';
+import { useAuth } from '../contexts/AuthContext';
 
-const mockDocuments = [
-    { id: 1, title: 'Ata de Sessão Econômica', lodge: 'Loja Estrela do Norte nº 42', date: '2024-05-20', type: 'Ata', status: 'pending', importance: 'medium' },
-    { id: 2, title: 'Iniciação de Candidato', lodge: 'Loja Luz da Verdade nº 15', date: '2024-05-19', type: 'Processo', status: 'approved', importance: 'high' },
-    { id: 3, title: 'Pedido de Placet Ex-voto', lodge: 'Loja Silêncio e Virtude nº 03', date: '2024-05-18', type: 'Placet', status: 'rejected', importance: 'high' },
-    { id: 4, title: 'Relatório Trimestral Tesouraria', lodge: 'Loja Fraternidade Universal nº 01', date: '2024-05-15', type: 'Relatório', status: 'approved', importance: 'medium' },
-    { id: 5, title: 'Ata de Eleição de Diretoria', lodge: 'Loja Estrela do Norte nº 42', date: '2024-05-12', type: 'Ata', status: 'pending', importance: 'high' },
-];
+type DocumentWithLodge = Documento & { lojas: { nome: string; numero: string } | null };
 
 export default function AdminDocuments() {
+    const { profile } = useAuth();
+    const [documents, setDocuments] = useState<DocumentWithLodge[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState('');
+
+    const loadDocuments = async () => {
+        if (!profile?.potencia_id) return;
+        try {
+            setLoading(true);
+            const data = await databaseService.getDocumentos(profile.potencia_id);
+            setDocuments(data);
+        } catch (error) {
+            console.error('Erro ao carregar documentos:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadDocuments();
+    }, [profile?.potencia_id]);
+
+    const handleStatusUpdate = async (id: string, status: 'Aprovado' | 'Rejeitado') => {
+        try {
+            await databaseService.updateDocumentStatus(id, status);
+            loadDocuments();
+        } catch (error) {
+            console.error('Erro ao atualizar status:', error);
+            alert('Não foi possível atualizar o status do documento.');
+        }
+    };
+
+    const filteredDocuments = documents.filter(d =>
+        d.titulo?.toLowerCase().includes(search.toLowerCase()) ||
+        d.lojas?.nome.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const stats = useMemo(() => {
+        return {
+            pendentes: documents.filter(d => d.status === 'Pendente').length,
+            aprovadosMes: documents.filter(d => d.status === 'Aprovado').length,
+            total: documents.length
+        };
+    }, [documents]);
+
     return (
         <div className="p-10 space-y-12 bg-background min-h-screen">
             {/* Header section */}
@@ -45,10 +89,10 @@ export default function AdminDocuments() {
             {/* Stats bar */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                 {[
-                    { label: 'Pendentes', value: '24', icon: Clock, accent: true },
-                    { label: 'Aprovados (Mês)', value: '142', icon: CheckCircle2 },
-                    { label: 'Nível de Urgência', value: 'Alta', icon: AlertCircle, accent: true },
-                    { label: 'Total Digitalizado', value: '3.2k', icon: FileText },
+                    { label: 'Pendentes', value: stats.pendentes.toString(), icon: Clock, accent: true },
+                    { label: 'Aprovados (Total)', value: stats.aprovadosMes.toString(), icon: CheckCircle2 },
+                    { label: 'Urgência', value: stats.pendentes > 5 ? 'Alta' : 'Normal', icon: AlertCircle, accent: stats.pendentes > 5 },
+                    { label: 'Total Base', value: stats.total.toString(), icon: FileText },
                 ].map((stat, i) => (
                     <div key={i} className="bg-background p-8 rounded-xl border border-border shadow-sm flex items-center justify-between group hover:border-accent/40 transition-all">
                         <div>
@@ -69,6 +113,8 @@ export default function AdminDocuments() {
                     <input
                         type="text"
                         placeholder="Buscar por título, loja ou número do processo..."
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
                         className="w-full pl-12 pr-6 py-4 bg-background border border-border rounded-md focus:border-accent transition-all outline-none font-medium"
                     />
                 </div>
@@ -78,69 +124,93 @@ export default function AdminDocuments() {
             </div>
 
             {/* Document Table */}
-            <div className="bg-background rounded-xl border border-border shadow-sm overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left">
-                        <thead>
-                            <tr className="bg-muted/10 border-b border-border">
-                                <th className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Documento</th>
-                                <th className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Loja Federada</th>
-                                <th className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Data</th>
-                                <th className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Status</th>
-                                <th className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] text-right">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border text-primary font-medium">
-                            {mockDocuments.map((doc) => (
-                                <tr key={doc.id} className="group hover:bg-muted/5 transition-colors">
-                                    <td className="px-8 py-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-10 h-12 bg-muted border border-border rounded-md flex items-center justify-center text-muted-foreground group-hover:bg-accent group-hover:text-primary transition-colors">
-                                                <FileText size={20} />
-                                                {doc.importance === 'high' && <div className="absolute top-0 right-0 w-2 h-2 bg-accent rounded-full animate-pulse" />}
-                                            </div>
-                                            <div>
-                                                <p className="font-black text-primary tracking-tight">{doc.title}</p>
-                                                <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">{doc.type}</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-8 py-6">
-                                        <p className="text-sm font-bold">{doc.lodge}</p>
-                                    </td>
-                                    <td className="px-8 py-6">
-                                        <p className="text-xs font-medium text-muted-foreground font-mono">{doc.date}</p>
-                                    </td>
-                                    <td className="px-8 py-6 text-[9px] font-black uppercase tracking-[0.2em]">
-                                        <StatusBadge status={doc.status} />
-                                    </td>
-                                    <td className="px-8 py-6">
-                                        <div className="flex items-center justify-end gap-3">
-                                            <button className="p-3 text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition">
-                                                <Eye size={18} />
-                                            </button>
-                                            <button className="p-3 text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition">
-                                                <Download size={18} />
-                                            </button>
-                                            <button className="p-3 text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition">
-                                                <MoreVertical size={18} />
-                                            </button>
-                                        </div>
-                                    </td>
+            <div className="bg-background rounded-xl border border-border shadow-sm overflow-hidden min-h-[400px]">
+                {loading ? (
+                    <div className="flex flex-col items-center justify-center py-20 text-muted-foreground gap-4">
+                        <Loader2 className="animate-spin text-accent" size={40} />
+                        <p className="font-black uppercase tracking-[0.2em] text-[10px]">Consultando Arquivos...</p>
+                    </div>
+                ) : filteredDocuments.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-20 text-muted-foreground gap-2">
+                        <FileText size={40} className="opacity-20" />
+                        <p className="font-bold">Nenhum documento encontrado.</p>
+                    </div>
+                ) : (
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left">
+                            <thead>
+                                <tr className="bg-muted/10 border-b border-border">
+                                    <th className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Documento</th>
+                                    <th className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Loja Federada</th>
+                                    <th className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Data</th>
+                                    <th className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Status</th>
+                                    <th className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] text-right">Ações</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody className="divide-y divide-border text-primary font-medium">
+                                {filteredDocuments.map((doc) => (
+                                    <tr key={doc.id} className="group hover:bg-muted/5 transition-colors">
+                                        <td className="px-8 py-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-10 h-12 bg-muted border border-border rounded-md flex items-center justify-center text-muted-foreground group-hover:bg-accent group-hover:text-primary transition-colors relative">
+                                                    <FileText size={20} />
+                                                    {doc.status === 'Pendente' && <div className="absolute top-0 right-0 w-2 h-2 bg-accent rounded-full animate-pulse" />}
+                                                </div>
+                                                <div>
+                                                    <p className="font-black text-primary tracking-tight">{doc.titulo || 'Documento sem Título'}</p>
+                                                    <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">{doc.tipo}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-6">
+                                            <p className="text-sm font-bold">{doc.lojas?.nome || 'Jurisdição GOB'}</p>
+                                        </td>
+                                        <td className="px-8 py-6">
+                                            <p className="text-xs font-medium text-muted-foreground font-mono">{new Date(doc.created_at).toLocaleDateString()}</p>
+                                        </td>
+                                        <td className="px-8 py-6 text-[9px] font-black uppercase tracking-[0.2em]">
+                                            <StatusBadge status={doc.status} />
+                                        </td>
+                                        <td className="px-8 py-6">
+                                            <div className="flex items-center justify-end gap-3">
+                                                {doc.status === 'Pendente' && (
+                                                    <div className="flex gap-2 mr-4">
+                                                        <button
+                                                            onClick={() => handleStatusUpdate(doc.id, 'Aprovado')}
+                                                            className="px-3 py-1 bg-primary text-primary-foreground text-[8px] font-black uppercase tracking-widest rounded hover:bg-primary/90 transition"
+                                                        >
+                                                            Aprovar
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleStatusUpdate(doc.id, 'Rejeitado')}
+                                                            className="px-3 py-1 border border-border text-muted-foreground text-[8px] font-black uppercase tracking-widest rounded hover:text-accent hover:border-accent transition"
+                                                        >
+                                                            Rejeitar
+                                                        </button>
+                                                    </div>
+                                                )}
+                                                <a href={doc.arquivo_url} target="_blank" rel="noreferrer" className="p-3 text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition border border-transparent hover:border-border">
+                                                    <Eye size={18} />
+                                                </a>
+                                                <button className="p-3 text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition">
+                                                    <MoreVertical size={18} />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
 
                 <div className="px-8 py-6 border-t border-border flex items-center justify-between bg-muted/5">
-                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Exibindo 5 de 24 processos</p>
+                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Exibindo {filteredDocuments.length} documentos</p>
                     <div className="flex items-center gap-3">
                         <button className="h-10 w-10 flex items-center justify-center rounded-md bg-background border border-border text-muted-foreground hover:text-primary disabled:opacity-30" disabled>
                             <ChevronRight size={18} className="rotate-180" />
                         </button>
                         <button className="h-10 w-10 flex items-center justify-center rounded-md bg-primary text-primary-foreground font-black text-xs">1</button>
-                        <button className="h-10 w-10 flex items-center justify-center rounded-md bg-background border border-border text-muted-foreground hover:text-primary font-black text-xs transition-colors">2</button>
                         <button className="h-10 w-10 flex items-center justify-center rounded-md bg-background border border-border text-muted-foreground hover:text-primary transition-all">
                             <ChevronRight size={18} />
                         </button>
@@ -153,19 +223,19 @@ export default function AdminDocuments() {
 
 function StatusBadge({ status }: { status: string }) {
     switch (status) {
-        case 'approved':
+        case 'Aprovado':
             return (
                 <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-[9px] font-black uppercase tracking-[0.2em]">
                     <CheckCircle2 size={12} className="text-accent" /> Aprovado
                 </span>
             );
-        case 'pending':
+        case 'Pendente':
             return (
                 <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-[9px] font-black uppercase tracking-[0.2em]">
                     <Clock size={12} /> Em Análise
                 </span>
             );
-        case 'rejected':
+        case 'Rejeitado':
             return (
                 <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-muted border border-border text-muted-foreground text-[9px] font-black uppercase tracking-[0.2em]">
                     <AlertCircle size={12} /> Rejeitado

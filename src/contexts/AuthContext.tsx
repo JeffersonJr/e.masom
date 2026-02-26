@@ -5,6 +5,7 @@ import type { Session, User } from '@supabase/supabase-js';
 
 interface Profile {
     id: string;
+    nome: string | null;
     loja_id: string | null;
     potencia_id: string | null;
     grau: string;
@@ -57,24 +58,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
 
     const fetchProfile = async (userId: string, retries = 5) => {
+        console.log('Fetching profile for:', userId, 'Retries left:', retries);
         setLoading(true);
         try {
-            const { data } = await supabase
+            const { data, error } = await supabase
                 .from('perfis')
                 .select('*, lojas(slug)')
-                .eq('id', userId)
+                .eq('user_id', userId)
                 .single();
 
+            if (error) {
+                console.error('Profile fetch error:', error);
+                throw error;
+            }
+
             if (data) {
+                console.log('Profile loaded successfully:', data);
                 setProfile(data);
                 setLoading(false);
             } else if (retries > 0) {
-                // Wait 1s and retry (in case trigger is slow)
+                console.log('Profile not found, retrying...');
                 setTimeout(() => fetchProfile(userId, retries - 1), 1000);
             } else {
+                console.log('Profile not found after retries.');
                 setLoading(false);
             }
-        } catch (error) {
+        } catch (error: any) {
+            console.error('Fatal profile fetch error:', error);
             if (retries > 0) {
                 setTimeout(() => fetchProfile(userId, retries - 1), 1000);
             } else {

@@ -1,12 +1,48 @@
 
-import { Users, Search, Filter, Download, UserPlus, ShieldCheck } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Users, Search, Filter, Download, UserPlus, ShieldCheck, Loader2 } from 'lucide-react';
+import { databaseService, type Obreiro } from '../lib/database-service';
+import { useAuth } from '../contexts/AuthContext';
+
+type ObreiroWithLodge = Obreiro & { lojas: { nome: string; numero: string } | null };
 
 export default function AdminObreiros() {
-    const obreiros = [
-        { id: '1', nome: 'Antônio Carlos Silva', loja: 'Aurora (001)', grau: 'Mestre', cargo: 'Venerável Mestre', status: 'Regular' },
-        { id: '2', nome: 'Ricardo Mendes', loja: 'Aurora (001)', grau: 'Companheiro', cargo: 'Nenhum', status: 'Regular' },
-        { id: '3', nome: 'Lucas Ferreira', loja: 'Cavaleiros (012)', grau: 'Aprendiz', cargo: 'Nenhum', status: 'Regular' },
-    ];
+    const { profile } = useAuth();
+    const [obreiros, setObreiros] = useState<ObreiroWithLodge[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState('');
+
+    const loadObreiros = async () => {
+        if (!profile?.potencia_id) return;
+        try {
+            setLoading(true);
+            const data = await databaseService.getObreiros(profile.potencia_id);
+            setObreiros(data);
+        } catch (error) {
+            console.error('Erro ao carregar obreiros:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadObreiros();
+    }, [profile?.potencia_id]);
+
+    const filteredObreiros = obreiros.filter(o =>
+        o.nome?.toLowerCase().includes(search.toLowerCase()) ||
+        o.lojas?.nome.toLowerCase().includes(search.toLowerCase()) ||
+        o.cargo?.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const stats = useMemo(() => {
+        return {
+            total: obreiros.length,
+            mestres: obreiros.filter(o => o.grau === 'Mestre').length,
+            aprendizes: obreiros.filter(o => o.grau === 'Aprendiz').length,
+            irregulares: obreiros.filter(o => o.status === 'Irregular').length
+        };
+    }, [obreiros]);
 
     return (
         <div className="p-10 space-y-12 bg-background min-h-screen">
@@ -30,62 +66,86 @@ export default function AdminObreiros() {
 
             {/* Stats Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <StatSimpleCard title="Total Geral" value="1.240" />
-                <StatSimpleCard title="Mestres" value="856" />
-                <StatSimpleCard title="Aprendizes" value="192" />
-                <StatSimpleCard title="Irregulares" value="14" warning />
+                <StatSimpleCard title="Total Geral" value={stats.total.toString()} />
+                <StatSimpleCard title="Mestres" value={stats.mestres.toString()} />
+                <StatSimpleCard title="Aprendizes" value={stats.aprendizes.toString()} />
+                <StatSimpleCard title="Irregulares" value={stats.irregulares.toString()} warning={stats.irregulares > 0} />
             </div>
 
             {/* List */}
-            <div className="bg-background border border-border rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-background border border-border rounded-xl shadow-sm overflow-hidden min-h-[400px]">
                 <div className="p-8 border-b border-border flex gap-6 bg-muted/5">
                     <div className="relative flex-grow max-w-2xl">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-accent transition" size={18} />
-                        <input type="text" placeholder="Buscar por nome, CIM ou Loja..." className="w-full pl-12 pr-6 py-4 bg-background border border-border rounded-md outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition font-medium" />
+                        <input
+                            type="text"
+                            placeholder="Buscar por nome, cargo ou Loja..."
+                            value={search}
+                            onChange={e => setSearch(e.target.value)}
+                            className="w-full pl-12 pr-6 py-4 bg-background border border-border rounded-md outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition font-medium"
+                        />
                     </div>
                     <button className="px-6 py-4 bg-background border border-border rounded-md text-muted-foreground font-black uppercase text-[10px] tracking-[0.2em] flex items-center gap-2 hover:text-primary hover:border-primary transition">
                         <Filter size={16} /> Filtros
                     </button>
                 </div>
-                <table className="w-full text-left">
-                    <thead className="bg-muted/10 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] border-b border-border">
-                        <tr>
-                            <th className="px-8 py-6">Obreiro</th>
-                            <th className="px-8 py-6">Grau</th>
-                            <th className="px-8 py-6">Loja Atual</th>
-                            <th className="px-8 py-6">Cargo</th>
-                            <th className="px-8 py-6 text-right">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border text-primary">
-                        {obreiros.map(worker => (
-                            <tr key={worker.id} className="hover:bg-muted/5 transition group">
-                                <td className="px-8 py-6 flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-muted border border-border flex items-center justify-center text-muted-foreground group-hover:bg-accent group-hover:text-primary transition-colors">
-                                        <Users size={16} />
-                                    </div>
-                                    <div>
-                                        <p className="font-black text-base tracking-tight">{worker.nome}</p>
-                                        <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest mt-0.5">CIM: 123456</p>
-                                    </div>
-                                </td>
-                                <td className="px-8 py-6">
-                                    <div className="flex items-center gap-2 font-bold">
-                                        <ShieldCheck size={16} className="text-accent" />
-                                        {worker.grau}
-                                    </div>
-                                </td>
-                                <td className="px-8 py-6 text-muted-foreground font-medium">{worker.loja}</td>
-                                <td className="px-8 py-6 text-muted-foreground font-medium">{worker.cargo}</td>
-                                <td className="px-8 py-6 text-right">
-                                    <span className="px-4 py-1.5 bg-primary text-primary-foreground rounded-full text-[9px] font-black uppercase tracking-[0.2em]">
-                                        {worker.status}
-                                    </span>
-                                </td>
+
+                {loading ? (
+                    <div className="flex flex-col items-center justify-center py-20 text-muted-foreground gap-4">
+                        <Loader2 className="animate-spin text-accent" size={40} />
+                        <p className="font-black uppercase tracking-[0.2em] text-[10px]">Carregando Obreiros...</p>
+                    </div>
+                ) : filteredObreiros.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-20 text-muted-foreground gap-2">
+                        <Users size={40} className="opacity-20" />
+                        <p className="font-bold">Nenhum obreiro encontrado.</p>
+                    </div>
+                ) : (
+                    <table className="w-full text-left">
+                        <thead className="bg-muted/10 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] border-b border-border">
+                            <tr>
+                                <th className="px-8 py-6">Obreiro</th>
+                                <th className="px-8 py-6">Grau</th>
+                                <th className="px-8 py-6">Loja Atual</th>
+                                <th className="px-8 py-6">Cargo</th>
+                                <th className="px-8 py-6 text-right">Status</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-border text-primary">
+                            {filteredObreiros.map(worker => (
+                                <tr key={worker.id} className="hover:bg-muted/5 transition group">
+                                    <td className="px-8 py-6 flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-full bg-muted border border-border flex items-center justify-center text-muted-foreground group-hover:bg-accent group-hover:text-primary transition-colors">
+                                            <Users size={16} />
+                                        </div>
+                                        <div>
+                                            <p className="font-black text-base tracking-tight">{worker.nome || 'Usuário Sem Nome'}</p>
+                                            <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest mt-0.5">ID: {worker.id.split('-')[0]}</p>
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <div className="flex items-center gap-2 font-bold">
+                                            <ShieldCheck size={16} className="text-accent" />
+                                            {worker.grau}
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-6 text-muted-foreground font-medium">
+                                        {worker.lojas ? `${worker.lojas.nome} (${worker.lojas.numero})` : 'Sem Loja'}
+                                    </td>
+                                    <td className="px-8 py-6 text-muted-foreground font-medium">{worker.cargo || 'Membro'}</td>
+                                    <td className="px-8 py-6 text-right">
+                                        <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] ${worker.status === 'Ativo'
+                                                ? 'bg-primary text-primary-foreground border border-white/5'
+                                                : 'bg-accent/10 text-accent border border-accent/20'
+                                            }`}>
+                                            {worker.status}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
             </div>
         </div>
     );

@@ -55,7 +55,9 @@ export default function PublicLayout() {
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
                     <div className="col-span-1 md:col-span-2 space-y-6">
                         <div className="text-2xl font-black text-primary tracking-tighter uppercase italic">
-                            e.mason<span className="text-accent">.</span>
+                            <Link to="/" className="flex items-center">
+                                <img src="/e.mason.svg" alt="e.mason" className="h-8 w-auto grayscale brightness-50" />
+                            </Link>
                         </div>
                         <p className="text-muted-foreground max-w-sm text-lg leading-relaxed">
                             A próxima geração em governança maçônica. Tecnologia de ponta voltada à tradição secular.

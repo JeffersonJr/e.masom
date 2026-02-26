@@ -1,8 +1,10 @@
 
 import { useState, useEffect, useRef } from 'react';
-import { ArrowRight, ShieldCheck, FileText, Zap, TrendingUp, Users, Store, AlertCircle } from 'lucide-react';
+import { ArrowRight, ShieldCheck, FileText, Zap, TrendingUp, BarChart3, Lock, MessageSquare, Plus, CheckCircle2, Clock, Shield, Globe, Database } from 'lucide-react';
 import FeatureCard from '../components/FeatureCard';
 import LeadModal from '../components/LeadModal';
+import IsometricMockup from '../components/IsometricMockup';
+import FloatingPill from '../components/FloatingPill';
 
 export default function Home() {
     const [modalConfig, setModalConfig] = useState<{ open: boolean; type: 'demo' | 'trial' }>({
@@ -41,10 +43,10 @@ export default function Home() {
         <div className="flex flex-col bg-background">
 
             {/* Hero Section */}
-            <section className="relative pt-40 pb-24 px-6 overflow-hidden">
+            <section className="relative pt-40 pb-40 px-6 overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10 bg-[radial-gradient(circle_at_50%_0%,oklch(0.769_0.188_70.08_/_0.05)_0%,transparent_50%)]" />
 
-                <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
+                <div className="max-w-7xl mx-auto flex flex-col items-center text-center relative">
                     <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-muted/50 border border-border rounded-full text-[10px] font-black text-primary mb-12 tracking-[0.2em] uppercase">
                         <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse shadow-[0_0_8px_oklch(0.769_0.188_70.08)]" />
                         O Futuro da Tradição: Governança em Estado da Arte
@@ -61,7 +63,7 @@ export default function Home() {
                         O e.mason é a ferramenta definitiva para Grão-Mestrados e Grandes Secretarias que buscam soberania digital, controle financeiro absoluto e o resgate da eficiência administrativa.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-5 mb-24">
+                    <div className="flex flex-col sm:flex-row gap-5 mb-32 z-10">
                         <button
                             onClick={() => openModal('demo')}
                             className="px-10 py-4 bg-primary text-primary-foreground font-black rounded-md hover:bg-primary/90 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-primary/20 uppercase text-xs tracking-widest active:scale-95"
@@ -76,94 +78,33 @@ export default function Home() {
                         </button>
                     </div>
 
-                    {/* Realistic MacBook Pro Mockup with Scroll Animation */}
-                    <div ref={mockupRef} className="relative w-full max-w-5xl group perspective-[2000px]">
-                        <div
-                            className="relative aspect-[16/10] transition-transform duration-500 ease-out preserve-3d"
-                            style={{
-                                perspective: '2000px',
-                                // The lid (top half) is what rotates. We'll simplify the structure:
-                            }}
-                        >
-                            {/* The Lid (Screen) */}
-                            <div
-                                className="absolute inset-0 bg-primary rounded-[2rem] p-2 border-4 border-primary shadow-2xl origin-bottom transition-transform duration-75"
-                                style={{
-                                    transform: `rotateX(calc(var(--scroll-progress, 0) * -110deg + 110deg))`,
-                                    zIndex: 20
-                                }}
-                            >
-                                <div className="w-full h-full bg-background rounded-2xl overflow-hidden relative border border-border/50">
-                                    <div className="absolute inset-x-0 top-0 h-6 bg-muted/50 flex items-center px-4 gap-1.5 border-b border-border">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-border" />
-                                        <div className="w-2.5 h-2.5 rounded-full bg-border" />
-                                        <div className="w-2.5 h-2.5 rounded-full bg-border" />
-                                    </div>
-
-                                    <div className="pt-6 h-full flex">
-                                        {/* Sidebar */}
-                                        <div className="w-20 md:w-48 bg-primary h-full border-r border-border flex flex-col p-4 gap-4">
-                                            {[1, 2, 3, 4, 5].map(i => (
-                                                <div key={i} className="h-2 w-full bg-muted-foreground/10 rounded" />
-                                            ))}
-                                            <div className="mt-auto h-8 w-full bg-accent/20 rounded border border-accent/30" />
-                                        </div>
-                                        {/* Dashboard Content */}
-                                        <div className="flex-grow bg-[#FDFDFD] p-6 lg:p-10 flex flex-col gap-6 text-left overflow-hidden">
-                                            <div className="flex justify-between items-end mb-4">
-                                                <div>
-                                                    <div className="h-2 w-24 bg-muted mb-2 rounded" />
-                                                    <div className="h-6 w-48 bg-primary rounded" />
-                                                </div>
-                                                <div className="h-10 w-10 bg-muted rounded-full" />
-                                            </div>
-
-                                            {/* Metrics Grid */}
-                                            <div className="grid grid-cols-3 gap-4">
-                                                <div className="p-4 border border-border rounded-lg bg-white shadow-sm">
-                                                    <div className="flex justify-between mb-4"><Users size={14} className="text-muted-foreground" /><TrendingUp size={12} className="text-accent" /></div>
-                                                    <div className="h-6 w-full bg-primary/10 rounded" />
-                                                </div>
-                                                <div className="p-4 border border-border rounded-lg bg-white shadow-sm">
-                                                    <div className="flex justify-between mb-4"><Store size={14} className="text-muted-foreground" /><TrendingUp size={12} className="text-accent" /></div>
-                                                    <div className="h-6 w-full bg-primary/10 rounded" />
-                                                </div>
-                                                <div className="p-4 border border-border rounded-lg bg-white shadow-sm">
-                                                    <div className="flex justify-between mb-4"><AlertCircle size={14} className="text-muted-foreground" /><div className="h-2 w-2 rounded-full bg-accent animate-pulse" /></div>
-                                                    <div className="h-6 w-full bg-primary/10 rounded" />
-                                                </div>
-                                            </div>
-
-                                            {/* Activity Chart Area */}
-                                            <div className="flex-grow bg-white rounded-xl border border-border shadow-sm p-6 relative">
-                                                <div className="h-3 w-1/2 bg-muted/30 rounded mb-8" />
-                                                <div className="space-y-4">
-                                                    {[1, 2, 3].map(i => (
-                                                        <div key={i} className="flex items-center gap-4">
-                                                            <div className="w-8 h-8 rounded-full bg-muted/20" />
-                                                            <div className="flex-grow h-2 bg-muted/10 rounded" />
-                                                            <div className="w-12 h-2 bg-accent/20 rounded" />
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                                {/* Abstract Chart Overlay */}
-                                                <div className="absolute bottom-4 left-4 right-4 h-24 flex items-end gap-1 opacity-20">
-                                                    {[30, 50, 40, 70, 45, 60, 80, 55, 65, 90, 75, 85].map((h, i) => (
-                                                        <div key={i} className="flex-grow bg-primary rounded-t" style={{ height: `${h}%` }} />
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* The Base (Keyboard) */}
-                            <div className="absolute inset-0 bg-primary/95 rounded-[2rem] border-4 border-primary shadow-lg overflow-hidden translate-y-2 origin-top rotateX-[80deg] -z-10">
-                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.1)_0%,transparent_60%)]" />
-                            </div>
-                        </div>
-                        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[110%] h-4 bg-primary/90 rounded-b-2xl shadow-xl hidden md:block" />
+                    {/* New Isometric Mockup Section */}
+                    <div className="relative w-full flex justify-center">
+                        <FloatingPill
+                            icon={BarChart3}
+                            text="+40% de Eficiência"
+                            className="top-20 left-[5%] md:left-[10%]"
+                            delay="0s"
+                        />
+                        <FloatingPill
+                            icon={Lock}
+                            text="Segurança RLS Ativa"
+                            className="top-40 right-[5%] md:right-[15%]"
+                            delay="1.5s"
+                        />
+                        <FloatingPill
+                            icon={MessageSquare}
+                            text="Pranchas Digitais"
+                            className="bottom-20 left-[10%] md:left-[20%]"
+                            delay="0.7s"
+                        />
+                        <FloatingPill
+                            icon={TrendingUp}
+                            text="Gestão de Metais"
+                            className="bottom-40 right-[10%] md:right-[20%]"
+                            delay="2.2s"
+                        />
+                        <IsometricMockup />
                     </div>
                 </div>
             </section>
@@ -194,6 +135,116 @@ export default function Home() {
                             description="Fluxo de pranchas, placets e processos 100% digitais. Workflow de aprovação entre Lojas e Grande Secretaria em tempo real."
                             delay="200ms"
                         />
+                    </div>
+                </div>
+            </section>
+
+            {/* Comparison Section: Battle vs Solution */}
+            <section className="py-24 px-6 bg-muted/30">
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex flex-col lg:flex-row gap-16 items-center">
+                        <div className="flex-1 space-y-8">
+                            <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter">
+                                A Realidade da <span className="text-muted-foreground italic font-serif">Gestão Manual</span>
+                            </h2>
+                            <p className="text-lg text-muted-foreground font-medium">
+                                Planilhas soltas, processos em papel e falta de transparência financeira consomem o tempo precioso da administração.
+                            </p>
+                            <div className="space-y-4">
+                                {[
+                                    "Dependência de processos físicos e burocráticos",
+                                    "Dificuldade na prestação de contas em tempo real",
+                                    "Risco de perda de dados históricos e legados",
+                                    "Arrecadação de metais lenta e descentralizada"
+                                ].map((item, i) => (
+                                    <div key={i} className="flex items-center gap-4 text-sm font-bold text-primary/70">
+                                        <Plus className="text-red-500 rotate-45" size={18} />
+                                        {item}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="flex-1 bg-white p-8 md:p-12 rounded-3xl border border-border shadow-2xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-4">
+                                <CheckCircle2 className="text-accent" size={32} />
+                            </div>
+                            <h3 className="text-3xl font-black text-primary mb-8 tracking-tighter">A Solução <span className="text-accent underline decoration-2 underline-offset-8">e.mason</span></h3>
+                            <div className="space-y-6">
+                                {[
+                                    { title: "Soberania Digital", desc: "Controle total da jurisdição em um clique." },
+                                    { title: "Transparência Financeira", desc: "Dashboard de metais em tempo real." },
+                                    { title: "Segurança de Grado Maçônico", desc: "Proteção de dados em nível institucional." }
+                                ].map((item, i) => (
+                                    <div key={i} className="flex gap-4">
+                                        <div className="mt-1 w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center shrink-0">
+                                            <div className="w-2 h-2 rounded-full bg-accent" />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-black text-primary text-sm uppercase tracking-wider">{item.title}</h4>
+                                            <p className="text-muted-foreground text-sm">{item.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Impact Section: Stats */}
+            <section className="py-40 px-6 bg-primary text-primary-foreground relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,oklch(0.769_0.188_70.08_/_0.1)_0%,transparent_70%)]" />
+                <div className="max-w-7xl mx-auto relative z-10">
+                    <div className="text-center mb-24">
+                        <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter">O Impacto em Números</h2>
+                        <p className="text-primary-foreground/60 text-xl font-medium">Resultados reais para potências de excelência.</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {[
+                            { icon: Clock, value: "65%", label: "Redução em Trabalho Manual" },
+                            { icon: CheckCircle2, value: "100%", label: "Conciliação Bancária Ativa" },
+                            { icon: Shield, value: "Zero", label: "Vulnerabilidade de Dados" },
+                            { icon: Globe, value: "24/7", label: "Disponibilidade da Jurisdição" }
+                        ].map((stat, i) => (
+                            <div key={i} className="p-10 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-sm text-center group hover:bg-white/10 transition-all">
+                                <stat.icon size={32} className="text-accent mx-auto mb-6 group-hover:scale-110 transition-transform" />
+                                <div className="text-4xl font-black mb-2">{stat.value}</div>
+                                <div className="text-xs uppercase tracking-[0.2em] text-primary-foreground/40 font-bold">{stat.label}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Ecosystem Section */}
+            <section className="py-24 px-6 bg-background">
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex flex-col items-center text-center mb-16">
+                        <div className="px-4 py-1.5 bg-accent/10 border border-accent/20 rounded-full text-[10px] font-black text-accent mb-6 uppercase tracking-widest">
+                            Conectividade
+                        </div>
+                        <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter">
+                            Ecossistema Integrado
+                        </h2>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                        {[
+                            { name: 'Supabase', icon: Database },
+                            { name: 'Stripe', icon: Zap },
+                            { name: 'WhatsApp', icon: MessageSquare },
+                            { name: 'Zapier', icon: TrendingUp },
+                            { name: 'PostgreSQL', icon: Shield },
+                            { name: 'Vercel', icon: Globe }
+                        ].map((item) => (
+                            <div key={item.name} className="flex flex-col items-center justify-center p-8 border border-border rounded-2xl hover:bg-muted/50 transition-colors group">
+                                <div className="h-8 w-8 text-primary/40 mb-3 group-hover:text-primary transition-colors">
+                                    <item.icon size={32} />
+                                </div>
+                                <span className="text-[10px] font-black uppercase tracking-tighter text-primary">{item.name}</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>

@@ -9,12 +9,15 @@ import Home from '../pages/Home';
 import AdminDashboard from '../pages/AdminDashboard';
 import LodgeDashboard from '../pages/LodgeDashboard';
 import LodgePublic from '../pages/LodgePublic';
+import PotenciaPublic from '../pages/PotenciaPublic';
 import LodgeFinance from '../pages/LodgeFinance';
 import ApprovalWorkflow from '../pages/ApprovalWorkflow';
 import LodgeCMS from '../pages/LodgeCMS';
 import AdminDocuments from '../pages/AdminDocuments';
 import AdminLojas from '../pages/AdminLojas';
 import AdminObreiros from '../pages/AdminObreiros';
+import AdminSite from '../pages/AdminSite';
+import AdminConfig from '../pages/AdminConfig';
 import Login from '../pages/Login';
 import Governanca from '../pages/Governanca';
 import Capitacao from '../pages/Capitacao';
@@ -64,6 +67,8 @@ export default function AppRouter() {
                             <Route path="lojas" element={<AdminLojas />} />
                             <Route path="processos" element={<AdminDocuments />} />
                             <Route path="obreiros" element={<AdminObreiros />} />
+                            <Route path="site" element={<AdminSite />} />
+                            <Route path="config" element={<AdminConfig />} />
                         </Route>
 
                         {/* Lodge Restricted Dashboard */}
@@ -79,6 +84,9 @@ export default function AppRouter() {
                             <Route path="cms" element={<LodgeCMS />} />
                             <Route path="config" element={<div>Configurações</div>} />
                         </Route>
+
+                        {/* Potência Public Site */}
+                        <Route path="/p/:potenciaSlug" element={<PotenciaPublic />} />
 
                         {/* Lodge Public Landing Page */}
                         <Route path="/:lodgeSlug" element={<LodgePublic />} />

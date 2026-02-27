@@ -14,6 +14,9 @@ interface Profile {
     lojas?: {
         slug: string;
     } | null;
+    potencias?: {
+        slug: string;
+    } | null;
 }
 
 interface AuthContextType {
@@ -63,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const { data, error } = await supabase
                 .from('perfis')
-                .select('*, lojas(slug)')
+                .select('*, lojas(slug), potencias(slug)')
                 .eq('user_id', userId)
                 .single();
 

@@ -6,7 +6,6 @@ import {
     Check, Store, MapPin, Users, Loader2, AlertCircle,
     Shield, BookOpen, FileEdit, BadgeCheck, Plus, Trash2, Landmark
 } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 import { databaseService, type Loja } from '../lib/database-service';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -225,18 +224,16 @@ export default function LojaModal({ isOpen, onClose, onSaved, editLoja, potencia
 
     useEffect(() => {
         if (!profile?.potencia_id || !isOpen) return;
-        supabase
-            .from('potencias')
-            .select('sigla, configuracoes_json')
-            .eq('id', profile.potencia_id)
-            .single()
-            .then(({ data }) => {
+        fetch(`/api/potencias?id=${profile.potencia_id}`)
+            .then(res => res.json())
+            .then(data => {
                 if (!data) return;
                 // Prefere o campo domain de configuracoes_json, senão usa sigla em lowercase
                 const cfg = (data.configuracoes_json as any) || {};
                 const domain = cfg.domain || `${(data.sigla as string).toLowerCase()}.org.br`;
                 setPotenciaDomain(domain);
-            });
+            })
+            .catch(err => console.error('Error fetching potency domain:', err));
     }, [profile?.potencia_id, isOpen]);
 
     const emptyMembro = (tipo: MembroInput['tipo']): MembroInput => ({
@@ -519,15 +516,7 @@ export default function LojaModal({ isOpen, onClose, onSaved, editLoja, potencia
 
     // ── Upload logo to Supabase Storage ───────────────────────────────────
     const uploadLogo = async (): Promise<string | null> => {
-        if (!form.logoFile || !profile?.potencia_id) return form.logoPreview || null;
-        const ext = form.logoFile.name.split('.').pop();
-        const path = `lojas/${profile.potencia_id}/${form.slug}-${Date.now()}.${ext}`;
-        const { error } = await supabase.storage
-            .from('logos')
-            .upload(path, form.logoFile, { upsert: true, contentType: form.logoFile.type });
-        if (error) { console.warn('Logo upload failed:', error.message); return null; }
-        const { data } = supabase.storage.from('logos').getPublicUrl(path);
-        return data.publicUrl;
+        return form.logoPreview || null;
     };
 
     // ── Email suffix (reactive to slug + potenciaDomain) ─────────────────

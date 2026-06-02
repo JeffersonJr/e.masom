@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
 import NotFound from './NotFound';
 import { Loader2, Heart, Eye, Users, BookOpen, Mail, MapPin, ChevronRight, Star, Shield, Globe } from 'lucide-react';
 
@@ -232,14 +231,20 @@ function ContatoSection({ lodge }: { lodge: any }) {
         e.preventDefault();
         setSending(true);
         try {
-            await supabase.from('leads').insert({
-                loja_id: lodge.id,
-                potencia_id: lodge.potencia_id,
-                nome: form.nome,
-                email: form.email,
-                telefone: form.telefone,
-                mensagem: form.mensagem,
-                origem: 'site_loja',
+            await fetch('/api/leads', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    loja_id: lodge.id,
+                    potencia_id: lodge.potencia_id,
+                    nome: form.nome,
+                    email: form.email,
+                    telefone: form.telefone,
+                    mensagem: form.mensagem,
+                    origem: 'site_loja',
+                })
             });
         } catch (_) {
             // Falha silenciosa — UX mantém sucesso
@@ -400,12 +405,11 @@ export default function LodgePublic() {
     useEffect(() => {
         async function fetchLodge() {
             setLoading(true);
-            const { data } = await supabase
-                .from('lojas')
-                .select('*, potencias(nome)')
-                .eq('slug', lodgeSlug)
-                .single();
-            if (data) setLodgeData(data);
+            const res = await fetch(`/api/lojas?slug=${lodgeSlug}`);
+            if (res.ok) {
+                const data = await res.json();
+                setLodgeData(data);
+            }
             setLoading(false);
         }
         fetchLodge();

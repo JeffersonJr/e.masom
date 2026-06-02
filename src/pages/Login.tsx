@@ -1,12 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { LogIn, Mail, Lock, Loader2, ArrowLeft, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 import LeadModal from '../components/LeadModal';
 import { translateAuthError } from '../lib/auth-translate';
 
 export default function Login() {
+    const { signIn } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -26,7 +27,7 @@ export default function Login() {
     const [forgotSent, setForgotSent] = useState(false);
 
     // Reset Password States
-    const [resetSuccess, setResetSuccess] = useState(false);
+    const [resetSuccess, _setResetSuccess] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
 
     useEffect(() => {
@@ -53,16 +54,21 @@ export default function Login() {
         console.log('Iniciando tentativa de login para:', cleanEmail);
 
         try {
-            const { error } = await supabase.auth.signInWithPassword({
-                email: cleanEmail,
-                password: cleanPassword,
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: cleanEmail, password: cleanPassword })
             });
 
-            if (error) {
-                console.error('Erro no Supabase Login:', error);
-                setError(translateAuthError(error.message));
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                setError(translateAuthError(errData.error || 'Erro ao realizar login.'));
                 setLoading(false);
             } else {
+                const data = await res.json();
+                signIn(data.token, data.user, data.profile);
                 navigate('/dashboard');
             }
         } catch (err: any) {
@@ -77,17 +83,8 @@ export default function Login() {
         setLoading(true);
         setError(null);
 
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: `${window.location.origin}/login?view=reset`,
-        });
-
-        if (error) {
-            setError(translateAuthError(error.message));
-            setLoading(false);
-        } else {
-            setForgotSent(true);
-            setLoading(false);
-        }
+        setError('A recuperação de senha está indisponível temporariamente na migração de banco.');
+        setLoading(false);
     };
 
     const handleReset = async (e: React.FormEvent) => {
@@ -107,24 +104,8 @@ export default function Login() {
         setError(null);
 
         try {
-            const { error } = await supabase.auth.updateUser({
-                password: password
-            });
-
-            if (error) {
-                setError(translateAuthError(error.message));
-                setLoading(false);
-            } else {
-                setResetSuccess(true);
-                setLoading(false);
-                // Keep success message for 3 seconds then redirect
-                setTimeout(() => {
-                    navigate('/login?view=login');
-                    setResetSuccess(false);
-                    setPassword('');
-                    setConfirmPassword('');
-                }, 3000);
-            }
+            setError('A atualização de senha via link externo está indisponível nesta versão.');
+            setLoading(false);
         } catch (err: any) {
             console.error('Erro no Reset:', err);
             setError('Ocorreu um erro inesperado.');

@@ -87,7 +87,7 @@ export default function AdminConfig() {
     const [integracoes, setIntegracoes] = useState({
         webhookUrl: '',
         webhookAtivo: false,
-        supabaseUrl: import.meta.env.VITE_SUPABASE_URL || '',
+        supabaseUrl: '',
         slackWebhook: '',
         zapierKey: '',
     });
@@ -391,7 +391,7 @@ export default function AdminConfig() {
                         {/* Version info */}
                         <div className="text-center py-4 space-y-1">
                             <p className="text-[10px] text-muted-foreground/40 font-mono">e.mason v1.0.0 · build 2026.02</p>
-                            <p className="text-[10px] text-muted-foreground/30">Powered by Supabase + React + Vite</p>
+                            <p className="text-[10px] text-muted-foreground/30">Powered by Neon + React + Vite</p>
                         </div>
                     </div>
                 )}

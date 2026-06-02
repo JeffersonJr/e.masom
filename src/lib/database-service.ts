@@ -1,6 +1,3 @@
-
-import { supabase } from './supabase';
-
 export interface Loja {
     id: string;
     potencia_id: string;
@@ -69,61 +66,68 @@ export interface Documento {
     created_at: string;
 }
 
+const getHeaders = () => {
+    const token = localStorage.getItem('emason_token');
+    return {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    };
+};
+
 export const databaseService = {
     // ── LOJAS ──────────────────────────────────────────────────────────────────
     async getLojas(potenciaId: string) {
-        const { data, error } = await supabase
-            .from('lojas')
-            .select('*')
-            .eq('potencia_id', potenciaId)
-            .order('nome');
-        if (error) throw error;
-        return data as Loja[];
+        const res = await fetch(`/api/lojas?potenciaId=${potenciaId}`, {
+            headers: getHeaders()
+        });
+        if (!res.ok) throw new Error('Falha ao buscar lojas');
+        return await res.json() as Loja[];
     },
 
     async createLoja(data: Partial<Loja>) {
-        const { data: newLoja, error } = await supabase
-            .from('lojas')
-            .insert(data)
-            .select()
-            .single();
-        if (error) throw error;
-        return newLoja as Loja;
+        const res = await fetch('/api/lojas', {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify(data)
+        });
+        if (!res.ok) throw new Error('Falha ao criar loja');
+        return await res.json() as Loja;
     },
 
     async updateLoja(id: string, data: Partial<Loja>) {
-        const { data: updated, error } = await supabase
-            .from('lojas')
-            .update(data)
-            .eq('id', id)
-            .select()
-            .single();
-        if (error) throw error;
-        return updated as Loja;
+        const res = await fetch(`/api/lojas?id=${id}`, {
+            method: 'PUT',
+            headers: getHeaders(),
+            body: JSON.stringify(data)
+        });
+        if (!res.ok) throw new Error('Falha ao atualizar loja');
+        return await res.json() as Loja;
     },
 
     async archiveLoja(id: string) {
-        const { error } = await supabase
-            .from('lojas')
-            .update({ status: 'arquivado' })
-            .eq('id', id);
-        if (error) throw error;
+        const res = await fetch(`/api/lojas?id=${id}`, {
+            method: 'PATCH',
+            headers: getHeaders(),
+            body: JSON.stringify({ status: 'arquivado' })
+        });
+        if (!res.ok) throw new Error('Falha ao arquivar loja');
     },
 
     async activateLoja(id: string) {
-        const { error } = await supabase
-            .from('lojas')
-            .update({ status: 'ativo' })
-            .eq('id', id);
-        if (error) throw error;
+        const res = await fetch(`/api/lojas?id=${id}`, {
+            method: 'PATCH',
+            headers: getHeaders(),
+            body: JSON.stringify({ status: 'ativo' })
+        });
+        if (!res.ok) throw new Error('Falha ao ativar loja');
     },
 
     async deleteLoja(id: string) {
-        const { error } = await supabase
-            .from('lojas')
-            .delete()
-            .eq('id', id);
-        if (error) throw error;
+        const res = await fetch(`/api/lojas?id=${id}`, {
+            method: 'DELETE',
+            headers: getHeaders()
+        });
+        if (!res.ok) throw new Error('Falha ao excluir loja');
     },
 
     async updateLojaMeta(id: string, data: {
@@ -134,54 +138,47 @@ export const databaseService = {
         per_capita_historico_json?: Loja['per_capita_historico_json'];
         encontros_json?: Loja['encontros_json'];
     }) {
-        const { error } = await supabase
-            .from('lojas')
-            .update(data)
-            .eq('id', id);
-        if (error) throw error;
+        const res = await fetch(`/api/lojas?id=${id}`, {
+            method: 'PATCH',
+            headers: getHeaders(),
+            body: JSON.stringify(data)
+        });
+        if (!res.ok) throw new Error('Falha ao atualizar metadados da loja');
     },
 
     // ── OBREIROS ───────────────────────────────────────────────────────────────
     async getObreiros(potenciaId: string) {
-        const { data, error } = await supabase
-            .from('perfis')
-            .select('*, lojas(nome, numero)')
-            .eq('potencia_id', potenciaId)
-            .order('nome');
-        if (error) throw error;
-        return data as (Obreiro & { lojas: { nome: string; numero: string } | null })[];
+        const res = await fetch(`/api/obreiros?potenciaId=${potenciaId}`, {
+            headers: getHeaders()
+        });
+        if (!res.ok) throw new Error('Falha ao buscar obreiros');
+        return await res.json() as (Obreiro & { lojas: { nome: string; numero: string } | null })[];
     },
 
     async getObreirosByPotencia(potenciaId: string) {
-        const { data, error } = await supabase
-            .from('perfis')
-            .select('id, nome, cargo, grau, status')
-            .eq('potencia_id', potenciaId)
-            .eq('status', 'Ativo')
-            .order('nome');
-        if (error) throw error;
-        return data as Pick<Obreiro, 'id' | 'nome' | 'cargo' | 'grau' | 'status'>[];
+        const res = await fetch(`/api/obreiros?potenciaId=${potenciaId}&status=Ativo`, {
+            headers: getHeaders()
+        });
+        if (!res.ok) throw new Error('Falha ao buscar obreiros da potência');
+        return await res.json() as Pick<Obreiro, 'id' | 'nome' | 'cargo' | 'grau' | 'status'>[];
     },
 
     // ── DOCUMENTOS ─────────────────────────────────────────────────────────────
     async getDocumentos(potenciaId: string) {
-        const { data, error } = await supabase
-            .from('documentos')
-            .select('*, lojas(nome, numero)')
-            .eq('potencia_id', potenciaId)
-            .order('created_at', { ascending: false });
-        if (error) throw error;
-        return data as (Documento & { lojas: { nome: string; numero: string } | null })[];
+        const res = await fetch(`/api/documentos?potenciaId=${potenciaId}`, {
+            headers: getHeaders()
+        });
+        if (!res.ok) throw new Error('Falha ao buscar documentos');
+        return await res.json() as (Documento & { lojas: { nome: string; numero: string } | null })[];
     },
 
     async updateDocumentStatus(id: string, status: 'Aprovado' | 'Rejeitado') {
-        const { data, error } = await supabase
-            .from('documentos')
-            .update({ status })
-            .eq('id', id)
-            .select()
-            .single();
-        if (error) throw error;
-        return data;
+        const res = await fetch(`/api/documentos?id=${id}`, {
+            method: 'PATCH',
+            headers: getHeaders(),
+            body: JSON.stringify({ status })
+        });
+        if (!res.ok) throw new Error('Falha ao atualizar status do documento');
+        return await res.json();
     },
 };

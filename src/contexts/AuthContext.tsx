@@ -1,9 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
-import type { Session, User } from '@supabase/supabase-js';
 
-interface Profile {
+export interface Profile {
     id: string;
     nome: string | null;
     loja_id: string | null;
@@ -19,12 +17,23 @@ interface Profile {
     } | null;
 }
 
+export interface User {
+    id: string;
+    email: string;
+}
+
+export interface Session {
+    user: User;
+    token: string;
+}
+
 interface AuthContextType {
     session: Session | null;
     user: User | null;
     profile: Profile | null;
     loading: boolean;
     signOut: () => Promise<void>;
+    signIn: (token: string, user: User, profile: Profile) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,73 +44,56 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Get initial session
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-            if (session) fetchProfile(session.user.id);
-            else setLoading(false);
-        });
+        const token = localStorage.getItem('emason_token');
+        if (!token) {
+            setLoading(false);
+            return;
+        }
 
-        // Listen for auth changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event: string, session: Session | null) => {
-            setSession(session);
-
-            if (event === 'PASSWORD_RECOVERY') {
-                window.location.href = '/login?view=reset';
-            }
-
-            if (session) fetchProfile(session.user.id);
-            else {
-                setProfile(null);
-                setLoading(false);
-            }
-        });
-
-        return () => subscription.unsubscribe();
+        // Fetch user session using the JWT token
+        fetchProfile(token);
     }, []);
 
-    const fetchProfile = async (userId: string, retries = 5) => {
-        console.log('Fetching profile for:', userId, 'Retries left:', retries);
-        setLoading(true);
+    const fetchProfile = async (token: string) => {
         try {
-            const { data, error } = await supabase
-                .from('perfis')
-                .select('*, lojas(slug), potencias(slug)')
-                .eq('user_id', userId)
-                .single();
+            const res = await fetch('/api/auth/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
 
-            if (error) {
-                console.error('Profile fetch error:', error);
-                throw error;
+            if (!res.ok) {
+                throw new Error('Sessão expirada ou inválida');
             }
 
-            if (data) {
-                console.log('Profile loaded successfully:', data);
-                setProfile(data);
-                setLoading(false);
-            } else if (retries > 0) {
-                console.log('Profile not found, retrying...');
-                setTimeout(() => fetchProfile(userId, retries - 1), 1000);
-            } else {
-                console.log('Profile not found after retries.');
-                setLoading(false);
-            }
-        } catch (error: any) {
-            console.error('Fatal profile fetch error:', error);
-            if (retries > 0) {
-                setTimeout(() => fetchProfile(userId, retries - 1), 1000);
-            } else {
-                setLoading(false);
-            }
+            const data = await res.json();
+            setSession({ token, user: data.user });
+            setProfile(data.profile);
+        } catch (error) {
+            console.error('Session restore error:', error);
+            // Clear invalid session
+            localStorage.removeItem('emason_token');
+            setSession(null);
+            setProfile(null);
+        } finally {
+            setLoading(false);
         }
     };
 
+    const signIn = (token: string, user: User, profileData: Profile) => {
+        localStorage.setItem('emason_token', token);
+        setSession({ token, user });
+        setProfile(profileData);
+    };
+
     const signOut = async () => {
-        await supabase.auth.signOut();
+        localStorage.removeItem('emason_token');
+        setSession(null);
+        setProfile(null);
     };
 
     return (
-        <AuthContext.Provider value={{ session, user: session?.user ?? null, profile, loading, signOut }}>
+        <AuthContext.Provider value={{ session, user: session?.user ?? null, profile, loading, signOut, signIn }}>
             {children}
         </AuthContext.Provider>
     );

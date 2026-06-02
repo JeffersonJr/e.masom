@@ -231,7 +231,7 @@ export default function Home() {
 
                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
                         {[
-                            { name: 'Supabase', icon: Database },
+                            { name: 'Neon', icon: Database },
                             { name: 'Stripe', icon: Zap },
                             { name: 'WhatsApp', icon: MessageSquare },
                             { name: 'Zapier', icon: TrendingUp },

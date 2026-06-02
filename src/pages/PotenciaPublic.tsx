@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
 import NotFound from './NotFound';
 import {
     Loader2, Globe, Shield, Star, ChevronRight,
@@ -277,13 +276,15 @@ function LojasSection({ potencia }: { potencia: any }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        supabase
-            .from('lojas')
-            .select('id, nome, numero, rito, slug, logo_url, localizacao_json')
-            .eq('potencia_id', potencia.id)
-            .eq('status', 'ativo')
-            .order('nome')
-            .then(({ data }) => { setLojas(data || []); setLoading(false); });
+        fetch(`/api/lojas?potenciaId=${potencia.id}`)
+            .then(res => res.json())
+            .then(data => {
+                // filter active lodges
+                const activeLojas = (data || []).filter((l: any) => l.status === 'ativo');
+                setLojas(activeLojas);
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
     }, [potencia.id]);
 
     return (
@@ -368,12 +369,18 @@ function ContatoSection({ potencia }: { potencia: any }) {
         e.preventDefault();
         setSending(true);
         try {
-            await supabase.from('leads').insert({
-                potencia_id: potencia.id,
-                nome: form.nome,
-                email: form.email,
-                mensagem: `[Loja: ${form.loja || 'N/A'}] [Assunto: ${form.assunto}] ${form.mensagem}`,
-                origem: 'site_potencia',
+            await fetch('/api/leads', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    potencia_id: potencia.id,
+                    nome: form.nome,
+                    email: form.email,
+                    mensagem: `[Loja: ${form.loja || 'N/A'}] [Assunto: ${form.assunto}] ${form.mensagem}`,
+                    origem: 'site_potencia',
+                })
             });
         } catch (_) {
             // Falha silenciosa — UX mantém sucesso
@@ -520,12 +527,16 @@ export default function PotenciaPublic() {
     const [activeSection, setActiveSection] = useState('home');
 
     useEffect(() => {
-        supabase
-            .from('potencias')
-            .select('*')
-            .eq('slug', potenciaSlug)
-            .single()
-            .then(({ data }) => { if (data) setPotencia(data); setLoading(false); });
+        fetch(`/api/potencias?slug=${potenciaSlug}`)
+            .then(res => {
+                if (!res.ok) throw new Error('Não encontrado');
+                return res.json();
+            })
+            .then(data => {
+                if (data) setPotencia(data);
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
     }, [potenciaSlug]);
 
     useEffect(() => {

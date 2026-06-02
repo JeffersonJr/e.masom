@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { supabase } from '../lib/supabase';
 import {
     Loader2, Check, Upload, Palette, Type, Info,
     ExternalLink, AlertCircle, Search, BarChart2, Tag,
@@ -70,12 +69,9 @@ export default function AdminSite() {
 
     useEffect(() => {
         if (!profile?.potencia_id) return;
-        supabase
-            .from('potencias')
-            .select('*')
-            .eq('id', profile.potencia_id)
-            .single()
-            .then(({ data }) => {
+        fetch(`/api/potencias?id=${profile.potencia_id}`)
+            .then(res => res.json())
+            .then(data => {
                 if (!data) return;
                 setPotencia(data);
                 setLogoPreview(data.logo_url || null);
@@ -107,7 +103,8 @@ export default function AdminSite() {
                     cep: cfg.cep || '',
                 });
                 setLoading(false);
-            });
+            })
+            .catch(() => setLoading(false));
     }, [profile?.potencia_id]);
 
     const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,13 +123,8 @@ export default function AdminSite() {
         setError('');
         try {
             let logo_url = potencia.logo_url;
-            if (logoFile) {
-                const ext = logoFile.name.split('.').pop();
-                const path = `potencias/${potencia.id}/logo.${ext}`;
-                const { error: upErr } = await supabase.storage.from('logos').upload(path, logoFile, { upsert: true });
-                if (upErr) throw upErr;
-                const { data: urlData } = supabase.storage.from('logos').getPublicUrl(path);
-                logo_url = urlData.publicUrl;
+            if (logoFile && logoPreview) {
+                logo_url = logoPreview; // Use the base64 preview we generated
             }
 
             const cfg = {
@@ -159,12 +151,29 @@ export default function AdminSite() {
                 cep: form.cep,
             };
 
-            const { error: updateErr } = await supabase
-                .from('potencias')
-                .update({ nome: form.nome, sigla: form.sigla, descricao: form.descricao, logo_url, configuracoes_json: cfg })
-                .eq('id', potencia.id);
+            const token = localStorage.getItem('emason_token');
+            const res = await fetch(`/api/potencias?id=${potencia.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                },
+                body: JSON.stringify({
+                    nome: form.nome,
+                    sigla: form.sigla,
+                    descricao: form.descricao,
+                    logo_url,
+                    configuracoes_json: cfg
+                })
+            });
 
-            if (updateErr) throw updateErr;
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                throw new Error(errData.error || 'Erro ao salvar.');
+            }
+
+            const updatedData = await res.json();
+            setPotencia(updatedData);
             setSaved(true);
             setTimeout(() => setSaved(false), 3000);
         } catch (err: any) {

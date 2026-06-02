@@ -1,4 +1,4 @@
-import { sql } from '../lib/db.js';
+import { sql } from '../lib/db';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -43,9 +43,10 @@ export default async function handler(req: any, res: any) {
     if (potRes.length === 0) {
       // Create new potency
       const trialEndsAt = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString();
+      const potSlug = potencySigla.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       const insertPot = await sql`
-        INSERT INTO public.potencias (nome, sigla, configuracoes_json, trial_ends_at)
-        VALUES (${potencyName}, ${potencySigla}, ${JSON.stringify({ domain })}::jsonb, ${trialEndsAt})
+        INSERT INTO public.potencias (nome, sigla, slug, configuracoes_json, trial_ends_at)
+        VALUES (${potencyName}, ${potencySigla}, ${potSlug}, ${JSON.stringify({ domain })}::jsonb, ${trialEndsAt})
         RETURNING id
       `;
       potencyId = insertPot[0].id;

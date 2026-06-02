@@ -50,6 +50,7 @@ async function main() {
         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
         nome TEXT NOT NULL,
         sigla TEXT NOT NULL,
+        slug TEXT UNIQUE,
         logo_url TEXT,
         configuracoes_json JSONB DEFAULT '{}'::jsonb,
         trial_ends_at TIMESTAMP WITH TIME ZONE,

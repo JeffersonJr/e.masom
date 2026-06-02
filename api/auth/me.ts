@@ -1,4 +1,4 @@
-import { sql } from '../lib/db';
+import { sql } from '../lib/db.js';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'placeholder-secret-key';

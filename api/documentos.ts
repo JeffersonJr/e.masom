@@ -1,4 +1,4 @@
-import { sql } from './lib/db';
+import { getSql } from './lib/db';
 
 export default async function handler(req: any, res: any) {
   // CORS configuration
@@ -16,6 +16,8 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
+    const sql = getSql();
+
     // GET Method (List documents)
     if (req.method === 'GET') {
       const { potenciaId } = req.query;

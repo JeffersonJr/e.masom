@@ -1,4 +1,4 @@
-import { sql } from '../lib/db';
+import { getSql } from '../lib/db';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'placeholder-secret-key';
@@ -31,6 +31,8 @@ export default async function handler(req: any, res: any) {
   const token = authHeader.split(' ')[1];
 
   try {
+    const sql = getSql();
+
     // 1. Verify token
     const decoded: any = jwt.verify(token, JWT_SECRET);
 

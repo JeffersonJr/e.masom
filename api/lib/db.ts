@@ -1,10 +1,14 @@
-import { neon } from '@neondatabase/serverless';
+import { neon, NeonQueryFunction } from '@neondatabase/serverless';
 
-const databaseUrl = process.env.DATABASE_URL;
+let _sql: NeonQueryFunction<false, false> | null = null;
 
-if (!databaseUrl) {
-  console.warn('Warning: DATABASE_URL is not set in environment variables.');
+export function getSql() {
+  if (!_sql) {
+    const databaseUrl = process.env.DATABASE_URL;
+    if (!databaseUrl) {
+      throw new Error('DATABASE_URL environment variable is not set. Please configure it in your Vercel project settings.');
+    }
+    _sql = neon(databaseUrl);
+  }
+  return _sql;
 }
-
-// Exports the Neon serverless SQL client
-export const sql = neon(databaseUrl || 'postgresql://placeholder:placeholder@localhost:5432/placeholder');

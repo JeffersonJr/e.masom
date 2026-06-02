@@ -1,4 +1,4 @@
-import { sql } from './lib/db';
+import { getSql } from './lib/db';
 
 export default async function handler(req: any, res: any) {
   // CORS configuration
@@ -16,6 +16,8 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
+    const sql = getSql();
+
     if (req.method !== 'GET') {
       return res.status(405).json({ error: 'Method not allowed' });
     }

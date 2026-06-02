@@ -1,4 +1,4 @@
-import { sql } from '../lib/db';
+import { getSql } from '../lib/db';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -20,7 +20,7 @@ export default async function handler(req: any, res: any) {
   }
 
   if (req.method !== 'POST') {
-    return res.status(455).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const { name, email, password, potencyName } = req.body;
@@ -30,6 +30,7 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
+    const sql = getSql();
     const domain = email.split('@')[1].toLowerCase();
     const potencySigla = domain.split('.')[0].toUpperCase();
 

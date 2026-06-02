@@ -1,4 +1,4 @@
-import { sql } from '../lib/db';
+import { getSql } from '../lib/db';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -30,6 +30,8 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
+    const sql = getSql();
+
     // 1. Get user by email
     const users = await sql`
       SELECT id, email, password_hash FROM public.usuarios 

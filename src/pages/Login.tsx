@@ -25,6 +25,7 @@ export default function Login() {
 
     // Forgot Password States
     const [forgotSent, setForgotSent] = useState(false);
+    const [devLink, setDevLink] = useState<string | null>(null);
 
     // Reset Password States
     const [resetSuccess, _setResetSuccess] = useState(false);
@@ -80,15 +81,51 @@ export default function Login() {
 
     const handleForgot = async (e: React.FormEvent) => {
         e.preventDefault();
+        const cleanEmail = email.trim();
+        if (!cleanEmail) {
+            setError('Por favor, preencha o campo de e-mail.');
+            return;
+        }
+
         setLoading(true);
         setError(null);
 
-        setError('A recuperação de senha está indisponível temporariamente na migração de banco.');
-        setLoading(false);
+        try {
+            const res = await fetch('/api/auth/forgot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: cleanEmail })
+            });
+
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                setError(errData.error || 'Erro ao enviar protocolo de recuperação.');
+                setLoading(false);
+            } else {
+                const data = await res.json();
+                setForgotSent(true);
+                if (data.devLink) {
+                    setDevLink(data.devLink);
+                }
+                setLoading(false);
+            }
+        } catch (err: any) {
+            console.error('Erro no Forgot:', err);
+            setError('Ocorreu um erro inesperado.');
+            setLoading(false);
+        }
     };
 
     const handleReset = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const token = searchParams.get('token');
+        if (!token) {
+            setError('Token de recuperação inválido ou ausente.');
+            return;
+        }
 
         if (password !== confirmPassword) {
             setError('As senhas não coincidem.');
@@ -104,8 +141,27 @@ export default function Login() {
         setError(null);
 
         try {
-            setError('A atualização de senha via link externo está indisponível nesta versão.');
-            setLoading(false);
+            const res = await fetch('/api/auth/reset', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token, password })
+            });
+
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                setError(errData.error || 'Erro ao redefinir a senha.');
+                setLoading(false);
+            } else {
+                _setResetSuccess(true);
+                setTimeout(() => {
+                    setSearchParams({ view: 'login' });
+                    _setResetSuccess(false);
+                    setPassword('');
+                    setConfirmPassword('');
+                }, 3000);
+            }
         } catch (err: any) {
             console.error('Erro no Reset:', err);
             setError('Ocorreu um erro inesperado.');
@@ -267,9 +323,23 @@ export default function Login() {
                             </div>
                             <h2 className="text-2xl font-black text-primary mb-4 italic font-serif">Verifique seu E-mail</h2>
                             <p className="text-muted-foreground mb-12 font-medium">Protocolo enviado para <strong>{email}</strong>.</p>
+                            
+                            {devLink && (
+                                <div className="mb-8 p-4 bg-accent/5 border border-accent/20 rounded-md text-left text-xs font-semibold text-accent leading-relaxed">
+                                    <p className="font-bold mb-2">Simulação de e-mail (Ambiente de Testes):</p>
+                                    <Link
+                                        to={devLink}
+                                        className="text-primary underline hover:text-accent font-black break-all block"
+                                    >
+                                        Clique aqui para redefinir a senha
+                                    </Link>
+                                </div>
+                            )}
+
                             <button
                                 onClick={() => {
                                     setForgotSent(false);
+                                    setDevLink(null);
                                     setSearchParams({ view: 'login' });
                                 }}
                                 className="w-full bg-primary text-primary-foreground font-black py-4 rounded-md hover:bg-primary/95 transition uppercase text-[11px] tracking-[0.3em]"

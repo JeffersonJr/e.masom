@@ -17,60 +17,67 @@
   --color-gold-10: #D4AF37;
 
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-serif: "Inter", system-ui, -apple-system, sans-serif;
 }
 
 @layer base {
   :root {
     /* 60% - White Background */
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.205 0 0);
+    --background: #ffffff;
+    --foreground: #4e342e; /* Deep coffee brown */
     
-    /* 30% - Dark Gray for UI elements */
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(1 0 0);
+    /* 30% - Pastel Brown */
+    --primary: #8d6e63; /* Pastel brown primary */
+    --primary-foreground: #ffffff;
     
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
+    --secondary: #efebe9; /* Light pastel brown/beige */
+    --secondary-foreground: #4e342e;
     
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.45 0 0);
+    --muted: #f5f2f0;
+    --muted-foreground: #a1887f; /* Soft pastel brown */
     
     /* 10% - Gold Accent */
-    --accent: oklch(0.769 0.188 70.08); /* Gold-ish */
-    --accent-foreground: oklch(0.205 0 0);
+    --accent: #d4af37; /* Gold */
+    --accent-foreground: #ffffff;
     
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.205 0 0);
+    --card: #ffffff;
+    --card-foreground: #4e342e;
     
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.205 0 0);
+    --popover: #ffffff;
+    --popover-foreground: #4e342e;
     
-    --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: oklch(0.985 0 0);
+    --destructive: #d32f2f;
+    --destructive-foreground: #ffffff;
     
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.769 0.188 70.08); /* Gold ring */
+    --border: #eae5e2;
+    --input: #eae5e2;
+    --ring: #d4af37;
     
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
+    --background: #2d1a15; /* Dark pastel brown background */
+    --foreground: #efebe9; /* Light cream text */
     
-    --primary: oklch(0.985 0 0);
-    --primary-foreground: oklch(0.145 0 0);
+    --primary: #efebe9;
+    --primary-foreground: #2d1a15;
     
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
+    --secondary: #4e342e; /* Medium dark pastel brown */
+    --secondary-foreground: #efebe9;
     
-    --accent: oklch(0.769 0.188 70.08);
-    --accent-foreground: oklch(0.145 0 0);
+    --muted: #3a231c;
+    --muted-foreground: #a1887f;
     
-    --border: oklch(0.269 0 0);
-    --input: oklch(0.269 0 0);
-    --ring: oklch(0.769 0.188 70.08);
+    --accent: #d4af37;
+    --accent-foreground: #2d1a15;
+    
+    --card: #35211b;
+    --card-foreground: #efebe9;
+    
+    --border: #4e342e;
+    --input: #4e342e;
+    --ring: #d4af37;
   }
 }
 
@@ -143,4 +150,81 @@
   .-rotate-z-6 {
     transform: rotateZ(-6deg);
   }
+}
+
+/* ─── Elegant Custom Overrides for Light Pastel Theme ─── */
+
+* {
+  font-family: var(--font-sans) !important;
+}
+
+/* Override hardcoded dark background classes to use theme values */
+.bg-\[\#070b13\] {
+  background-color: var(--background) !important;
+}
+.bg-\[\#0e1626\] {
+  background-color: var(--secondary) !important;
+}
+.bg-\[\#0c1220\] {
+  background-color: var(--secondary) !important;
+}
+.bg-\[\#0c1220\]\/50 {
+  background-color: rgba(239, 235, 233, 0.65) !important;
+}
+.bg-gradient-to-b.from-\[\#09101d\].to-\[\#121c2e\] {
+  background: linear-gradient(to bottom, var(--secondary), var(--muted)) !important;
+}
+.bg-gradient-to-r.from-\[\#09101d\].to-\[\#121c2e\] {
+  background: linear-gradient(to right, var(--secondary), var(--muted)) !important;
+}
+.bg-background {
+  background-color: var(--background) !important;
+}
+.bg-card {
+  background-color: var(--background) !important;
+}
+
+/* Input fields styling */
+input, select, textarea {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+/* Text color overrides for light background readability */
+.text-slate-100, .text-slate-200, .text-slate-300, .text-white {
+  color: var(--foreground) !important;
+}
+.text-primary-foreground {
+  color: #ffffff !important;
+}
+.text-muted-foreground {
+  color: var(--muted-foreground) !important;
+}
+.text-slate-400 {
+  color: var(--muted-foreground) !important;
+}
+.text-white\/45, .text-white\/40 {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+.text-white\/30 {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+.text-white\/20 {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+/* Border overrides */
+.border-border\/40, .border-border\/20, .border-border\/10, .border-white\/5, .border-accent\/10, .border-accent\/15 {
+  border-color: var(--border) !important;
+}
+
+/* Accent highlight */
+.text-accent {
+  color: var(--accent) !important;
+}
+
+/* Clean cards and items shadow */
+.bg-card, .bg-\[\#0e1626\], .bg-\[\#0c1220\] {
+  box-shadow: 0 4px 20px -2px rgba(93, 64, 55, 0.04) !important;
 }

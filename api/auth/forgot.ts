@@ -1,7 +1,19 @@
-import { getSql } from '../lib/db.js';
+import { neon } from '@neondatabase/serverless';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'placeholder-secret-key';
+
+let _sql: any = null;
+function getSql() {
+  if (!_sql) {
+    const databaseUrl = process.env.DATABASE_URL;
+    if (!databaseUrl) {
+      throw new Error('DATABASE_URL environment variable is not set.');
+    }
+    _sql = neon(databaseUrl);
+  }
+  return _sql;
+}
 
 export default async function handler(req: any, res: any) {
   // CORS configuration
@@ -38,7 +50,6 @@ export default async function handler(req: any, res: any) {
     `;
 
     if (users.length === 0) {
-      // Standard security practice: return success even if user doesn't exist
       return res.status(200).json({
         message: 'Se o e-mail estiver cadastrado, um protocolo de recuperação foi enviado.'
       });
@@ -52,9 +63,6 @@ export default async function handler(req: any, res: any) {
       JWT_SECRET,
       { expiresIn: '15m' }
     );
-
-    // Simulated log
-    console.log(`[PASSWORD RESET TOKEN GENERATED FOR ${user.email}]: /login?view=reset&token=${token}`);
 
     return res.status(200).json({
       message: 'Se o e-mail estiver cadastrado, um protocolo de recuperação foi enviado.',

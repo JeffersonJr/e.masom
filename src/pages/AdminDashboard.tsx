@@ -55,7 +55,7 @@ export default function AdminDashboard() {
                 </div>
             )}
 
-            <UpgradeModal isOpen={isUpgradeOpen} onClose={() => setIsUpgradeOpen(false)} />
+            <UpgradeModal isOpen={isUpgradeOpen} onClose={() => setIsUpgradeOpen(false)} accountType="potencia" />
 
             {/* Page Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border pb-10">

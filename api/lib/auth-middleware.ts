@@ -32,7 +32,7 @@ export function withAuth(handler: Function, allowedCargos?: string[]) {
       // Fetch user profile from database to get fresh role and potency details
       const sql = getSql();
       const profiles = await sql`
-        SELECT cargo, potencia_id FROM public.perfis 
+        SELECT cargo, potencia_id, loja_id FROM public.perfis 
         WHERE id = ${decoded.profileId} LIMIT 1
       `;
 
@@ -62,7 +62,8 @@ export function withAuth(handler: Function, allowedCargos?: string[]) {
       req.user = {
         ...decoded,
         cargo: profile.cargo,
-        potencyId: profile.potencia_id
+        potencyId: profile.potencia_id,
+        lojaId: profile.loja_id
       };
 
       return handler(req, res);

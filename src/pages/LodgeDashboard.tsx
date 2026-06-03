@@ -232,7 +232,7 @@ export default function LodgeDashboard() {
                 </div>
             )}
 
-            <UpgradeModal isOpen={isUpgradeOpen} onClose={() => setIsUpgradeOpen(false)} />
+            <UpgradeModal isOpen={isUpgradeOpen} onClose={() => setIsUpgradeOpen(false)} accountType="loja" />
 
             {/* Header */}
             <header className="border-b border-border/40 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">

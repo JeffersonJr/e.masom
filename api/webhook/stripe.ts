@@ -103,14 +103,16 @@ export default async function handler(req: any, res: any) {
 
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
-      const potencyId = session.metadata?.potencyId;
+      const potencyId = session.metadata?.potencyId || null;
+      const lojaId = session.metadata?.lojaId || null;
       const email = session.metadata?.email;
       const planName = session.metadata?.planName;
+      const accountType = session.metadata?.accountType || 'potencia';
       const subscriptionId = session.subscription;
       const customerId = session.customer;
 
-      if (!potencyId || !subscriptionId) {
-        console.error('[STRIPE WEBHOOK ERROR] Missing metadata potencyId or subscriptionId in session:', session.id);
+      if ((accountType === 'potencia' && !potencyId) || (accountType === 'loja' && !lojaId) || !subscriptionId) {
+        console.error('[STRIPE WEBHOOK ERROR] Missing metadata identifiers or subscriptionId in session:', session.id);
         return res.status(400).json({ error: 'Metadados ausentes na sessão de checkout' });
       }
 
@@ -137,65 +139,118 @@ export default async function handler(req: any, res: any) {
       const nextBillingDate = new Date(subscription.current_period_end * 1000).toISOString();
       const valor = (subscription.items?.data?.[0]?.price?.unit_amount || 0) / 100;
 
-      console.log(`[STRIPE WEBHOOK] Checkout completed for Potency: ${potencyId}, Plan: ${planName}, Price: R$ ${valor}`);
+      console.log(`[STRIPE WEBHOOK] Checkout completed for ${accountType === 'potencia' ? 'Potency: ' + potencyId : 'Lodge: ' + lojaId}, Plan: ${planName}`);
 
       // Upsert Subscription in database
-      await sql`
-        INSERT INTO public.assinaturas (potencia_id, stripe_customer_id, stripe_subscription_id, status, plano, valor, next_billing_date)
-        VALUES (${potencyId}, ${customerId}, ${subscriptionId}, ${status}, ${planName}, ${valor}, ${nextBillingDate})
-        ON CONFLICT (potencia_id) 
-        DO UPDATE SET 
-          stripe_customer_id = EXCLUDED.stripe_customer_id,
-          stripe_subscription_id = EXCLUDED.stripe_subscription_id,
-          status = EXCLUDED.status,
-          plano = EXCLUDED.plano,
-          valor = EXCLUDED.valor,
-          next_billing_date = EXCLUDED.next_billing_date,
-          created_at = NOW()
-      `;
+      if (accountType === 'potencia') {
+        await sql`
+          INSERT INTO public.assinaturas (potencia_id, stripe_customer_id, stripe_subscription_id, status, plano, valor, next_billing_date)
+          VALUES (${potencyId}, ${customerId}, ${subscriptionId}, ${status}, ${planName}, ${valor}, ${nextBillingDate})
+          ON CONFLICT (potencia_id) 
+          DO UPDATE SET 
+            stripe_customer_id = EXCLUDED.stripe_customer_id,
+            stripe_subscription_id = EXCLUDED.stripe_subscription_id,
+            status = EXCLUDED.status,
+            plano = EXCLUDED.plano,
+            valor = EXCLUDED.valor,
+            next_billing_date = EXCLUDED.next_billing_date,
+            created_at = NOW()
+        `;
 
-      // Fetch current potency settings
-      const potencies = await sql`
-        SELECT * FROM public.potencias WHERE id = ${potencyId} LIMIT 1
-      `;
+        // Fetch current potency settings
+        const potencies = await sql`
+          SELECT * FROM public.potencias WHERE id = ${potencyId} LIMIT 1
+        `;
 
-      if (potencies.length === 0) {
-        console.error(`[STRIPE WEBHOOK ERROR] Potency ID ${potencyId} not found in database.`);
-        return res.status(404).json({ error: 'Potência não encontrada' });
-      }
+        if (potencies.length > 0) {
+          const potency = potencies[0];
+          const config = typeof potency.configuracoes_json === 'string'
+            ? JSON.parse(potency.configuracoes_json)
+            : (potency.configuracoes_json || {});
 
-      const potency = potencies[0];
-      const config = typeof potency.configuracoes_json === 'string'
-        ? JSON.parse(potency.configuracoes_json)
-        : (potency.configuracoes_json || {});
+          config.plan = planName;
 
-      config.plan = planName;
+          // Update plan in potency table
+          await sql`
+            UPDATE public.potencias
+            SET configuracoes_json = ${JSON.stringify(config)}::jsonb,
+                trial_ends_at = NULL -- Reset trial ends since payment is active
+            WHERE id = ${potencyId}
+          `;
 
-      // Update plan in potency table
-      await sql`
-        UPDATE public.potencias
-        SET configuracoes_json = ${JSON.stringify(config)}::jsonb,
-            trial_ends_at = NULL -- Reset trial ends since payment is active
-        WHERE id = ${potencyId}
-      `;
+          // Send confirmation email
+          let limitText = 'Acesso Premium';
+          if (planName === 'Aprendiz') {
+            limitText = 'Até 30 Obreiros por Loja';
+          } else if (planName === 'Companheiro') {
+            limitText = 'Até 60 Obreiros por Loja';
+          } else if (planName === 'Mestre') {
+            limitText = 'Obreiros ilimitados por Loja';
+          }
 
-      // Send confirmation email
-      let limitText = 'Acesso Premium';
-      if (planName === 'Aprendiz') {
-        limitText = 'Até 30 Obreiros por Loja';
-      } else if (planName === 'Companheiro') {
-        limitText = 'Até 60 Obreiros por Loja';
-      } else if (planName === 'Mestre') {
-        limitText = 'Obreiros ilimitados por Loja';
-      }
+          if (email) {
+            await emailService.sendUpgradeConfirmation(
+              email,
+              potency.nome,
+              planName,
+              limitText
+            );
+          }
+        }
+      } else {
+        await sql`
+          INSERT INTO public.assinaturas (loja_id, stripe_customer_id, stripe_subscription_id, status, plano, valor, next_billing_date)
+          VALUES (${lojaId}, ${customerId}, ${subscriptionId}, ${status}, ${planName}, ${valor}, ${nextBillingDate})
+          ON CONFLICT (loja_id) 
+          DO UPDATE SET 
+            stripe_customer_id = EXCLUDED.stripe_customer_id,
+            stripe_subscription_id = EXCLUDED.stripe_subscription_id,
+            status = EXCLUDED.status,
+            plano = EXCLUDED.plano,
+            valor = EXCLUDED.valor,
+            next_billing_date = EXCLUDED.next_billing_date,
+            created_at = NOW()
+        `;
 
-      if (email) {
-        await emailService.sendUpgradeConfirmation(
-          email,
-          potency.nome,
-          planName,
-          limitText
-        );
+        // Fetch current lodge settings
+        const lodges = await sql`
+          SELECT * FROM public.lojas WHERE id = ${lojaId} LIMIT 1
+        `;
+
+        if (lodges.length > 0) {
+          const lodge = lodges[0];
+          const config = typeof lodge.site_config_json === 'string'
+            ? JSON.parse(lodge.site_config_json)
+            : (lodge.site_config_json || {});
+
+          config.plan = planName;
+
+          // Update plan in lodge table
+          await sql`
+            UPDATE public.lojas
+            SET site_config_json = ${JSON.stringify(config)}::jsonb
+            WHERE id = ${lojaId}
+          `;
+
+          // Send confirmation email
+          let limitText = 'Acesso Premium Loja';
+          if (planName === 'Aprendiz') {
+            limitText = 'Até 30 Obreiros';
+          } else if (planName === 'Companheiro') {
+            limitText = 'Até 60 Obreiros';
+          } else if (planName === 'Mestre') {
+            limitText = 'Obreiros ilimitados';
+          }
+
+          if (email) {
+            await emailService.sendUpgradeConfirmation(
+              email,
+              lodge.nome,
+              planName,
+              limitText
+            );
+          }
+        }
       }
     }
 
@@ -211,6 +266,7 @@ export default async function handler(req: any, res: any) {
 
       if (rows.length > 0) {
         const potencyId = rows[0].potencia_id;
+        const lojaId = rows[0].loja_id;
 
         // Update signature record
         await sql`
@@ -219,26 +275,49 @@ export default async function handler(req: any, res: any) {
           WHERE stripe_subscription_id = ${subscriptionId}
         `;
 
-        // Fetch potency config to remove plan
-        const potencies = await sql`
-          SELECT * FROM public.potencias WHERE id = ${potencyId} LIMIT 1
-        `;
-
-        if (potencies.length > 0) {
-          const potency = potencies[0];
-          const config = typeof potency.configuracoes_json === 'string'
-            ? JSON.parse(potency.configuracoes_json)
-            : (potency.configuracoes_json || {});
-          
-          delete config.plan;
-
-          // Lock account by expiring trial access immediately
-          await sql`
-            UPDATE public.potencias
-            SET configuracoes_json = ${JSON.stringify(config)}::jsonb,
-                trial_ends_at = NOW() - INTERVAL '1 day'
-            WHERE id = ${potencyId}
+        if (potencyId) {
+          // Fetch potency config to remove plan
+          const potencies = await sql`
+            SELECT * FROM public.potencias WHERE id = ${potencyId} LIMIT 1
           `;
+
+          if (potencies.length > 0) {
+            const potency = potencies[0];
+            const config = typeof potency.configuracoes_json === 'string'
+              ? JSON.parse(potency.configuracoes_json)
+              : (potency.configuracoes_json || {});
+            
+            delete config.plan;
+
+            // Lock account by expiring trial access immediately
+            await sql`
+              UPDATE public.potencias
+              SET configuracoes_json = ${JSON.stringify(config)}::jsonb,
+                  trial_ends_at = NOW() - INTERVAL '1 day'
+              WHERE id = ${potencyId}
+            `;
+          }
+        } else if (lojaId) {
+          // Fetch lodge config to remove plan
+          const lodges = await sql`
+            SELECT * FROM public.lojas WHERE id = ${lojaId} LIMIT 1
+          `;
+
+          if (lodges.length > 0) {
+            const lodge = lodges[0];
+            const config = typeof lodge.site_config_json === 'string'
+              ? JSON.parse(lodge.site_config_json)
+              : (lodge.site_config_json || {});
+            
+            delete config.plan;
+
+            // Lock account by cleaning up active plan
+            await sql`
+              UPDATE public.lojas
+              SET site_config_json = ${JSON.stringify(config)}::jsonb
+              WHERE id = ${lojaId}
+            `;
+          }
         }
       }
     }

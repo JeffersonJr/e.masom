@@ -233,7 +233,7 @@ export default function AdminConfig() {
                             </div>
                         </div>
 
-                        <UpgradeModal isOpen={isUpgradeOpen} onClose={() => setIsUpgradeOpen(false)} />
+                        <UpgradeModal isOpen={isUpgradeOpen} onClose={() => setIsUpgradeOpen(false)} accountType="potencia" />
                     </div>
                 )}
 

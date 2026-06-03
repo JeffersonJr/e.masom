@@ -5,9 +5,10 @@ import { useAuth } from '../contexts/AuthContext';
 interface UpgradeModalProps {
     isOpen: boolean;
     onClose: () => void;
+    accountType?: 'potencia' | 'loja';
 }
 
-export default function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
+export default function UpgradeModal({ isOpen, onClose, accountType = 'potencia' }: UpgradeModalProps) {
     const { profile, session } = useAuth();
     const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -98,7 +99,7 @@ export default function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session.token}`
                 },
-                body: JSON.stringify({ planName })
+                body: JSON.stringify({ planName, accountType })
             });
 
             const data = await res.json();

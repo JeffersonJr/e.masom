@@ -36,8 +36,9 @@ if (!databaseUrl) {
 const sql = neon(databaseUrl);
 
 async function main() {
-  console.log('🔄 Running production database migrations on Neon...');
-  const migrationPath = path.resolve(process.cwd(), 'supabase/migrations/20260603000000_production_migrations.sql');
+  const migrationFile = process.argv[2] || 'supabase/migrations/20260603000000_production_migrations.sql';
+  console.log(`🔄 Running database migration: ${migrationFile} on Neon...`);
+  const migrationPath = path.resolve(process.cwd(), migrationFile);
   
   if (!fs.existsSync(migrationPath)) {
     console.error('❌ Migration file not found at:', migrationPath);

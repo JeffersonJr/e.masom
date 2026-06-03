@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import UpgradeModal from '../components/UpgradeModal';
 import {
     Shield, Bell, Globe, Database, Users,
     ChevronRight, Lock, Mail, Sliders, Save, Check, Loader2,
@@ -47,10 +49,12 @@ type Tab = typeof TABS[number]['id'];
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function AdminConfig() {
+    const { profile } = useAuth();
     const [tab, setTab] = useState<Tab>('geral');
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
     const [showSecret, setShowSecret] = useState(false);
+    const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
 
     // Geral
     const [geral, setGeral] = useState({
@@ -206,14 +210,30 @@ export default function AdminConfig() {
                                     <Info size={18} className="text-accent" />
                                 </div>
                                 <div className="flex-1">
-                                    <p className="font-black text-sm text-primary mb-1">Plano atual: <span className="text-accent">Pro</span></p>
-                                    <p className="text-xs text-muted-foreground">Lojas ilimitadas · SEO completo · Analytics · Suporte prioritário</p>
-                                    <button className="mt-3 flex items-center gap-1 text-xs font-black text-accent hover:underline">
-                                        Ver detalhes do plano <ChevronRight size={12} />
+                                    <p className="font-black text-sm text-primary mb-1">
+                                        Plano vigente: <span className="text-accent">
+                                            {profile?.potencias?.configuracoes_json?.plan 
+                                                ? `Plano ${profile.potencias.configuracoes_json.plan}` 
+                                                : 'Período de Testes (15 dias)'}
+                                        </span>
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {profile?.potencias?.configuracoes_json?.plan === 'Aprendiz' && 'Até 30 Obreiros por Loja · Carteirinha Digital Básica · Suporte por email'}
+                                        {profile?.potencias?.configuracoes_json?.plan === 'Companheiro' && 'Até 60 Obreiros por Loja · Carteirinhas Digital/Física · Validação QR Code · Suporte prioritário'}
+                                        {profile?.potencias?.configuracoes_json?.plan === 'Mestre' && 'Obreiros Ilimitados por Loja · Acesso Total a Graus e Rituais · Suporte Premium Dedicado'}
+                                        {!profile?.potencias?.configuracoes_json?.plan && 'Acesso provisório de testes de 15 dias liberado para exploração de todas as ferramentas.'}
+                                    </p>
+                                    <button 
+                                        onClick={() => setIsUpgradeOpen(true)}
+                                        className="mt-3 flex items-center gap-1 text-xs font-black text-accent hover:underline"
+                                    >
+                                        Alterar / Fazer Upgrade de Plano <ChevronRight size={12} />
                                     </button>
                                 </div>
                             </div>
                         </div>
+
+                        <UpgradeModal isOpen={isUpgradeOpen} onClose={() => setIsUpgradeOpen(false)} />
                     </div>
                 )}
 

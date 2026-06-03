@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import UpgradeModal from '../components/UpgradeModal';
 import {
     Users,
     Store,
@@ -11,8 +14,49 @@ import {
 } from 'lucide-react';
 
 export default function AdminDashboard() {
+    const { profile } = useAuth();
+    const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
+
+    // Dynamic remaining days calculation
+    const trialEndsAt = profile?.potencias?.trial_ends_at;
+    const currentPlan = profile?.potencias?.configuracoes_json?.plan;
+
+    let trialDaysRemaining = 0;
+    let isTrialActive = false;
+
+    if (trialEndsAt && !currentPlan) {
+        const diffTime = new Date(trialEndsAt).getTime() - Date.now();
+        trialDaysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+        isTrialActive = true;
+    }
+
     return (
         <div className="p-10 space-y-12 bg-background min-h-screen">
+            {isTrialActive && (
+                <div className="bg-gradient-to-r from-amber-700/80 to-amber-900/80 border border-amber-600/30 rounded-xl p-6 text-slate-100 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full blur-3xl -mr-10 -mt-10" />
+                    <div className="flex items-center gap-4 relative z-10">
+                        <div className="w-12 h-12 bg-accent/15 border border-accent/20 rounded-full flex items-center justify-center text-accent">
+                            <AlertCircle size={22} className="animate-pulse" />
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-lg text-primary tracking-tight">Período de Testes Ativo (15 dias)</h4>
+                            <p className="text-slate-300 text-xs mt-0.5 font-medium">
+                                Sua potência possui <span className="text-primary font-bold">{trialDaysRemaining} {trialDaysRemaining === 1 ? 'dia restante' : 'dias restantes'}</span> de acesso provisório.
+                            </p>
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => setIsUpgradeOpen(true)}
+                        className="px-6 py-2.5 bg-accent text-[#070b13] hover:bg-[#f3e5ab] text-[10px] font-black uppercase tracking-widest rounded-lg shadow-md transition-all duration-300 relative z-10 shrink-0"
+                    >
+                        Escolher Plano
+                    </button>
+                </div>
+            )}
+
+            <UpgradeModal isOpen={isUpgradeOpen} onClose={() => setIsUpgradeOpen(false)} />
+
             {/* Page Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border pb-10">
                 <div>

@@ -64,7 +64,9 @@ export default async function handler(req: any, res: any) {
 
     // 3. Get profile associated with this user
     const profiles = await sql`
-      SELECT p.*, l.slug as loja_slug, po.slug as potencia_slug 
+      SELECT p.*, l.slug as loja_slug, po.slug as potencia_slug,
+             po.trial_ends_at as potencia_trial_ends_at,
+             po.configuracoes_json as potencia_configuracoes_json
       FROM public.perfis p
       LEFT JOIN public.lojas l ON p.loja_id = l.id
       LEFT JOIN public.potencias po ON p.potencia_id = po.id
@@ -101,7 +103,13 @@ export default async function handler(req: any, res: any) {
         cargo: profile.cargo,
         status: profile.status,
         lojas: profile.loja_slug ? { slug: profile.loja_slug } : null,
-        potencias: profile.potencia_slug ? { slug: profile.potencia_slug } : null
+        potencias: profile.potencia_slug ? {
+          slug: profile.potencia_slug,
+          trial_ends_at: profile.potencia_trial_ends_at,
+          configuracoes_json: typeof profile.potencia_configuracoes_json === 'string' 
+            ? JSON.parse(profile.potencia_configuracoes_json) 
+            : profile.potencia_configuracoes_json
+        } : null
       }
     });
   } catch (error: any) {

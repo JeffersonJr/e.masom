@@ -1,6 +1,7 @@
 import { neon } from '@neondatabase/serverless';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { emailService } from '../lib/email-service.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'placeholder-secret-key';
 
@@ -102,6 +103,15 @@ export default async function handler(req: any, res: any) {
       JWT_SECRET,
       { expiresIn: '7d' }
     );
+
+    // Trigger registration emails
+    try {
+      await emailService.sendWelcomeEmail(email.toLowerCase(), name);
+      await emailService.sendTrialWelcome(email.toLowerCase(), name, potencyName);
+      await emailService.sendEmailVerification(email.toLowerCase(), '159263');
+    } catch (emailErr) {
+      console.error('Error sending signup emails:', emailErr);
+    }
 
     return res.status(200).json({
       token,

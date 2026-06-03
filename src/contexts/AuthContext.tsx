@@ -14,6 +14,12 @@ export interface Profile {
     } | null;
     potencias?: {
         slug: string;
+        trial_ends_at?: string | null;
+        configuracoes_json?: {
+            plan?: string;
+            domain?: string;
+            [key: string]: any;
+        } | null;
     } | null;
 }
 
@@ -34,6 +40,7 @@ interface AuthContextType {
     loading: boolean;
     signOut: () => Promise<void>;
     signIn: (token: string, user: User, profile: Profile) => void;
+    updateProfile: (profileData: Profile) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -86,6 +93,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setProfile(profileData);
     };
 
+    const updateProfile = (profileData: Profile) => {
+        setProfile(profileData);
+    };
+
     const signOut = async () => {
         localStorage.removeItem('emason_token');
         setSession(null);
@@ -93,7 +104,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ session, user: session?.user ?? null, profile, loading, signOut, signIn }}>
+        <AuthContext.Provider value={{ session, user: session?.user ?? null, profile, loading, signOut, signIn, updateProfile }}>
             {children}
         </AuthContext.Provider>
     );

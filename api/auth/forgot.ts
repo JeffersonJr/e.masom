@@ -1,5 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import jwt from 'jsonwebtoken';
+import { emailService } from '../lib/email-service.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'placeholder-secret-key';
 
@@ -64,9 +65,17 @@ export default async function handler(req: any, res: any) {
       { expiresIn: '15m' }
     );
 
+    const devLink = `/login?view=reset&token=${token}`;
+
+    try {
+      await emailService.sendPasswordRecovery(user.email, devLink);
+    } catch (emailErr) {
+      console.error('Error sending password recovery email:', emailErr);
+    }
+
     return res.status(200).json({
       message: 'Se o e-mail estiver cadastrado, um protocolo de recuperação foi enviado.',
-      devLink: `/login?view=reset&token=${token}`
+      devLink
     });
   } catch (error: any) {
     console.error('Forgot password error:', error);

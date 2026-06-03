@@ -24,59 +24,59 @@
   :root {
     /* 60% - White Background */
     --background: #ffffff;
-    --foreground: #4e342e; /* Deep coffee brown */
+    --foreground: #031222; /* Deep navy blue */
     
-    /* 30% - Pastel Brown */
-    --primary: #8d6e63; /* Pastel brown primary */
+    /* 30% - Deep Blue Primary */
+    --primary: #031222; /* Navy blue primary */
     --primary-foreground: #ffffff;
     
-    --secondary: #efebe9; /* Light pastel brown/beige */
-    --secondary-foreground: #4e342e;
+    --secondary: #f0f4f8; /* Soft light ice blue secondary */
+    --secondary-foreground: #031222;
     
-    --muted: #f5f2f0;
-    --muted-foreground: #a1887f; /* Soft pastel brown */
+    --muted: #f4f6f9;
+    --muted-foreground: #4f6173; /* Soft slate/blue muted */
     
     /* 10% - Gold Accent */
     --accent: #d4af37; /* Gold */
     --accent-foreground: #ffffff;
     
     --card: #ffffff;
-    --card-foreground: #4e342e;
+    --card-foreground: #031222;
     
     --popover: #ffffff;
-    --popover-foreground: #4e342e;
+    --popover-foreground: #031222;
     
     --destructive: #d32f2f;
     --destructive-foreground: #ffffff;
     
-    --border: #eae5e2;
-    --input: #eae5e2;
+    --border: #e2e8f0;
+    --input: #e2e8f0;
     --ring: #d4af37;
     
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: #2d1a15; /* Dark pastel brown background */
-    --foreground: #efebe9; /* Light cream text */
+    --background: #010810; /* Very dark blue/black */
+    --foreground: #e2e8f0; /* Light slate text */
     
-    --primary: #efebe9;
-    --primary-foreground: #2d1a15;
+    --primary: #e2e8f0;
+    --primary-foreground: #010810;
     
-    --secondary: #4e342e; /* Medium dark pastel brown */
-    --secondary-foreground: #efebe9;
+    --secondary: #031222; /* Deep navy blue secondary */
+    --secondary-foreground: #e2e8f0;
     
-    --muted: #3a231c;
-    --muted-foreground: #a1887f;
+    --muted: #020d18;
+    --muted-foreground: #4f6173;
     
     --accent: #d4af37;
-    --accent-foreground: #2d1a15;
+    --accent-foreground: #010810;
     
-    --card: #35211b;
-    --card-foreground: #efebe9;
+    --card: #020d18;
+    --card-foreground: #e2e8f0;
     
-    --border: #4e342e;
-    --input: #4e342e;
+    --border: #031222;
+    --input: #031222;
     --ring: #d4af37;
   }
 }
@@ -152,7 +152,7 @@
   }
 }
 
-/* ─── Elegant Custom Overrides for Light Pastel Theme ─── */
+/* ─── Elegant Custom Overrides for Light Blue Theme ─── */
 
 * {
   font-family: var(--font-sans) !important;
@@ -169,7 +169,7 @@
   background-color: var(--secondary) !important;
 }
 .bg-\[\#0c1220\]\/50 {
-  background-color: rgba(239, 235, 233, 0.65) !important;
+  background-color: rgba(240, 244, 248, 0.65) !important;
 }
 .bg-gradient-to-b.from-\[\#09101d\].to-\[\#121c2e\] {
   background: linear-gradient(to bottom, var(--secondary), var(--muted)) !important;
@@ -226,5 +226,5 @@ input, select, textarea {
 
 /* Clean cards and items shadow */
 .bg-card, .bg-\[\#0e1626\], .bg-\[\#0c1220\] {
-  box-shadow: 0 4px 20px -2px rgba(93, 64, 55, 0.04) !important;
+  box-shadow: 0 4px 20px -2px rgba(3, 18, 34, 0.04) !important;
 }

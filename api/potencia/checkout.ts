@@ -1,5 +1,5 @@
-import { getSql } from '../lib/db.js';
-import { withAuth } from '../lib/auth-middleware.js';
+import { getSql } from '../_lib/db.js';
+import { withAuth } from '../_lib/auth-middleware.js';
 
 async function handler(req: any, res: any) {
   if (req.method !== 'POST') {

@@ -2,9 +2,10 @@ import fs from 'fs';
 import path from 'path';
 
 // Local folder to store compiled HTML files for testing/previewing
-const EMAILS_DIR = path.resolve(process.cwd(), 'api/lib/emails');
+const EMAILS_DIR = path.resolve(process.cwd(), 'api/_lib/emails');
 
 function ensureEmailsDir() {
+  if (process.env.NODE_ENV === 'production' || process.env.VERCEL) return;
   if (!fs.existsSync(EMAILS_DIR)) {
     fs.mkdirSync(EMAILS_DIR, { recursive: true });
   }
@@ -261,15 +262,18 @@ export const emailService = {
 
   // Resend sender/backup helper
   async mockSend(type: string, to: string, subject: string, html: string) {
-    ensureEmailsDir();
-    const filename = `${type}_${Date.now()}.html`;
-    const filepath = path.join(EMAILS_DIR, filename);
+    const isProd = process.env.NODE_ENV === 'production' || process.env.VERCEL;
+    if (!isProd) {
+      ensureEmailsDir();
+      const filename = `${type}_${Date.now()}.html`;
+      const filepath = path.join(EMAILS_DIR, filename);
 
-    try {
-      fs.writeFileSync(filepath, html, 'utf8');
-      console.log(`[EMAIL LOGGED] Preview locally: file://${filepath}`);
-    } catch (err) {
-      console.error(`Failed to write email file backup:`, err);
+      try {
+        fs.writeFileSync(filepath, html, 'utf8');
+        console.log(`[EMAIL LOGGED] Preview locally: file://${filepath}`);
+      } catch (err) {
+        console.error(`Failed to write email file backup:`, err);
+      }
     }
 
     const resendApiKey = process.env.RESEND_API_KEY;

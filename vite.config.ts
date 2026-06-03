@@ -24,7 +24,6 @@ export default defineConfig({
             if (id.includes('framer-motion')) {
               return 'vendor-motion';
             }
-            return 'vendor-others';
           }
         }
       }

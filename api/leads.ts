@@ -22,7 +22,7 @@ export default async function handler(req: any, res: any) {
       return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { loja_id, potencia_id, nome, email, telefone, mensagem } = req.body;
+    const { loja_id, nome, email, telefone, mensagem } = req.body;
 
     if (!nome || !email) {
       return res.status(400).json({ error: 'Nome e E-mail são obrigatórios' });

@@ -54,7 +54,7 @@ export default async function handler(req: any, res: any) {
     // PUT/PATCH Method (Update Potencia)
     if (req.method === 'PUT' || req.method === 'PATCH') {
       const { id } = req.query;
-      const { nome, sigla, descricao, logo_url, configuracoes_json } = req.body;
+      const { nome, sigla, logo_url, configuracoes_json } = req.body;
 
       if (!id) {
         return res.status(400).json({ error: 'ID da potência é obrigatório' });
@@ -69,7 +69,6 @@ export default async function handler(req: any, res: any) {
 
       const updatedNome = nome !== undefined ? nome : p.nome;
       const updatedSigla = sigla !== undefined ? sigla : p.sigla;
-      const updatedDescricao = descricao !== undefined ? descricao : p.descricao;
       const updatedLogoUrl = logo_url !== undefined ? logo_url : p.logo_url;
       const updatedConfig = configuracoes_json !== undefined ? configuracoes_json : p.configuracoes_json;
 

@@ -1,8 +1,20 @@
-import { getSql } from './lib/db.js';
+import { neon } from '@neondatabase/serverless';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'placeholder-secret-key';
+
+let _sql: any = null;
+function getSql() {
+  if (!_sql) {
+    const databaseUrl = process.env.DATABASE_URL;
+    if (!databaseUrl) {
+      throw new Error('DATABASE_URL is not set.');
+    }
+    _sql = neon(databaseUrl);
+  }
+  return _sql;
+}
 
 export default async function handler(req: any, res: any) {
   // CORS configuration

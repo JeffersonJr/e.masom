@@ -1,20 +1,7 @@
 import { getSql } from './lib/db.js';
+import { withAuth } from './lib/auth-middleware.js';
 
-export default async function handler(req: any, res: any) {
-  // CORS configuration
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
-  );
-
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
-
+async function handler(req: any, res: any) {
   try {
     const sql = getSql();
 
@@ -70,3 +57,5 @@ export default async function handler(req: any, res: any) {
     return res.status(500).json({ error: error.message || 'Erro interno no servidor' });
   }
 }
+
+export default withAuth(handler);

@@ -1,20 +1,7 @@
 import { getSql } from './lib/db.js';
+import { withAuth } from './lib/auth-middleware.js';
 
-export default async function handler(req: any, res: any) {
-  // CORS configuration
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
-  );
-
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
-
+async function handler(req: any, res: any) {
   try {
     const sql = getSql();
 
@@ -52,6 +39,12 @@ export default async function handler(req: any, res: any) {
 
     // PUT/PATCH Method (Update document status)
     if (req.method === 'PUT' || req.method === 'PATCH') {
+      // Role validation
+      const allowedCargos = ['Venerável Mestre', 'Grão-Mestre'];
+      if (!allowedCargos.includes(req.user.cargo)) {
+        return res.status(403).json({ error: 'Acesso restrito para aprovação de documentos.' });
+      }
+
       const { id } = req.query;
       const { status } = req.body;
 
@@ -63,16 +56,22 @@ export default async function handler(req: any, res: any) {
         return res.status(400).json({ error: 'Status inválido' });
       }
 
+      // Tenancy check
+      const doc = await sql`SELECT potencia_id FROM public.documentos WHERE id = ${id} LIMIT 1`;
+      if (doc.length === 0) {
+        return res.status(404).json({ error: 'Documento não encontrado' });
+      }
+
+      if (doc[0].potencia_id !== req.user.potencyId) {
+        return res.status(403).json({ error: 'Acesso proibido. Jurisdição inválida.' });
+      }
+
       const rows = await sql`
         UPDATE public.documentos
         SET status = ${status}
         WHERE id = ${id}
         RETURNING *
       `;
-
-      if (rows.length === 0) {
-        return res.status(404).json({ error: 'Documento não encontrado' });
-      }
 
       return res.status(200).json(rows[0]);
     }
@@ -83,3 +82,5 @@ export default async function handler(req: any, res: any) {
     return res.status(500).json({ error: error.message || 'Erro interno no servidor' });
   }
 }
+
+export default withAuth(handler);

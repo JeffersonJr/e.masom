@@ -60,7 +60,26 @@ export default function AdminDashboard() {
             {/* Page Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border pb-10">
                 <div>
-                    <h1 className="text-5xl font-black text-primary tracking-tighter leading-none mb-4">Macrovisão</h1>
+                    <h1 className="text-5xl font-black text-primary tracking-tighter leading-none mb-4 flex flex-wrap items-center gap-3">
+                        Macrovisão
+                        {currentPlan ? (
+                            <span 
+                                onClick={() => setIsUpgradeOpen(true)}
+                                className="inline-flex items-center gap-1.5 px-3 py-1 bg-accent/10 border border-accent/30 rounded-full text-[10px] font-black text-accent uppercase tracking-widest cursor-pointer hover:bg-accent/20 transition-all"
+                                title="Clique para gerenciar plano"
+                            >
+                                Plano {currentPlan}
+                            </span>
+                        ) : (
+                            <span 
+                                onClick={() => setIsUpgradeOpen(true)}
+                                className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-[10px] font-black text-amber-500 uppercase tracking-widest cursor-pointer hover:bg-amber-500/20 transition-all"
+                                title="Clique para ativar plano"
+                            >
+                                Período de Testes
+                            </span>
+                        )}
+                    </h1>
                     <p className="text-muted-foreground font-medium flex items-center gap-2">
                         <span className="w-2 h-2 bg-accent rounded-full" />
                         Jurisdição: <span className="text-primary font-bold">Grande Loja Equinócio</span>

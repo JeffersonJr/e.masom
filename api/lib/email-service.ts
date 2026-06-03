@@ -259,7 +259,7 @@ export const emailService = {
     await this.mockSend('upgrade_plano', to, title, html);
   },
 
-  // Mock send helper
+  // Resend sender/backup helper
   async mockSend(type: string, to: string, subject: string, html: string) {
     ensureEmailsDir();
     const filename = `${type}_${Date.now()}.html`;
@@ -267,12 +267,40 @@ export const emailService = {
 
     try {
       fs.writeFileSync(filepath, html, 'utf8');
-      console.log(`[MOCK EMAIL SENT]`);
-      console.log(`To: ${to}`);
-      console.log(`Subject: ${subject}`);
-      console.log(`Preview locally: file://${filepath}`);
+      console.log(`[EMAIL LOGGED] Preview locally: file://${filepath}`);
     } catch (err) {
-      console.error(`Failed to write mock email file:`, err);
+      console.error(`Failed to write email file backup:`, err);
+    }
+
+    const resendApiKey = process.env.RESEND_API_KEY;
+    if (resendApiKey) {
+      try {
+        console.log(`[RESEND] Attempting to dispatch email to: ${to}...`);
+        const res = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${resendApiKey}`
+          },
+          body: JSON.stringify({
+            from: 'e.mason <onboarding@resend.dev>', // Resend Sandbox Sender
+            to: [to],
+            subject: subject,
+            html: html
+          })
+        });
+
+        const data: any = await res.json();
+        if (!res.ok) {
+          console.error(`[RESEND ERROR] Status ${res.status}:`, data);
+        } else {
+          console.log(`[RESEND SUCCESS] Email dispatched. ID:`, data.id);
+        }
+      } catch (err) {
+        console.error(`[RESEND DISPATCH FAILED]:`, err);
+      }
+    } else {
+      console.log(`[EMAIL DISPATCH SKIPPED] RESEND_API_KEY is not defined. Using local file preview.`);
     }
   }
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -49,7 +49,7 @@ const mockActiveObreiros = [
 
 export default function LodgeDashboard() {
     const { lodgeSlug } = useParams<{ lodgeSlug: string }>();
-    const { profile } = useAuth();
+    const { profile, session } = useAuth();
     const userCargo = profile?.cargo || 'Obreiro';
     const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
 
@@ -95,6 +95,72 @@ export default function LodgeDashboard() {
     // Attendance registry state
     const [attendanceList, setAttendanceList] = useState(mockActiveObreiros);
     const [attendanceSaved, setAttendanceSaved] = useState(false);
+
+    // Fetch real workers for attendance
+    useEffect(() => {
+        if (profile?.potencia_id && activeTab === 'secretaria') {
+            const fetchWorkers = async () => {
+                try {
+                    const res = await fetch(`/api/obreiros?potenciaId=${profile.potencia_id}`, {
+                        headers: {
+                            'Authorization': `Bearer ${session?.token}`
+                        }
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        // Filter obreiros belonging to the current user's lodge
+                        const filtered = data.filter((o: any) => o.loja_id === profile.loja_id);
+                        if (filtered.length > 0) {
+                            setAttendanceList(filtered.map((w: any) => ({
+                                id: w.id,
+                                nome: w.nome || 'Irmão Sem Nome',
+                                cargo: w.cargo || 'Obreiro',
+                                cCim: w.id.substring(0, 5),
+                                present: true
+                            })));
+                        }
+                    }
+                } catch (err) {
+                    console.error('Failed to fetch real obreiros:', err);
+                }
+            };
+            fetchWorkers();
+        }
+    }, [profile, activeTab, session]);
+
+    const handleSyncAttendance = async () => {
+        if (!profile?.loja_id || !session?.token) {
+            alert('Não foi possível identificar a Loja ou a Sessão de usuário.');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/frequencia', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.token}`
+                },
+                body: JSON.stringify({
+                    lojaId: profile.loja_id,
+                    frequencias: attendanceList.map(item => ({
+                        obreiroId: item.id,
+                        presente: item.present
+                    }))
+                })
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.error || 'Falha ao sincronizar.');
+            }
+
+            setAttendanceSaved(true);
+            setTimeout(() => setAttendanceSaved(false), 3000);
+        } catch (e: any) {
+            alert(e.message || 'Erro ao sincronizar presença no servidor.');
+        }
+    };
 
     // Unlock Rituals logic
     const handleUnlockRituals = (e: React.FormEvent) => {
@@ -171,8 +237,25 @@ export default function LodgeDashboard() {
             {/* Header */}
             <header className="border-b border-border/40 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
                 <div>
-                    <h1 className="text-4xl font-black text-primary tracking-tighter leading-none mb-3 font-serif italic uppercase flex items-center gap-3">
+                    <h1 className="text-4xl font-black text-primary tracking-tighter leading-none mb-3 font-serif italic uppercase flex flex-wrap items-center gap-3">
                         <Landmark className="text-accent" size={32} /> Painel da Oficina
+                        {currentPlan ? (
+                            <span 
+                                onClick={() => setIsUpgradeOpen(true)}
+                                className="inline-flex items-center gap-1.5 px-3 py-1 bg-accent/10 border border-accent/30 rounded-full text-[10px] font-black text-accent uppercase tracking-widest cursor-pointer hover:bg-accent/20 transition-all font-sans normal-case"
+                                title="Clique para gerenciar plano"
+                            >
+                                Plano {currentPlan}
+                            </span>
+                        ) : (
+                            <span 
+                                onClick={() => setIsUpgradeOpen(true)}
+                                className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-[10px] font-black text-amber-500 uppercase tracking-widest cursor-pointer hover:bg-amber-500/20 transition-all font-sans normal-case"
+                                title="Clique para ativar plano"
+                            >
+                                Período de Testes
+                            </span>
+                        )}
                     </h1>
                     <p className="text-muted-foreground text-sm font-medium flex items-center gap-2">
                         <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
@@ -727,10 +810,7 @@ export default function LodgeDashboard() {
                             </div>
 
                             <button
-                                onClick={() => {
-                                    setAttendanceSaved(true);
-                                    setTimeout(() => setAttendanceSaved(false), 3000);
-                                }}
+                                onClick={handleSyncAttendance}
                                 className="w-full bg-accent hover:bg-accent/90 text-primary font-black py-4 rounded-lg uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-2 active:scale-95"
                             >
                                 Sincronizar Frequência Geral

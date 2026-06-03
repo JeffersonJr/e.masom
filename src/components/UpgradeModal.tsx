@@ -8,7 +8,7 @@ interface UpgradeModalProps {
 }
 
 export default function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
-    const { profile, session, updateProfile } = useAuth();
+    const { profile, session } = useAuth();
     const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
@@ -92,7 +92,7 @@ export default function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
         setSuccess(null);
 
         try {
-            const res = await fetch('/api/potencia/upgrade', {
+            const res = await fetch('/api/potencia/checkout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -104,32 +104,19 @@ export default function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
             const data = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.error || 'Ocorreu um erro no upgrade de plano.');
+                throw new Error(data.error || 'Ocorreu um erro no redirecionamento para o pagamento.');
             }
 
-            // Update local state context
-            if (profile) {
-                const updatedProfile = {
-                    ...profile,
-                    potencias: profile.potencias ? {
-                        ...profile.potencias,
-                        configuracoes_json: {
-                            ...profile.potencias.configuracoes_json,
-                            plan: planName
-                        }
-                    } : null
-                };
-                updateProfile(updatedProfile);
+            if (data.url) {
+                setSuccess(`Redirecionando para o Stripe para ativação do plano ${planName}...`);
+                setTimeout(() => {
+                    window.location.href = data.url;
+                }, 1000);
+            } else {
+                throw new Error('URL de pagamento não fornecida pelo servidor.');
             }
-
-            setSuccess(`Parabéns! O plano da potência foi atualizado com sucesso para ${planName}.`);
-            setTimeout(() => {
-                onClose();
-                setSuccess(null);
-            }, 3000);
         } catch (err: any) {
-            setError(err.message || 'Falha ao processar o upgrade.');
-        } finally {
+            setError(err.message || 'Falha ao processar a assinatura.');
             setLoadingPlan(null);
         }
     };

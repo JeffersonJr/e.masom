@@ -1,20 +1,7 @@
 import { getSql } from './lib/db.js';
+import { withAuth } from './lib/auth-middleware.js';
 
-export default async function handler(req: any, res: any) {
-  // CORS configuration
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
-  );
-
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
-
+async function handler(req: any, res: any) {
   try {
     const sql = getSql();
 
@@ -27,6 +14,12 @@ export default async function handler(req: any, res: any) {
           SELECT * FROM public.lojas WHERE id = ${id} LIMIT 1
         `;
         if (rows.length === 0) return res.status(404).json({ error: 'Loja não encontrada' });
+        
+        // Tenancy validation
+        if (rows[0].potencia_id !== req.user.potencyId) {
+          return res.status(403).json({ error: 'Acesso proibido. Jurisdição inválida.' });
+        }
+        
         return res.status(200).json(rows[0]);
       }
 
@@ -35,6 +28,12 @@ export default async function handler(req: any, res: any) {
           SELECT * FROM public.lojas WHERE slug = ${slug} LIMIT 1
         `;
         if (rows.length === 0) return res.status(404).json({ error: 'Loja não encontrada' });
+        
+        // Tenancy validation
+        if (rows[0].potencia_id !== req.user.potencyId) {
+          return res.status(403).json({ error: 'Acesso proibido. Jurisdição inválida.' });
+        }
+        
         return res.status(200).json(rows[0]);
       }
 
@@ -46,6 +45,12 @@ export default async function handler(req: any, res: any) {
       }
 
       return res.status(400).json({ error: 'Parâmetro de consulta ausente (potenciaId, id ou slug)' });
+    }
+
+    // Write-level operations restricted to Venerável Mestre or Grão-Mestre
+    const isAuthorizedWrite = req.user.cargo === 'Venerável Mestre' || req.user.cargo === 'Grão-Mestre';
+    if (!isAuthorizedWrite) {
+      return res.status(403).json({ error: 'Acesso restrito a cargos administrativos autorizados.' });
     }
 
     // POST Method (Create Loja)
@@ -114,6 +119,11 @@ export default async function handler(req: any, res: any) {
 
       const l = current[0];
 
+      // Tenancy validation
+      if (l.potencia_id !== req.user.potencyId) {
+        return res.status(403).json({ error: 'Acesso proibido. Jurisdição inválida.' });
+      }
+
       // Merge current values with incoming body
       const nome = body.nome !== undefined ? body.nome : l.nome;
       const numero = body.numero !== undefined ? body.numero : l.numero;
@@ -169,6 +179,16 @@ export default async function handler(req: any, res: any) {
         return res.status(400).json({ error: 'ID da loja não fornecido' });
       }
 
+      const current = await sql`SELECT * FROM public.lojas WHERE id = ${id} LIMIT 1`;
+      if (current.length === 0) {
+        return res.status(404).json({ error: 'Loja não encontrada' });
+      }
+
+      // Tenancy validation
+      if (current[0].potencia_id !== req.user.potencyId) {
+        return res.status(403).json({ error: 'Acesso proibido. Jurisdição inválida.' });
+      }
+
       await sql`
         DELETE FROM public.lojas WHERE id = ${id}
       `;
@@ -182,3 +202,5 @@ export default async function handler(req: any, res: any) {
     return res.status(500).json({ error: error.message || 'Erro interno no servidor' });
   }
 }
+
+export default withAuth(handler);

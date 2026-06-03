@@ -1,20 +1,8 @@
-import { neon } from '@neondatabase/serverless';
+import { getSql } from './lib/db.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'placeholder-secret-key';
-
-let _sql: any = null;
-function getSql() {
-  if (!_sql) {
-    const databaseUrl = process.env.DATABASE_URL;
-    if (!databaseUrl) {
-      throw new Error('DATABASE_URL is not set.');
-    }
-    _sql = neon(databaseUrl);
-  }
-  return _sql;
-}
 
 export default async function handler(req: any, res: any) {
   // CORS configuration
@@ -54,7 +42,7 @@ export default async function handler(req: any, res: any) {
     let potencyId: string;
 
     if (potRes.length === 0) {
-      // Create new potency
+      // Create new potency with 15 days access
       const trialEndsAt = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString();
       const potSlug = potencySigla.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       const insertPot = await sql`
@@ -109,7 +97,7 @@ export default async function handler(req: any, res: any) {
       profile: {
         id: profileId,
         nome: name,
-        potencia_id: potencyId,
+        potency_id: potencyId,
         grau: 'Aprendiz',
         cargo: 'Grão-Mestre',
         status: 'Ativo'

@@ -32,6 +32,7 @@ import { AuthProvider } from '../contexts/AuthContext';
 import ProtectedRoute from '../components/ProtectedRoute';
 import DashRedirect from '../components/DashRedirect';
 import ScrollToTop from '../components/ScrollToTop';
+import Validation from '../pages/Validation';
 
 export default function AppRouter() {
     return (
@@ -87,6 +88,9 @@ export default function AppRouter() {
 
                         {/* Potência Public Site */}
                         <Route path="/p/:potenciaSlug" element={<PotenciaPublic />} />
+
+                        {/* Public Member QR validation */}
+                        <Route path="/validar/:cim" element={<Validation />} />
 
                         {/* Lodge Public Landing Page */}
                         <Route path="/:lodgeSlug" element={<LodgePublic />} />

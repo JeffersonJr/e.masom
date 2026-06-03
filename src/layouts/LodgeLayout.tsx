@@ -32,14 +32,15 @@ export default function LodgeLayout() {
                     </Link>
 
                     <div className="bg-white/5 rounded-xl p-4 flex items-center gap-3 border border-white/5">
-                        <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-primary font-black">
+                        <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-primary font-black text-sm shrink-0">
                             {profile?.nome?.[0] || 'U'}
                         </div>
                         <div className="flex-grow min-w-0">
                             <p className="text-sm font-bold truncate">{profile?.nome || 'Usuário'}</p>
+                            <p className="text-[9px] text-white/30 uppercase font-black truncate">{profile?.cargo || 'Obreiro'}</p>
                             <button
                                 onClick={() => signOut()}
-                                className="flex items-center gap-1 text-[10px] text-white/30 uppercase font-black hover:text-white transition"
+                                className="flex items-center gap-1 text-[10px] text-white/30 uppercase font-black hover:text-white transition mt-1.5"
                             >
                                 <LogOut size={10} /> Sair do Sistema
                             </button>

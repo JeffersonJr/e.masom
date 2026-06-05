@@ -11,10 +11,10 @@
   --color-mason-green: #00C389;
   --color-mason-green-light: #00E09D;
 
-  /* Sober Minimalist Palette (60/30/10) */
+  /* Sober Minimalist Palette (Apple Style) */
   --color-white-60: #FFFFFF;
-  --color-gray-30: #262626;
-  --color-gold-10: #D4AF37;
+  --color-gray-30: #1d1d1f;
+  --color-gold-10: #0071e3;
 
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-serif: "Inter", system-ui, -apple-system, sans-serif;
@@ -22,62 +22,65 @@
 
 @layer base {
   :root {
-    /* 60% - White Background */
-    --background: #ffffff;
-    --foreground: #031222; /* Deep navy blue */
+    --background: #f5f5f7; /* Apple light gray background */
+    --foreground: #1d1d1f; /* Apple dark text */
     
-    /* 30% - Deep Blue Primary */
-    --primary: #031222; /* Navy blue primary */
+    --primary: #1d1d1f; /* Apple deep dark primary */
     --primary-foreground: #ffffff;
     
-    --secondary: #f0f4f8; /* Soft light ice blue secondary */
-    --secondary-foreground: #031222;
+    --secondary: #e8e8ed; /* Apple system secondary gray */
+    --secondary-foreground: #1d1d1f;
     
-    --muted: #f4f6f9;
-    --muted-foreground: #4f6173; /* Soft slate/blue muted */
+    --muted: #ffffff;
+    --muted-foreground: #86868b; /* Apple system secondary text */
     
-    /* 10% - Gold Accent */
-    --accent: #d4af37; /* Gold */
+    --accent: #0071e3; /* Apple premium blue */
     --accent-foreground: #ffffff;
     
     --card: #ffffff;
-    --card-foreground: #031222;
+    --card-foreground: #1d1d1f;
     
     --popover: #ffffff;
-    --popover-foreground: #031222;
+    --popover-foreground: #1d1d1f;
     
-    --destructive: #d32f2f;
+    --destructive: #ff3b30; /* Apple red */
     --destructive-foreground: #ffffff;
     
-    --border: #e2e8f0;
-    --input: #e2e8f0;
-    --ring: #d4af37;
+    --border: #d2d2d7; /* Apple border */
+    --input: #d2d2d7;
+    --ring: #0071e3;
     
-    --radius: 0.5rem;
+    --radius: 0.75rem; /* Smoother apple corners */
   }
 
   .dark {
-    --background: #010810; /* Very dark blue/black */
-    --foreground: #e2e8f0; /* Light slate text */
+    --background: #000000; /* Apple dark background */
+    --foreground: #f5f5f7;
     
-    --primary: #e2e8f0;
-    --primary-foreground: #010810;
+    --primary: #f5f5f7;
+    --primary-foreground: #1d1d1f;
     
-    --secondary: #031222; /* Deep navy blue secondary */
-    --secondary-foreground: #e2e8f0;
+    --secondary: #1d1d1f;
+    --secondary-foreground: #f5f5f7;
     
-    --muted: #020d18;
-    --muted-foreground: #4f6173;
+    --muted: #161617;
+    --muted-foreground: #86868b;
     
-    --accent: #d4af37;
-    --accent-foreground: #010810;
+    --accent: #0a84ff; /* Apple dark accent blue */
+    --accent-foreground: #ffffff;
     
-    --card: #020d18;
-    --card-foreground: #e2e8f0;
+    --card: #161617; /* Apple card background */
+    --card-foreground: #f5f5f7;
     
-    --border: #031222;
-    --input: #031222;
-    --ring: #d4af37;
+    --popover: #161617;
+    --popover-foreground: #f5f5f7;
+    
+    --destructive: #ff453a; /* Apple dark red */
+    --destructive-foreground: #ffffff;
+    
+    --border: #333336; /* Apple dark border */
+    --input: #333336;
+    --ring: #0a84ff;
   }
 }
 
@@ -152,7 +155,7 @@
   }
 }
 
-/* ─── Elegant Custom Overrides for Light Blue Theme ─── */
+/* ─── Elegant Custom Overrides for Apple Style Theme ─── */
 
 * {
   font-family: var(--font-sans) !important;
@@ -163,32 +166,40 @@
   background-color: var(--background) !important;
 }
 .bg-\[\#0e1626\] {
-  background-color: var(--secondary) !important;
+  background-color: var(--card) !important;
 }
 .bg-\[\#0c1220\] {
-  background-color: var(--secondary) !important;
+  background-color: var(--card) !important;
 }
 .bg-\[\#0c1220\]\/50 {
-  background-color: rgba(240, 244, 248, 0.65) !important;
+  background-color: var(--card) !important;
+  opacity: 0.8;
 }
 .bg-gradient-to-b.from-\[\#09101d\].to-\[\#121c2e\] {
-  background: linear-gradient(to bottom, var(--secondary), var(--muted)) !important;
+  background: linear-gradient(to bottom, var(--background), var(--secondary)) !important;
 }
 .bg-gradient-to-r.from-\[\#09101d\].to-\[\#121c2e\] {
-  background: linear-gradient(to right, var(--secondary), var(--muted)) !important;
+  background: linear-gradient(to right, var(--background), var(--secondary)) !important;
 }
 .bg-background {
   background-color: var(--background) !important;
 }
 .bg-card {
-  background-color: var(--background) !important;
+  background-color: var(--card) !important;
 }
 
 /* Input fields styling */
 input, select, textarea {
-  background-color: var(--background) !important;
+  background-color: var(--card) !important;
   color: var(--foreground) !important;
   border-color: var(--border) !important;
+  border-radius: var(--radius) !important;
+  transition: all 0.2s ease;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15) !important;
 }
 
 /* Text color overrides for light background readability */
@@ -204,15 +215,6 @@ input, select, textarea {
 .text-slate-400 {
   color: var(--muted-foreground) !important;
 }
-.text-white\/45, .text-white\/40 {
-  color: rgba(255, 255, 255, 0.75) !important;
-}
-.text-white\/30 {
-  color: rgba(255, 255, 255, 0.6) !important;
-}
-.text-white\/20 {
-  color: rgba(255, 255, 255, 0.45) !important;
-}
 
 /* Border overrides */
 .border-border\/40, .border-border\/20, .border-border\/10, .border-white\/5, .border-accent\/10, .border-accent\/15 {
@@ -226,5 +228,7 @@ input, select, textarea {
 
 /* Clean cards and items shadow */
 .bg-card, .bg-\[\#0e1626\], .bg-\[\#0c1220\] {
-  box-shadow: 0 4px 20px -2px rgba(3, 18, 34, 0.04) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
 }

@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { databaseService, type Loja } from '../lib/database-service';
 import { useAuth } from '../contexts/AuthContext';
+import { uploadStoreLogo } from '../lib/supabase-upload';
 
 // ─── Ritos Maçônicos (fallback — em produção virá das configurações da potência) ─
 const RITOS_DEFAULT = [
@@ -193,12 +194,24 @@ function MembroRow({
 {/* Grade input for irmãos */}
 {membro.tipo === 'irmao' && (
     <div className="space-y-1 mt-2">
-        <label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground pl-0.5">Grau</label>
+        <div className="flex justify-between items-center pl-0.5">
+            <label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Grau (0-100)</label>
+            {membro.grau && (
+                <span className="text-[10px] font-bold px-2 py-0.5 bg-accent/10 text-accent rounded-full">
+                    Grau {membro.grau}
+                </span>
+            )}
+        </div>
         <input
-            type="text"
+            type="number"
+            min={0}
+            max={100}
             value={membro.grau || ''}
-            onChange={e => onChange('grau', e.target.value)}
-            placeholder="Grau do irmão"
+            onChange={e => {
+                const val = e.target.value === '' ? '' : Math.min(100, Math.max(0, parseInt(e.target.value) || 0)).toString();
+                onChange('grau', val);
+            }}
+            placeholder="Grau do irmão (0-100)"
             className={`w-full border rounded-lg py-2.5 px-3 text-sm bg-background outline-none focus:border-accent/40 transition font-medium text-primary ${duplicateError ? 'border-destructive' : 'border-border'}`}
         />
     </div>
@@ -531,6 +544,14 @@ export default function LojaModal({ isOpen, onClose, onSaved, editLoja, potencia
 
     // ── Upload logo to Supabase Storage ───────────────────────────────────
     const uploadLogo = async (): Promise<string | null> => {
+        if (form.logoFile) {
+            try {
+                return await uploadStoreLogo(form.logoFile);
+            } catch (err) {
+                console.error('Erro ao fazer upload da logo:', err);
+                return form.logoPreview || null;
+            }
+        }
         return form.logoPreview || null;
     };
 

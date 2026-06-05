@@ -169,27 +169,27 @@ export default function Login() {
         }
     };
 
-    return (
+     return (
         <div className="min-h-screen flex flex-col md:flex-row bg-background overflow-hidden">
             {/* Visual Side */}
-            <div className="hidden md:flex flex-col justify-between w-1/2 bg-primary p-16 text-primary-foreground relative">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,oklch(0.769_0.188_70.08_/_0.1)_0%,transparent_60%)]" />
+            <div className="hidden md:flex flex-col justify-between w-1/2 bg-foreground p-16 text-background relative">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(10,132,255,0.08)_0%,transparent_60%)]" />
 
-                <Link to="/" className="relative z-10 block">
-                    <img src="/e.mason.svg" alt="e.mason" className="h-10 w-auto grayscale brightness-200" />
+                <Link to="/" className="relative z-10 block hover:opacity-85 transition-opacity">
+                    <img src="/e.mason.svg" alt="e.mason" className="h-6 w-auto invert brightness-200" />
                 </Link>
 
                 <div className="relative z-10 max-w-md">
-                    <h2 className="text-6xl font-black mb-8 leading-[0.95] tracking-tighter">
+                    <h2 className="text-5xl font-bold mb-6 leading-tight tracking-tight">
                         Gestão com <br />
-                        <span className="text-accent italic font-serif">Propósito.</span>
+                        <span className="text-accent">Propósito.</span>
                     </h2>
-                    <p className="text-primary-foreground/60 text-lg leading-relaxed font-medium">
+                    <p className="text-muted-foreground text-base leading-relaxed font-normal">
                         Acesse a plataforma de governança maçônica mais avançada do mercado. Segurança, tradição e sobriedade em cada detalhe.
                     </p>
                 </div>
 
-                <div className="relative z-10 text-[10px] text-primary-foreground/20 uppercase tracking-[0.3em] font-black">
+                <div className="relative z-10 text-[10px] text-muted-foreground/40 uppercase tracking-wider font-semibold">
                     Versão 2.4.0 • © 2026 e.mason
                 </div>
             </div>
@@ -198,16 +198,16 @@ export default function Login() {
             {/* Form Side */}
             <div className="flex-grow flex items-center justify-center p-8 bg-background">
                 <div className="w-full max-w-md">
-                    <Link to="/" className="md:hidden flex items-center gap-2 text-muted-foreground text-sm mb-12 hover:text-primary transition font-bold uppercase tracking-widest text-[10px]">
+                    <Link to="/" className="md:hidden flex items-center gap-2 text-muted-foreground text-xs mb-10 hover:text-foreground transition-colors font-medium">
                         <ArrowLeft size={14} /> Voltar para o início
                     </Link>
 
-                    <header className="mb-12 text-center md:text-left">
-                        <h1 className="text-4xl font-black text-primary mb-3 tracking-tighter">
+                    <header className="mb-10 text-center md:text-left">
+                        <h1 className="text-3xl font-semibold text-foreground mb-2 tracking-tight">
                             {view === 'login' ? 'Login Administrativo' :
                                 view === 'forgot' ? 'Recuperar Acesso' : 'Nova Credencial'}
                         </h1>
-                        <p className="text-muted-foreground font-medium">
+                        <p className="text-muted-foreground text-sm font-normal">
                             {view === 'login' ? 'Insira suas credenciais para acessar o painel.' :
                                 view === 'forgot' ? 'Enviaremos um protocolo de restauração para o seu e-mail.' :
                                     'Defina sua nova credencial de acesso soberano.'}
@@ -216,56 +216,56 @@ export default function Login() {
 
 
                     {error && (
-                        <div className="mb-8 p-5 bg-destructive/5 border border-destructive/20 text-destructive text-[11px] font-black uppercase tracking-widest rounded-md flex gap-4 items-center animate-shake">
+                        <div className="mb-6 p-4 bg-destructive/5 border border-destructive/20 text-destructive text-xs font-medium rounded-xl flex gap-3 items-center animate-shake">
                             <div className="w-1.5 h-1.5 bg-destructive rounded-full" />
                             {error}
                         </div>
                     )}
 
                     {view === 'login' && (
-                        <form onSubmit={handleLogin} className="space-y-8">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-primary uppercase tracking-[0.2em] pl-1">Identificação / Email</label>
+                        <form onSubmit={handleLogin} className="space-y-6">
+                            <div className="space-y-1.5">
+                                <label className="text-[11px] font-semibold text-foreground/80 pl-0.5">Identificação / Email</label>
                                 <div className="relative group">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 group-focus-within:text-accent transition" size={18} />
+                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 group-focus-within:text-accent transition" size={16} />
                                     <input
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
-                                        className="w-full bg-background border border-border rounded-md py-4 pl-12 pr-4 outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent/40 transition font-medium"
+                                        className="w-full bg-card border border-border rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition font-normal text-sm text-foreground"
                                         placeholder="seu@email.com"
                                     />
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <div className="flex justify-between items-center pr-1">
-                                    <label className="text-[10px] font-black text-primary uppercase tracking-[0.2em] pl-1">Credencial de Acesso</label>
+                            <div className="space-y-1.5">
+                                <div className="flex justify-between items-center pr-0.5">
+                                    <label className="text-[11px] font-semibold text-foreground/80 pl-0.5">Credencial de Acesso</label>
                                     <button
                                         type="button"
                                         onClick={() => setSearchParams({ view: 'forgot' })}
-                                        className="text-[9px] font-black text-accent hover:text-primary transition uppercase tracking-widest"
+                                        className="text-[11px] font-medium text-accent hover:underline transition-all"
                                     >
-                                        Recuperar Senha
+                                        Esqueceu a senha?
                                     </button>
                                 </div>
                                 <div className="relative group">
-                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 group-focus-within:text-accent transition" size={18} />
+                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 group-focus-within:text-accent transition" size={16} />
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
-                                        className="w-full bg-background border border-border rounded-md py-4 pl-12 pr-12 outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent/40 transition font-medium"
+                                        className="w-full bg-card border border-border rounded-xl py-3 pl-11 pr-11 outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition font-normal text-sm text-foreground"
                                         placeholder="••••••••"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 hover:text-primary transition focus:outline-none"
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-foreground transition focus:outline-none"
                                     >
-                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                                     </button>
                                 </div>
                             </div>
@@ -273,42 +273,42 @@ export default function Login() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full bg-primary text-primary-foreground font-black py-4 rounded-md hover:bg-primary/95 transition-all shadow-xl shadow-primary/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 uppercase text-[11px] tracking-[0.2em] active:scale-95"
+                                className="w-full bg-accent hover:bg-accent/95 text-white font-medium py-3 rounded-full transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm active:scale-95 cursor-pointer"
                             >
-                                {loading ? <Loader2 className="animate-spin" size={20} /> : <><LogIn size={18} className="text-accent" /> Acessar Painel</>}
+                                {loading ? <Loader2 className="animate-spin" size={16} /> : <><LogIn size={16} /> Acessar Painel</>}
                             </button>
                         </form>
                     )}
 
                     {view === 'forgot' && !forgotSent && (
-                        <form onSubmit={handleForgot} className="space-y-8">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-primary uppercase tracking-[0.2em] pl-1">E-mail para Recuperação</label>
+                        <form onSubmit={handleForgot} className="space-y-6">
+                            <div className="space-y-1.5">
+                                <label className="text-[11px] font-semibold text-foreground/80 pl-0.5">E-mail para Recuperação</label>
                                 <div className="relative group">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 group-focus-within:text-accent transition" size={18} />
+                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 group-focus-within:text-accent transition" size={16} />
                                     <input
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
-                                        className="w-full bg-background border border-border rounded-md py-4 pl-12 pr-4 outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent/40 transition font-medium"
+                                        className="w-full bg-card border border-border rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition font-normal text-sm text-foreground"
                                         placeholder="seu@email.com"
                                     />
                                 </div>
                             </div>
 
-                            <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-3">
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full bg-primary text-primary-foreground font-black py-4 rounded-md hover:bg-primary/95 transition-all shadow-xl shadow-primary/10 disabled:opacity-50 flex items-center justify-center gap-3 uppercase text-[11px] tracking-[0.2em]"
+                                    className="w-full bg-accent hover:bg-accent/95 text-white font-medium py-3 rounded-full transition-all shadow-sm disabled:opacity-50 flex items-center justify-center gap-2 text-sm cursor-pointer"
                                 >
-                                    {loading ? <Loader2 className="animate-spin" size={20} /> : 'Enviar Protocolo'}
+                                    {loading ? <Loader2 className="animate-spin" size={16} /> : 'Enviar Email'}
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setSearchParams({ view: 'login' })}
-                                    className="w-full text-muted-foreground hover:text-primary font-black text-[10px] uppercase tracking-widest transition-colors py-2"
+                                    className="w-full text-muted-foreground hover:text-foreground font-medium text-xs transition-colors py-2"
                                 >
                                     Voltar ao Login
                                 </button>
@@ -317,19 +317,19 @@ export default function Login() {
                     )}
 
                     {view === 'forgot' && forgotSent && (
-                        <div className="text-center py-8">
-                            <div className="w-20 h-20 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto mb-8 border border-accent/20">
-                                <CheckCircle2 size={40} />
+                        <div className="text-center py-6">
+                            <div className="w-16 h-16 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto mb-6 border border-accent/20">
+                                <CheckCircle2 size={32} />
                             </div>
-                            <h2 className="text-2xl font-black text-primary mb-4 italic font-serif">Verifique seu E-mail</h2>
-                            <p className="text-muted-foreground mb-12 font-medium">Protocolo enviado para <strong>{email}</strong>.</p>
+                            <h2 className="text-2xl font-bold text-foreground mb-2 tracking-tight">Verifique seu E-mail</h2>
+                            <p className="text-muted-foreground text-sm mb-8 font-normal">Protocolo enviado para <strong>{email}</strong>.</p>
                             
                             {devLink && (
-                                <div className="mb-8 p-4 bg-accent/5 border border-accent/20 rounded-md text-left text-xs font-semibold text-accent leading-relaxed">
-                                    <p className="font-bold mb-2">Simulação de e-mail (Ambiente de Testes):</p>
+                                <div className="mb-6 p-4 bg-accent/5 border border-accent/20 rounded-xl text-left text-xs font-normal text-accent leading-relaxed">
+                                    <p className="font-semibold mb-2">Simulação de e-mail (Ambiente de Testes):</p>
                                     <Link
                                         to={devLink}
-                                        className="text-primary underline hover:text-accent font-black break-all block"
+                                        className="text-foreground underline hover:text-accent font-medium break-all block"
                                     >
                                         Clique aqui para redefinir a senha
                                     </Link>
@@ -342,40 +342,39 @@ export default function Login() {
                                     setDevLink(null);
                                     setSearchParams({ view: 'login' });
                                 }}
-                                className="w-full bg-primary text-primary-foreground font-black py-4 rounded-md hover:bg-primary/95 transition uppercase text-[11px] tracking-[0.3em]"
+                                className="w-full bg-accent hover:bg-accent/95 text-white font-medium py-3 rounded-full transition text-sm cursor-pointer"
                             >
                                 Voltar ao Login
                             </button>
                         </div>
                     )}
-
                     {view === 'reset' && !resetSuccess && (
-                        <form onSubmit={handleReset} className="space-y-8">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-primary uppercase tracking-[0.2em] pl-1">Nova Senha</label>
+                        <form onSubmit={handleReset} className="space-y-6">
+                            <div className="space-y-1.5">
+                                <label className="text-[11px] font-semibold text-foreground/80 pl-0.5">Nova Senha</label>
                                 <div className="relative group">
-                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 group-focus-within:text-accent transition" size={18} />
+                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 group-focus-within:text-accent transition" size={16} />
                                     <input
                                         type="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
-                                        className="w-full bg-background border border-border rounded-md py-4 pl-12 pr-4 outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent/40 transition font-medium"
+                                        className="w-full bg-card border border-border rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition font-normal text-sm text-foreground"
                                         placeholder="••••••••"
                                     />
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-primary uppercase tracking-[0.2em] pl-1">Confirmar Senha</label>
+                            <div className="space-y-1.5">
+                                <label className="text-[11px] font-semibold text-foreground/80 pl-0.5">Confirmar Senha</label>
                                 <div className="relative group">
-                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 group-focus-within:text-accent transition" size={18} />
+                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50 group-focus-within:text-accent transition" size={16} />
                                     <input
                                         type="password"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                         required
-                                        className="w-full bg-background border border-border rounded-md py-4 pl-12 pr-4 outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent/40 transition font-medium"
+                                        className="w-full bg-card border border-border rounded-xl py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-accent/10 focus:border-accent transition font-normal text-sm text-foreground"
                                         placeholder="••••••••"
                                     />
                                 </div>
@@ -384,31 +383,31 @@ export default function Login() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full bg-primary text-primary-foreground font-black py-4 rounded-md hover:bg-primary/95 transition-all shadow-xl shadow-primary/10 disabled:opacity-50 flex items-center justify-center gap-3 uppercase text-[11px] tracking-[0.2em]"
+                                className="w-full bg-accent hover:bg-accent/95 text-white font-medium py-3 rounded-full transition-all shadow-sm disabled:opacity-50 flex items-center justify-center gap-2 text-sm cursor-pointer"
                             >
-                                {loading ? <Loader2 className="animate-spin" size={20} /> : 'Atualizar Credencial'}
+                                {loading ? <Loader2 className="animate-spin" size={16} /> : 'Atualizar Credencial'}
                             </button>
                         </form>
                     )}
 
                     {view === 'reset' && resetSuccess && (
-                        <div className="text-center py-8">
-                            <div className="w-20 h-20 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto mb-8 border border-accent/20">
-                                <CheckCircle2 size={40} />
+                        <div className="text-center py-6">
+                            <div className="w-16 h-16 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto mb-6 border border-accent/20">
+                                <CheckCircle2 size={32} />
                             </div>
-                            <h2 className="text-2xl font-black text-primary mb-4 italic font-serif">Senha Atualizada</h2>
-                            <p className="text-muted-foreground mb-8 font-medium">Sua nova senha foi salva. Redirecionando...</p>
+                            <h2 className="text-2xl font-bold text-foreground mb-2 tracking-tight">Senha Atualizada</h2>
+                            <p className="text-muted-foreground text-sm mb-6 font-normal">Sua nova senha foi salva. Redirecionando...</p>
                         </div>
                     )}
 
                     {view === 'login' && (
-                        <div className="mt-16 text-center">
-                            <p className="text-muted-foreground/40 text-[10px] uppercase font-black tracking-widest leading-relaxed">
+                        <div className="mt-12 text-center border-t border-border/40 pt-6">
+                            <p className="text-muted-foreground text-xs font-normal">
                                 Ainda não tem acesso?
                             </p>
                             <button
                                 onClick={() => setSignupModalOpen(true)}
-                                className="mt-2 text-primary hover:text-accent font-black text-[10px] uppercase tracking-widest transition-colors border-b border-accent/20 cursor-pointer"
+                                className="mt-2 text-accent hover:underline font-medium text-xs transition-colors cursor-pointer"
                             >
                                 Solicite seu Acesso de 15 Dias
                             </button>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { uploadStoreLogo } from '../lib/supabase-upload';
 import {
     Loader2, Check, Upload, Palette, Type, Info,
     ExternalLink, AlertCircle, Search, BarChart2, Tag,
@@ -123,8 +124,13 @@ export default function AdminSite() {
         setError('');
         try {
             let logo_url = potencia.logo_url;
-            if (logoFile && logoPreview) {
-                logo_url = logoPreview; // Use the base64 preview we generated
+            if (logoFile) {
+                try {
+                    logo_url = await uploadStoreLogo(logoFile);
+                } catch (err) {
+                    console.error('Erro ao fazer upload da logo da potência:', err);
+                    logo_url = logoPreview || logo_url;
+                }
             }
 
             const cfg = {

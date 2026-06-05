@@ -43,36 +43,36 @@ export default function Home() {
         <div className="flex flex-col bg-background">
 
             {/* Hero Section */}
-            <section className="relative pt-40 pb-40 px-6 overflow-hidden">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10 bg-[radial-gradient(circle_at_50%_0%,oklch(0.769_0.188_70.08_/_0.05)_0%,transparent_50%)]" />
+            <section className="relative pt-32 pb-24 px-6 overflow-hidden">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10 bg-[radial-gradient(circle_at_50%_0%,rgba(0,113,227,0.04)_0%,transparent_60%)]" />
 
-                <div className="max-w-7xl mx-auto flex flex-col items-center text-center relative">
-                    <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-muted/50 border border-border rounded-full text-[10px] font-black text-primary mb-12 tracking-[0.2em] uppercase">
-                        <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse shadow-[0_0_8px_oklch(0.769_0.188_70.08)]" />
+                <div className="max-w-5xl mx-auto flex flex-col items-center text-center relative">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-secondary/80 border border-border/60 rounded-full text-[11px] font-medium text-foreground mb-8 tracking-normal">
+                        <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
                         O Futuro da Tradição: Governança em Estado da Arte
                     </div>
 
-                    <h1 className="text-6xl md:text-8xl font-black tracking-tight text-primary leading-[0.95] mb-10 max-w-4xl">
+                    <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-foreground leading-[1.1] mb-6 max-w-4xl">
                         Soberania Digital. <br />
-                        <span className="text-muted-foreground italic font-serif">
+                        <span className="text-muted-foreground font-normal">
                             Legado Institucional.
                         </span>
                     </h1>
 
-                    <p className="max-w-2xl text-xl text-muted-foreground mb-14 leading-relaxed font-medium">
+                    <p className="max-w-2xl text-lg text-muted-foreground mb-10 leading-relaxed font-normal">
                         O e.mason é a ferramenta definitiva para Grão-Mestrados e Grandes Secretarias que buscam soberania digital, controle financeiro absoluto e o resgate da eficiência administrativa.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-5 mb-32 z-10">
+                    <div className="flex flex-col sm:flex-row gap-4 mb-20 z-10">
                         <button
                             onClick={() => openModal('demo')}
-                            className="px-10 py-4 bg-primary text-primary-foreground font-black rounded-md hover:bg-primary/90 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-primary/20 uppercase text-xs tracking-widest active:scale-95"
+                            className="px-8 py-3 bg-accent hover:bg-accent/95 text-white font-medium rounded-full transition-all flex items-center justify-center gap-2 shadow-sm text-sm active:scale-95 cursor-pointer"
                         >
-                            Solicitar Demonstração <ArrowRight size={16} className="text-accent" />
+                            Solicitar Demonstração <ArrowRight size={14} />
                         </button>
                         <button
                             onClick={() => openModal('trial')}
-                            className="px-10 py-4 bg-background border-2 border-primary text-primary font-black rounded-md hover:bg-muted transition-all uppercase text-xs tracking-widest active:scale-95"
+                            className="px-8 py-3 bg-secondary hover:bg-secondary/80 text-foreground border border-border/80 font-medium rounded-full transition-all text-sm active:scale-95 cursor-pointer"
                         >
                             Teste Grátis por 15 Dias
                         </button>
@@ -110,14 +110,14 @@ export default function Home() {
             </section>
 
             {/* Features (Conversion focused labels) */}
-            <section className="py-40 px-6 bg-background relative">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-24 max-w-3xl mx-auto">
-                        <h2 className="text-4xl md:text-6xl font-black text-primary mb-8 tracking-tighter italic font-serif">O Soberano no comando da sua jurisdição.</h2>
-                        <p className="text-xl text-muted-foreground font-medium italic">Elimine a desordem administrativa e financeira com ferramentas pensadas por quem entende de maçonaria.</p>
+            <section className="py-24 px-6 bg-background relative">
+                <div className="max-w-5xl mx-auto">
+                    <div className="text-center mb-16 max-w-2xl mx-auto">
+                        <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-foreground mb-4">O Soberano no comando da sua jurisdição.</h2>
+                        <p className="text-base text-muted-foreground font-normal">Elimine a desordem administrativa e financeira com ferramentas pensadas por quem entende de maçonaria.</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <FeatureCard
                             icon={ShieldCheck}
                             title="Segurança Inviolável"
@@ -140,49 +140,49 @@ export default function Home() {
             </section>
 
             {/* Comparison Section: Battle vs Solution */}
-            <section className="py-24 px-6 bg-muted/30">
-                <div className="max-w-7xl mx-auto">
-                    <div className="flex flex-col lg:flex-row gap-16 items-center">
-                        <div className="flex-1 space-y-8">
-                            <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter">
-                                A Realidade da <span className="text-muted-foreground italic font-serif">Gestão Manual</span>
+            <section className="py-20 px-6 bg-secondary/35 dark:bg-secondary/15">
+                <div className="max-w-5xl mx-auto">
+                    <div className="flex flex-col lg:flex-row gap-12 items-center">
+                        <div className="flex-1 space-y-6">
+                            <h2 className="text-3xl md:text-5xl font-semibold text-foreground tracking-tight">
+                                A Realidade da <span className="text-muted-foreground font-normal">Gestão Manual</span>
                             </h2>
-                            <p className="text-lg text-muted-foreground font-medium">
+                            <p className="text-base text-muted-foreground leading-relaxed">
                                 Planilhas soltas, processos em papel e falta de transparência financeira consomem o tempo precioso da administração.
                             </p>
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                                 {[
                                     "Dependência de processos físicos e burocráticos",
                                     "Dificuldade na prestação de contas em tempo real",
                                     "Risco de perda de dados históricos e legados",
                                     "Arrecadação de metais lenta e descentralizada"
                                 ].map((item, i) => (
-                                    <div key={i} className="flex items-center gap-4 text-sm font-bold text-primary/70">
-                                        <Plus className="text-red-500 rotate-45" size={18} />
+                                    <div key={i} className="flex items-center gap-3 text-sm font-medium text-foreground/80">
+                                        <Plus className="text-destructive rotate-45" size={16} />
                                         {item}
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="flex-1 bg-white p-8 md:p-12 rounded-3xl border border-border shadow-2xl relative overflow-hidden">
+                        <div className="flex-1 bg-card p-8 md:p-10 rounded-2xl border border-border shadow-sm relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-4">
-                                <CheckCircle2 className="text-accent" size={32} />
+                                <CheckCircle2 className="text-accent" size={24} />
                             </div>
-                            <h3 className="text-3xl font-black text-primary mb-8 tracking-tighter">A Solução <span className="text-accent underline decoration-2 underline-offset-8">e.mason</span></h3>
-                            <div className="space-y-6">
+                            <h3 className="text-2xl font-semibold text-foreground mb-6 tracking-tight">A Solução e.mason</h3>
+                            <div className="space-y-5">
                                 {[
                                     { title: "Soberania Digital", desc: "Controle total da jurisdição em um clique." },
                                     { title: "Transparência Financeira", desc: "Dashboard de metais em tempo real." },
                                     { title: "Segurança de Grado Maçônico", desc: "Proteção de dados em nível institucional." }
                                 ].map((item, i) => (
-                                    <div key={i} className="flex gap-4">
-                                        <div className="mt-1 w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center shrink-0">
-                                            <div className="w-2 h-2 rounded-full bg-accent" />
+                                    <div key={i} className="flex gap-3">
+                                        <div className="mt-1 w-4 h-4 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-accent" />
                                         </div>
                                         <div>
-                                            <h4 className="font-black text-primary text-sm uppercase tracking-wider">{item.title}</h4>
-                                            <p className="text-muted-foreground text-sm">{item.desc}</p>
+                                            <h4 className="font-semibold text-foreground text-xs uppercase tracking-wider">{item.title}</h4>
+                                            <p className="text-muted-foreground text-xs mt-0.5">{item.desc}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -193,24 +193,23 @@ export default function Home() {
             </section>
 
             {/* Impact Section: Stats */}
-            <section className="py-40 px-6 bg-primary text-primary-foreground relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,oklch(0.769_0.188_70.08_/_0.1)_0%,transparent_70%)]" />
-                <div className="max-w-7xl mx-auto relative z-10">
-                    <div className="text-center mb-24">
-                        <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter">O Impacto em Números</h2>
-                        <p className="text-primary-foreground/60 text-xl font-medium">Resultados reais para potências de excelência.</p>
+            <section className="py-24 px-6 bg-foreground text-background relative overflow-hidden">
+                <div className="max-w-5xl mx-auto relative z-10">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-5xl font-semibold tracking-tight mb-4">O Impacto em Números</h2>
+                        <p className="text-muted-foreground text-base">Resultados reais para potências de excelência.</p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             { icon: Clock, value: "65%", label: "Redução em Trabalho Manual" },
                             { icon: CheckCircle2, value: "100%", label: "Conciliação Bancária Ativa" },
                             { icon: Shield, value: "Zero", label: "Vulnerabilidade de Dados" },
                             { icon: Globe, value: "24/7", label: "Disponibilidade da Jurisdição" }
                         ].map((stat, i) => (
-                            <div key={i} className="p-10 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-sm text-center group hover:bg-white/10 transition-all">
-                                <stat.icon size={32} className="text-accent mx-auto mb-6 group-hover:scale-110 transition-transform" />
-                                <div className="text-4xl font-black mb-2">{stat.value}</div>
-                                <div className="text-xs uppercase tracking-[0.2em] text-primary-foreground/40 font-bold">{stat.label}</div>
+                            <div key={i} className="p-8 bg-background/5 border border-background/10 rounded-2xl backdrop-blur-sm text-center group hover:bg-background/10 transition-all">
+                                <stat.icon size={24} className="text-accent mx-auto mb-4 group-hover:scale-105 transition-transform" />
+                                <div className="text-3xl font-bold mb-1">{stat.value}</div>
+                                <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{stat.label}</div>
                             </div>
                         ))}
                     </div>
@@ -218,18 +217,18 @@ export default function Home() {
             </section>
 
             {/* Ecosystem Section */}
-            <section className="py-24 px-6 bg-background">
-                <div className="max-w-7xl mx-auto">
-                    <div className="flex flex-col items-center text-center mb-16">
-                        <div className="px-4 py-1.5 bg-accent/10 border border-accent/20 rounded-full text-[10px] font-black text-accent mb-6 uppercase tracking-widest">
+            <section className="py-20 px-6 bg-background">
+                <div className="max-w-5xl mx-auto">
+                    <div className="flex flex-col items-center text-center mb-12">
+                        <div className="px-3 py-1 bg-accent/10 border border-accent/20 rounded-full text-[10px] font-medium text-accent mb-4 tracking-normal">
                             Conectividade
                         </div>
-                        <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter">
+                        <h2 className="text-3xl md:text-4xl font-semibold text-foreground tracking-tight">
                             Ecossistema Integrado
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                    <div className="grid grid-cols-2 md:grid-cols-6 gap-6 grayscale opacity-45 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
                         {[
                             { name: 'Neon', icon: Database },
                             { name: 'Stripe', icon: Zap },

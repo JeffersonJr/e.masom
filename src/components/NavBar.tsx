@@ -30,19 +30,19 @@ export const NavBar = () => {
   }, [dark]);
 
   return (
-    <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-white/70 dark:bg-gray-900/70 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
-      <Link to="/" className="text-2xl font-bold text-primary-foreground">
+    <nav className="sticky top-0 z-50 flex items-center justify-between px-8 py-3 bg-background/80 dark:bg-background/80 backdrop-blur-md border-b border-border transition-colors duration-200">
+      <Link to="/" className="text-lg font-semibold tracking-tight text-foreground hover:opacity-85 transition-opacity">
         e.mason
       </Link>
-      <div className="flex items-center gap-4">
-        <Link to="/login" className="text-sm font-medium text-muted-foreground hover:text-primary-foreground">
+      <div className="flex items-center gap-6">
+        <Link to="/login" className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
           Entrar
         </Link>
-        <Link to="/admin" className="text-sm font-medium text-muted-foreground hover:text-primary-foreground">
+        <Link to="/admin" className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
           Área Admin
         </Link>
-        <Button variant="ghost" size="icon" onClick={() => setDark(!dark)}>
-          {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" onClick={() => setDark(!dark)}>
+          {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </Button>
       </div>
     </nav>

@@ -29,7 +29,7 @@ import Suporte from '../pages/Suporte';
 import Termos from '../pages/Termos';
 import { AuthProvider } from '../contexts/AuthContext';
 import NotFound from '../pages/NotFound';
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 const Finance = lazy(() => import('../pages/Finance'));
 
 

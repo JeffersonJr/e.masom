@@ -1,10 +1,9 @@
 
 import { useState, useEffect, useRef } from 'react';
-import { ArrowRight, ShieldCheck, FileText, Zap, TrendingUp, BarChart3, Lock, MessageSquare, Plus, CheckCircle2, Clock, Shield, Globe, Database } from 'lucide-react';
+import { ArrowRight, ShieldCheck, FileText, Zap, TrendingUp, Plus, CheckCircle2, Clock, Shield, Globe, Database, MessageSquare } from 'lucide-react';
 import FeatureCard from '../components/FeatureCard';
 import LeadModal from '../components/LeadModal';
-import IsometricMockup from '../components/IsometricMockup';
-import FloatingPill from '../components/FloatingPill';
+import DashboardShowcase from '../components/DashboardShowcase';
 
 export default function Home() {
     const [modalConfig, setModalConfig] = useState<{ open: boolean; type: 'demo' | 'trial' }>({
@@ -78,33 +77,9 @@ export default function Home() {
                         </button>
                     </div>
 
-                    {/* New Isometric Mockup Section */}
-                    <div className="relative w-full flex justify-center">
-                        <FloatingPill
-                            icon={BarChart3}
-                            text="+40% de Eficiência"
-                            className="top-20 left-[5%] md:left-[10%]"
-                            delay="0s"
-                        />
-                        <FloatingPill
-                            icon={Lock}
-                            text="Segurança RLS Ativa"
-                            className="top-40 right-[5%] md:right-[15%]"
-                            delay="1.5s"
-                        />
-                        <FloatingPill
-                            icon={MessageSquare}
-                            text="Pranchas Digitais"
-                            className="bottom-20 left-[10%] md:left-[20%]"
-                            delay="0.7s"
-                        />
-                        <FloatingPill
-                            icon={TrendingUp}
-                            text="Gestão de Metais"
-                            className="bottom-40 right-[10%] md:right-[20%]"
-                            delay="2.2s"
-                        />
-                        <IsometricMockup />
+                    {/* Dashboard Showcase */}
+                    <div className="relative w-full mt-4">
+                        <DashboardShowcase />
                     </div>
                 </div>
             </section>

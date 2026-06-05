@@ -13,12 +13,13 @@ export default {
           light: '#a0aec0',
         },
         accent: '#2b6cb0', // soft blue accent
+        apple: '#0a84ff', // Apple blue accent
         mason: {
           blue: "#4298B5",
           green: "#00C389",
           "green-light": "#00E09D",
           "blue-light": "#58B0CE",
-        }
+        },
       },
       fontFamily: { sans: ['Inter', 'sans-serif'] },
     },

@@ -66,6 +66,7 @@ interface MembroInput {
     emailManual: boolean; // true quando o usuário editou o email manualmente
     cargo: string;
     tipo: 'veneravel' | 'cargo' | 'irmao';
+    grau?: string; // grau do irmão (opcional)
 }
 
 interface FormData {
@@ -189,6 +190,19 @@ function MembroRow({
                         </select>
                     </div>
                 )}
+{/* Grade input for irmãos */}
+{membro.tipo === 'irmao' && (
+    <div className="space-y-1 mt-2">
+        <label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground pl-0.5">Grau</label>
+        <input
+            type="text"
+            value={membro.grau || ''}
+            onChange={e => onChange('grau', e.target.value)}
+            placeholder="Grau do irmão"
+            className={`w-full border rounded-lg py-2.5 px-3 text-sm bg-background outline-none focus:border-accent/40 transition font-medium text-primary ${duplicateError ? 'border-destructive' : 'border-border'}`}
+        />
+    </div>
+)}
             </div>
             <button
                 type="button"
@@ -239,6 +253,7 @@ export default function LojaModal({ isOpen, onClose, onSaved, editLoja, potencia
     const emptyMembro = (tipo: MembroInput['tipo']): MembroInput => ({
         id: crypto.randomUUID(),
         nome: '', email: '', emailManual: false, cargo: '', tipo,
+        grau: '',
     });
 
     const [form, setForm] = useState<FormData>({
@@ -560,7 +575,7 @@ export default function LojaModal({ isOpen, onClose, onSaved, editLoja, potencia
                 membros_json: {
                     veneravel: veneravel ? { nome: veneravel.nome, email: fullEmail(veneravel.email) } : undefined,
                     cargos: cargos.map(m => ({ nome: m.nome, email: fullEmail(m.email), cargo: m.cargo })),
-                    irmaos: irmaos.map(m => ({ nome: m.nome, email: fullEmail(m.email) })),
+                    irmaos: irmaos.map(m => ({ nome: m.nome, email: fullEmail(m.email), grau: m.grau })),
                 },
             };
 

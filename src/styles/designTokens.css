@@ -1,0 +1,36 @@
+/* Design Tokens for e.mason UI */
+:root {
+  /* Colors */
+  --color-primary: #4a5568; /* neutral gray */
+  --color-primary-light: #a0aec0;
+  --color-accent: #2b6cb0; /* soft blue */
+  --color-background: #ffffff;
+  --color-foreground: #031222;
+  --color-card-bg: #ffffff;
+  --color-card-fg: #031222;
+  --color-muted: #f4f6f9;
+  --color-muted-fg: #4f6173;
+  --color-border: #e2e8f0;
+  --color-input: #e2e8f0;
+  --color-ring: #d4af37;
+  /* Dark mode */
+  --color-dark-bg: #010810;
+  --color-dark-fg: #e2e8f0;
+  --color-dark-card-bg: #020d18;
+  --color-dark-card-fg: #e2e8f0;
+  /* Radii */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+/* Dark mode variables */
+.dark {
+  --color-primary: var(--color-dark-fg);
+  --color-primary-light: var(--color-dark-fg);
+  --color-background: var(--color-dark-bg);
+  --color-foreground: var(--color-dark-fg);
+  --color-card-bg: var(--color-dark-card-bg);
+  --color-card-fg: var(--color-dark-card-fg);
+}

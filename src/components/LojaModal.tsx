@@ -364,7 +364,7 @@ export default function LojaModal({ isOpen, onClose, onSaved, editLoja, potencia
             site_config_json: editLoja.site_config_json || {},
         });
         setRitoSearch(editLoja.rito || 'REAA');
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+         
     }, [editLoja?.id]); // re-roda se a loja mudar (componente remonta via key a cada abertura)
 
     // ── Close rito on outside click ───────────────────────────────────────

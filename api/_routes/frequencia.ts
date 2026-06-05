@@ -1,5 +1,5 @@
 import { neon } from '@neondatabase/serverless';
-import { withAuth } from './_lib/auth-middleware.js';
+import { withAuth } from '../_lib/auth-middleware.js';
 
 let _sql: any = null;
 function getSql() {

@@ -1,5 +1,5 @@
-import { getSql } from '../_lib/db.js';
-import { emailService } from '../_lib/email-service.js';
+import { getSql } from '../../_lib/db.js';
+import { emailService } from '../../_lib/email-service.js';
 import crypto from 'crypto';
 
 // Disable default Vercel body parser to get raw body needed for signature verification

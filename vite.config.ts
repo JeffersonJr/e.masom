@@ -64,24 +64,9 @@ const vercelApiPlugin = () => ({
         });
         customReq.query = query;
 
-        // Map URL to API file path (e.g. /api/auth/login -> api/auth/login.ts)
-        const pathname = urlObj.pathname;
-        const potentialFiles = [
-          path.join(process.cwd(), pathname + '.ts'),
-          path.join(process.cwd(), pathname + '.js'),
-          path.join(process.cwd(), pathname, 'index.ts'),
-          path.join(process.cwd(), pathname, 'index.js'),
-        ];
+        const apiFile = path.join(process.cwd(), 'api', 'index.ts');
 
-        let apiFile = null;
-        for (const file of potentialFiles) {
-          if (fs.existsSync(file)) {
-            apiFile = file;
-            break;
-          }
-        }
-
-        if (apiFile) {
+        if (fs.existsSync(apiFile)) {
           try {
             // Compile and load the TS/JS module on the fly with Vite SSR
             const module = await server.ssrLoadModule(apiFile);
@@ -97,7 +82,7 @@ const vercelApiPlugin = () => ({
             polyfilledRes.status(500).json({ error: error.message || 'Internal Server Error' });
           }
         } else {
-          polyfilledRes.status(404).json({ error: `API route ${pathname} not found` });
+          polyfilledRes.status(404).json({ error: `Monolithic API router (api/index.ts) not found` });
         }
       } else {
         next();

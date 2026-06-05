@@ -1,7 +1,7 @@
 import { neon } from '@neondatabase/serverless';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { emailService } from '../_lib/email-service.js';
+import { emailService } from '../../_lib/email-service.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'placeholder-secret-key';
 

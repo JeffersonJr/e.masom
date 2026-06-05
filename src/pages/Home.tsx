@@ -45,7 +45,7 @@ export default function Home() {
             <section className="relative pt-32 pb-24 px-6 overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full -z-10 bg-[radial-gradient(circle_at_50%_0%,rgba(0,113,227,0.04)_0%,transparent_60%)]" />
 
-                <div className="max-w-5xl mx-auto flex flex-col items-center text-center relative">
+                <div className="max-w-7xl mx-auto flex flex-col items-center text-center relative">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-secondary/80 border border-border/60 rounded-full text-[11px] font-medium text-foreground mb-8 tracking-normal">
                         <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
                         O Futuro da Tradição: Governança em Estado da Arte
@@ -86,7 +86,7 @@ export default function Home() {
 
             {/* Features (Conversion focused labels) */}
             <section className="py-24 px-6 bg-background relative">
-                <div className="max-w-5xl mx-auto">
+                <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16 max-w-2xl mx-auto">
                         <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-foreground mb-4">O Soberano no comando da sua jurisdição.</h2>
                         <p className="text-base text-muted-foreground font-normal">Elimine a desordem administrativa e financeira com ferramentas pensadas por quem entende de maçonaria.</p>
@@ -116,7 +116,7 @@ export default function Home() {
 
             {/* Comparison Section: Battle vs Solution */}
             <section className="py-20 px-6 bg-secondary/35 dark:bg-secondary/15">
-                <div className="max-w-5xl mx-auto">
+                <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col lg:flex-row gap-12 items-center">
                         <div className="flex-1 space-y-6">
                             <h2 className="text-3xl md:text-5xl font-semibold text-foreground tracking-tight">
@@ -169,7 +169,7 @@ export default function Home() {
 
             {/* Impact Section: Stats */}
             <section className="py-24 px-6 bg-foreground text-background relative overflow-hidden">
-                <div className="max-w-5xl mx-auto relative z-10">
+                <div className="max-w-7xl mx-auto relative z-10">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-5xl font-semibold tracking-tight mb-4">O Impacto em Números</h2>
                         <p className="text-muted-foreground text-base">Resultados reais para potências de excelência.</p>
@@ -193,7 +193,7 @@ export default function Home() {
 
             {/* Ecosystem Section */}
             <section className="py-20 px-6 bg-background">
-                <div className="max-w-5xl mx-auto">
+                <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col items-center text-center mb-12">
                         <div className="px-3 py-1 bg-accent/10 border border-accent/20 rounded-full text-[10px] font-medium text-accent mb-4 tracking-normal">
                             Conectividade
@@ -225,7 +225,7 @@ export default function Home() {
 
             {/* Final CTA */}
             <section className="py-40 px-6">
-                <div className="max-w-5xl mx-auto bg-primary text-primary-foreground rounded-2xl p-16 md:p-24 text-center relative overflow-hidden shadow-2xl">
+                <div className="max-w-7xl mx-auto bg-primary text-primary-foreground rounded-2xl p-16 md:p-24 text-center relative overflow-hidden shadow-2xl">
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,oklch(0.769_0.188_70.08_/_0.15)_0%,transparent_60%)]" />
                     <div className="relative z-10">
                         <h2 className="text-5xl md:text-7xl font-black mb-10 tracking-tighter leading-tight italic font-serif">A Era da Maestria <br /> Digital Chegou.</h2>

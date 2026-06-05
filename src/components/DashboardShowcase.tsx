@@ -26,7 +26,7 @@ export default function DashboardShowcase() {
     const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
     return (
-        <div ref={containerRef} className="relative w-full max-w-5xl mx-auto">
+        <div ref={containerRef} className="relative w-full max-w-6xl mx-auto">
             {/* Ambient glow */}
             <div className="absolute -inset-10 bg-gradient-to-b from-accent/5 via-transparent to-transparent rounded-[3rem] blur-3xl -z-10" />
 

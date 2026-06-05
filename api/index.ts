@@ -44,8 +44,21 @@ export default async function handler(req: any, res: any) {
     return res.status(200).end();
   }
 
-  // Extrair rota ignorando query params (ex: /api/auth/login?token=123 -> /api/auth/login)
-  const urlPath = req.url?.split('?')[0] || '';
+  // Recover the original path.
+  // On Vercel: the rewrite sends /api/auth/login → /api?route=auth/login
+  // Locally (Vite): req.url is the full original path like /api/auth/login
+  let urlPath = '';
+
+  // Check for the Vercel rewrite query param first
+  const rawUrl = req.url || '';
+  const urlObj = new URL(rawUrl, 'http://localhost');
+  const routeParam = urlObj.searchParams.get('route') || req.query?.route;
+
+  if (routeParam) {
+    urlPath = '/api/' + routeParam.split('?')[0];
+  } else {
+    urlPath = rawUrl.split('?')[0];
+  }
 
   // Remover barra no final, caso exista (ex: /api/health/ -> /api/health)
   const normalizedPath = urlPath.endsWith('/') && urlPath !== '/' 

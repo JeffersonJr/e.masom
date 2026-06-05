@@ -14,7 +14,7 @@ export default function PublicLayout() {
     return (
         <div className="flex flex-col min-h-screen bg-background">
             <header className="fixed top-0 left-0 right-0 z-50 bg-background/70 dark:bg-background/70 backdrop-blur-md border-b border-border/80">
-                <div className="max-w-5xl mx-auto px-6 h-12 flex items-center justify-between">
+                <div className="max-w-7xl mx-auto px-6 h-12 flex items-center justify-between">
                     <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
                         <img src="/e.mason.svg" alt="e.mason" className="h-5 w-auto dark:invert dark:brightness-100 transition-all duration-300" />
                     </Link>
@@ -52,7 +52,7 @@ export default function PublicLayout() {
             </main>
 
             <footer className="bg-secondary/40 dark:bg-secondary/20 py-16 px-6 border-t border-border/60">
-                <div className="max-w-5xl mx-auto">
+                <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-10 text-xs">
                         <div className="col-span-1 md:col-span-2 space-y-4">
                             <Link to="/" className="inline-block">

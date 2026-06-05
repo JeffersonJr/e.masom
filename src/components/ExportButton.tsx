@@ -1,5 +1,6 @@
-import React from 'react';
+
 import { Download } from 'lucide-react';
+// @ts-ignore
 import * as XLSX from 'xlsx';
 
 type ExportFormat = 'csv' | 'xlsx';

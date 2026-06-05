@@ -27,8 +27,8 @@ import Privacidade from '../pages/Privacidade';
 import Documentacao from '../pages/Documentacao';
 import Suporte from '../pages/Suporte';
 import Termos from '../pages/Termos';
+import { AuthProvider } from '../contexts/AuthContext';
 import NotFound from '../pages/NotFound';
-import Finance from '../pages/Finance';
 
 
 import ProtectedRoute from '../components/ProtectedRoute';

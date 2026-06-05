@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Account } from '../data/financeData';
 import { ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 

@@ -28,7 +28,9 @@ import Documentacao from '../pages/Documentacao';
 import Suporte from '../pages/Suporte';
 import Termos from '../pages/Termos';
 import NotFound from '../pages/NotFound';
-import { AuthProvider } from '../contexts/AuthContext';
+import Finance from '../pages/Finance';
+
+
 import ProtectedRoute from '../components/ProtectedRoute';
 import DashRedirect from '../components/DashRedirect';
 import ScrollToTop from '../components/ScrollToTop';
@@ -70,7 +72,8 @@ export default function AppRouter() {
                             <Route path="obreiros" element={<AdminObreiros />} />
                             <Route path="site" element={<AdminSite />} />
                             <Route path="config" element={<AdminConfig />} />
-                        </Route>
+                                <Route path="finance" element={<Finance />} />
+        </Route>
 
                         {/* Lodge Restricted Dashboard */}
                         <Route path="/:lodgeSlug/dashboard" element={

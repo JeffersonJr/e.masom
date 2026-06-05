@@ -1,4 +1,4 @@
-import { defineConfig, ViteDevServer, Connect } from 'vite'
+import { defineConfig, ViteDevServer, Connect, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import fs from 'fs'
@@ -33,6 +33,10 @@ function polyfillResponse(res: ServerResponse): PolyfilledResponse {
 const vercelApiPlugin = () => ({
   name: 'vercel-api',
   configureServer(server: ViteDevServer) {
+    // Load env variables into process.env for local API routes
+    const env = loadEnv(server.config.mode, process.cwd(), '');
+    Object.assign(process.env, env);
+
     server.middlewares.use(async (req: Connect.IncomingMessage, res: ServerResponse, next: Connect.NextFunction) => {
       if (req.url && req.url.startsWith('/api/')) {
         const polyfilledRes = polyfillResponse(res);

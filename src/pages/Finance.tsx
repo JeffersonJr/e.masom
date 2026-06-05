@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import FilterBar from '../components/FilterBar';
 import FinanceTable from '../components/FinanceTable';
 import ExportButton from '../components/ExportButton';

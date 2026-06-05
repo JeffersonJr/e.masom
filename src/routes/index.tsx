@@ -29,7 +29,8 @@ import Suporte from '../pages/Suporte';
 import Termos from '../pages/Termos';
 import { AuthProvider } from '../contexts/AuthContext';
 import NotFound from '../pages/NotFound';
-import Finance from '../pages/Finance';
+import React, { Suspense, lazy } from 'react';
+const Finance = lazy(() => import('../pages/Finance'));
 
 
 import ProtectedRoute from '../components/ProtectedRoute';
@@ -73,7 +74,7 @@ export default function AppRouter() {
                             <Route path="obreiros" element={<AdminObreiros />} />
                             <Route path="site" element={<AdminSite />} />
                             <Route path="config" element={<AdminConfig />} />
-                                <Route path="finance" element={<Finance />} />
+                                <Route path="finance" element={<Suspense fallback={<div className="flex items-center justify-center h-full">Carregando…</div>}><Finance /></Suspense>} />
         </Route>
 
                         {/* Lodge Restricted Dashboard */}

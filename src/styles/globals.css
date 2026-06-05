@@ -4,5 +4,9 @@
 
 /* Custom global utilities */
 .container {
-  @apply max-w-4xl mx-auto px-4;
+  max-width: 56rem; /* Tailwind max-w-4xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
